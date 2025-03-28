@@ -1,0 +1,6 @@
+@CareFlow.API_HostAddress = http://localhost:5013
+
+GET {{CareFlow.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
