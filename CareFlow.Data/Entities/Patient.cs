@@ -20,12 +20,12 @@ namespace CareFlow.Data.Entities
         public double Height { get; set; }
         public double Weight { get; set; }
 
-        public Appointment Appointment { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
         public Doctor Doctor { get; set; }
         public ICollection<Phone> PhoneNumbers { get; set; } = new HashSet<Phone>();
         public ICollection<Allergy> Allergies { get; set; } = new HashSet<Allergy>();
-        public ICollection<Prescription> Prescriptions { get; set; }
+        public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();
+        public ICollection<Document> Documents{ get; set; } = new HashSet<Document>();
         public Guid DoctorId { get; set; }
-        public Guid AppointmentId { get; set; }
     }
 }

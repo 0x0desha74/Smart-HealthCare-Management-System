@@ -18,7 +18,7 @@ namespace CareFlow.Data.Entities
         public Guid PatientId{ get; set; }
 
         public Doctor Doctor { get; set; }
-        public Guid DoctorID { get; set; }
+        public Guid? DoctorId { get; set; }
 
         public ICollection<Medicine> Medicines { get; set; }
 

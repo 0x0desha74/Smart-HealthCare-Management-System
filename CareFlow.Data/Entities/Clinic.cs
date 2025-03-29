@@ -16,5 +16,7 @@ namespace CareFlow.Data.Entities
         public string Website { get; set; }
         public bool IsOpen24Hours{ get; set; }
         public Location Location { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+        public ICollection<Doctor> Doctors { get; set; } = new HashSet<Doctor>();
     }
 }

@@ -20,6 +20,11 @@ namespace CareFlow.Repository.Data.Configurations
                 .WithMany(d => d.Appointments)
                 .HasForeignKey(a => a.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(a => a.Clinic)
+                .WithMany(d => d.Appointments)
+                .HasForeignKey(a => a.ClinicId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

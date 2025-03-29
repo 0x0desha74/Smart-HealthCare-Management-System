@@ -19,8 +19,15 @@ namespace CareFlow.Repository.Data.Configurations
             builder.HasMany(p => p.Medicines)
                 .WithMany(m=>m.Prescriptions);
 
+            builder.HasOne(p => p.Doctor)
+                .WithMany()
+                .HasForeignKey(p => p.DoctorId)
+                .OnDelete(DeleteBehavior.SetNull);
 
-                
+            builder.HasOne(p => p.Patient)
+            .WithMany(pa=>pa.Prescriptions)
+            .HasForeignKey(p => p.PatientId)
+            .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

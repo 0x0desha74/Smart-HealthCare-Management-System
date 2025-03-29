@@ -17,5 +17,6 @@ namespace CareFlow.Data.Entities
         public string Manufacture { get; set; }
         [MaxLength(100)]
         public string Category { get; set; }
+        public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();
     }
 }

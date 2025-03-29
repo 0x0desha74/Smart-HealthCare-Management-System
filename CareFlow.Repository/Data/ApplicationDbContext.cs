@@ -27,5 +27,10 @@ namespace CareFlow.Repository.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<Clinic> Clinics{ get; set; }
         public DbSet<Allergy> Allergies { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<Instruction> Instructions { get; set; }
+        public DbSet<Specialization> Specializations { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<Document> Documents{ get; set; }
     }
 }
