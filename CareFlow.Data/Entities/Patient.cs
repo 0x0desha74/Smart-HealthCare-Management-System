@@ -20,8 +20,12 @@ namespace CareFlow.Data.Entities
         public double Height { get; set; }
         public double Weight { get; set; }
 
-        //Doctor Relationship
-        public Doctor Doctor { get; set; }
+       
         public Guid DoctorId { get; set; }
+        public Appointment Appointment { get; set; }
+       
+        public Doctor Doctor { get; set; }
+        public Guid AppointmentId { get; set; }
+
     }
 }

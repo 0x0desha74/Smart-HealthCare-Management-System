@@ -18,5 +18,6 @@ namespace CareFlow.Data.Entities
         public string PictureUrl { get; set; }
         public int YearOfExperience { get; set; }
         public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }
