@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CareFlow.Data.Entities.Enums
 {
-    public enum PhoneType
+    public enum AllergySeverity
     {
-        Personal,
-        Home,
-        Work
-
+        Mild,
+        Moderate,
+        Severe,
+        LifeThreatening
     }
 }

@@ -20,8 +20,9 @@ namespace CareFlow.Data.Entities
 
         public Doctor Doctor { get; set; }
         public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
-
+        public Clinic Clinic { get; set; }
 
         public Guid DoctorId { get; set; }
+        public Guid ClinicId { get; set; }
     }
 }

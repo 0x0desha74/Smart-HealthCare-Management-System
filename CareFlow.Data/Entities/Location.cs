@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace CareFlow.Data.Entities
 {
-    class Location
+   public class Location:BaseEntity
     {
+
+
+        public Guid ClinicId { get; set; }
     }
 }

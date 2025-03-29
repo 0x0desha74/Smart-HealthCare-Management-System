@@ -22,8 +22,9 @@ namespace CareFlow.Data.Entities
 
         public Appointment Appointment { get; set; }
         public Doctor Doctor { get; set; }
-        public ICollection<Phone> PhoneNumbers { get; set; }
-        
+        public ICollection<Phone> PhoneNumbers { get; set; } = new HashSet<Phone>();
+        public ICollection<Allergy> Allergies { get; set; } = new HashSet<Allergy>();
+
         public Guid DoctorId { get; set; }
         public Guid AppointmentId { get; set; }
     }

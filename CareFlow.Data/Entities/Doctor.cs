@@ -16,8 +16,11 @@ namespace CareFlow.Data.Entities
         [MaxLength(100)]
         public string LicenceNumber { get; set; }
         public string PictureUrl { get; set; }
-        public int YearOfExperience { get; set; }
+        public int YearOfExperience { get; set; }   
         public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
-        public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+        public Clinic Clinic { get; set; }
+
+        public Guid ClinicId { get; set; }
     }
 }

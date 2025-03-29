@@ -33,6 +33,12 @@ namespace CareFlow.Repository.Data.Configurations
              .HasForeignKey(pn => pn.PatientId)
              .OnDelete(DeleteBehavior.Cascade);
 
+
+            builder.HasMany(p => p.Allergies)
+            .WithOne()
+            .HasForeignKey(a => a.PatientId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

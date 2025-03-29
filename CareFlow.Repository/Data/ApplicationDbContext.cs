@@ -24,5 +24,8 @@ namespace CareFlow.Repository.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Phone> Phones { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Clinic> Clinics{ get; set; }
+        public DbSet<Allergy> Allergies { get; set; }
     }
 }
