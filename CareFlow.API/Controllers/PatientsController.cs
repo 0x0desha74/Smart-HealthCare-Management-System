@@ -1,0 +1,29 @@
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.In;
+using CareFlow.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+
+namespace CareFlow.API.Controllers
+{
+    public class PatientsController : BaseApiController
+    {
+        private readonly IPatientService _patientService;
+
+        public PatientsController(IPatientService patientService)
+        {
+            _patientService = patientService;
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult<PatientDto>> Create([FromBody] PatientDto model)
+        {
+            var patient = await _patientService.CreatePatient(model);
+            if (patient is null) return BadRequest(new ApiResponse(400));
+            return Ok(patient);
+        }
+
+    }
+}

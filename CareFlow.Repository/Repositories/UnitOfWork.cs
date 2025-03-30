@@ -1,6 +1,6 @@
 ﻿using CareFlow.Core.Interfaces;
+using CareFlow.Core.Interfaces.Repositories;
 using CareFlow.Data.Entities;
-using CareFlow.Data.Interfaces;
 using CareFlow.Repository.Data;
 using System;
 using System.Collections;

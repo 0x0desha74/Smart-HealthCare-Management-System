@@ -3,6 +3,7 @@ using CareFlow.API.Extensions;
 using CareFlow.API.Middlewares;
 using CareFlow.Repository.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CareFlow.API
@@ -15,9 +16,14 @@ namespace CareFlow.API
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-   
+
             builder.Services.AddApplicationServices();
             builder.Services.AddSwaggerServices();
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CareFlow.Data.Interfaces
+namespace CareFlow.Core.Interfaces.Repositories
 {
     public interface IGenericRepository<T>
     {

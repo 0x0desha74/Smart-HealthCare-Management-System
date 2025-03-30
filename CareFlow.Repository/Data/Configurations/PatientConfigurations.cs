@@ -21,6 +21,7 @@ namespace CareFlow.Repository.Data.Configurations
             builder.HasOne(p => p.Doctor)
                 .WithMany(d => d.Patients)
                 .HasForeignKey(p => p.DoctorId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(p => p.Appointments)

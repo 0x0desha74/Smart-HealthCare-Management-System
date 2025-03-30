@@ -1,6 +1,6 @@
-﻿using CareFlow.Core.Specifications;
+﻿using CareFlow.Core.Interfaces.Repositories;
+using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
-using CareFlow.Data.Interfaces;
 using CareFlow.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
