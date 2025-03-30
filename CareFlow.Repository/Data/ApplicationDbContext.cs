@@ -1,4 +1,5 @@
-﻿using CareFlow.Data.Entities;
+﻿using CareFlow.Core.Entities;
+using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,5 +33,6 @@ namespace CareFlow.Repository.Data
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<Document> Documents{ get; set; }
+        public DbSet<MedicalHistory> MedicalHistories { get; set; }
     }
 }

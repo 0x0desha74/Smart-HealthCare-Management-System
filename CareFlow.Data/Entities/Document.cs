@@ -14,5 +14,6 @@ namespace CareFlow.Data.Entities
         public DateTime UpdateDate { get; set; }
         public Patient Patient { get; set; }
         public Guid PatientId { get; set; }
+        public Guid MedicalHistoryId { get; set; }
     }
 }

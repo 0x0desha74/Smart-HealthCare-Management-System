@@ -21,5 +21,6 @@ namespace CareFlow.Data.Entities
 
         public Doctor Doctor { get; set; }
         public Guid? DoctorId { get; set; }
+        public Guid MedicalHistoryId { get; set; }
     }
 }

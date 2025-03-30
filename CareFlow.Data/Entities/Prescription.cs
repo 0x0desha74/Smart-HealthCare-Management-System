@@ -22,5 +22,6 @@ namespace CareFlow.Data.Entities
 
         public ICollection<Medicine> Medicines { get; set; }
 
+        public Guid MedicalHistoryId{ get; set; }
     }
 }
