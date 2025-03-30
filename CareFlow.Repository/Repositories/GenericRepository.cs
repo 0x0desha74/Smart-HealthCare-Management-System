@@ -31,15 +31,16 @@ namespace CareFlow.Repository.Repositories
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> spec)
+        public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> spec)
         {
-            throw new NotImplementedException();
+            return await ApplySpecifications(spec).ToListAsync();
         }
 
 
-        public Task<T> GetEntityWithAsync(ISpecification<T> spec)
+        public async Task<T> GetEntityWithAsync(ISpecification<T> spec)
         {
-            throw new NotImplementedException();
+            return await ApplySpecifications(spec).FirstOrDefaultAsync();
+            
         }
 
 
@@ -58,6 +59,14 @@ namespace CareFlow.Repository.Repositories
         public void UpdateAsync(T entity)
         {
             _dbContext.Set<T>().Update(entity);
+        }
+
+
+
+
+        private IQueryable<T> ApplySpecifications(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec);
         }
     }
 }
