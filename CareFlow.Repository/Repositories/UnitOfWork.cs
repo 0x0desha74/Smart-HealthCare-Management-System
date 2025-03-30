@@ -14,7 +14,7 @@ namespace CareFlow.Repository.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _dbContext;
-        private Hashtable _repositories;
+        private Hashtable _repositories; 
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
