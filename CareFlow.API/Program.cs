@@ -1,5 +1,6 @@
 
 using CareFlow.API.Extensions;
+using CareFlow.API.Middlewares;
 using CareFlow.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -44,11 +45,11 @@ namespace CareFlow.API
                 logger.LogError(ex, "An error occurred during migration");
 
             }
+            app.UseMiddleware<ExceptionMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerMiddlewares();
             }
 
             app.UseHttpsRedirection();
