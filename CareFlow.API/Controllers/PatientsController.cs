@@ -1,5 +1,6 @@
 ﻿using CareFlow.API.Errors;
 using CareFlow.Core.DTOs.In;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,19 @@ namespace CareFlow.API.Controllers
         }
 
 
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<PatientToReturnDto>>> GetPatients()
+        {
+            var patients = await _patientService.GetPatients();
+            if (patients is null) return NotFound(new ApiResponse(404));
+            return Ok(patients);
+        }
+
+
+
+
+
         [HttpPost]
         public async Task<ActionResult<PatientDto>> Create([FromBody] PatientDto model)
         {
@@ -24,6 +38,8 @@ namespace CareFlow.API.Controllers
             if (patient is null) return BadRequest(new ApiResponse(400));
             return Ok(patient);
         }
+
+        
 
     }
 }

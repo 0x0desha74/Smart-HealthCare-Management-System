@@ -1,4 +1,5 @@
 ﻿using CareFlow.Core.DTOs.In;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace CareFlow.Core.Interfaces.Services
 {
    public interface IPatientService
     {
-        Task<IReadOnlyList<PatientDto>> GetPatients();
-        Task<PatientDto> GetPatient(Guid id);
+        Task<IReadOnlyList<PatientToReturnDto>> GetPatients();
+        Task<PatientToReturnDto> GetPatient(Guid id);
         Task<PatientDto> CreatePatient(PatientDto patientDto);
         Task<PatientDto> UpdatePatient(PatientDto patientDto);
         Task DeletePatient(Guid id);

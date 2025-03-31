@@ -45,11 +45,7 @@ namespace CareFlow.Repository.Repositories
 
 
 
-        public async Task AddAsync(T entity)
-        {
-          await  _dbContext.Set<T>().AddAsync(entity);
-        }
-
+     
         public void DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
@@ -67,6 +63,11 @@ namespace CareFlow.Repository.Repositories
         private IQueryable<T> ApplySpecifications(ISpecification<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec);
+        }
+
+        public async Task AddAsync(T entity)
+        {
+            await _dbContext.Set<T>().AddAsync(entity);
         }
     }
 }
