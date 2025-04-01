@@ -35,6 +35,16 @@ namespace CareFlow.Service.Services
         }
 
 
+        public async Task<PatientToReturnDto> GetPatient(Guid id)
+        {
+            var spec = new PatientSpecifications(id);
+            var patient = await _unitOfWork.Repository<Patient>().GetEntityWithAsync(spec);
+            if (patient is null) return null;
+           return _mapper.Map<Patient, PatientToReturnDto>(patient);
+
+        }
+
+
         public async Task<PatientDto> CreatePatient(PatientDto patientDto)
         {
             var patient = _mapper.Map<PatientDto, Patient>(patientDto);
@@ -50,13 +60,7 @@ namespace CareFlow.Service.Services
             throw new NotImplementedException();
         }
 
-        public Task<PatientToReturnDto> GetPatient(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
        
-
         public Task<PatientDto> UpdatePatient(PatientDto patientDto)
         {
             throw new NotImplementedException();

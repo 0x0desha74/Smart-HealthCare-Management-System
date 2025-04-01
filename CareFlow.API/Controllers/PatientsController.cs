@@ -28,7 +28,13 @@ namespace CareFlow.API.Controllers
         }
 
 
-
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PatientToReturnDto>> GetPatient(Guid id)
+        {
+            var patient = await _patientService.GetPatient(id);
+            if (patient is null) return NotFound(new ApiResponse(404));
+            return Ok(patient);
+        }
 
 
         [HttpPost]
