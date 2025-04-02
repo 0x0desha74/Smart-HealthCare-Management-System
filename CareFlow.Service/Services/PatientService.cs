@@ -55,9 +55,13 @@ namespace CareFlow.Service.Services
             return null;
         }
 
-        public Task DeletePatient(Guid id)
+        public async Task<bool> DeletePatient(Guid id)
         {
-            throw new NotImplementedException();
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(id);
+            if (patient is null) return false;
+            _unitOfWork.Repository<Patient>().DeleteAsync(patient);
+            var result = await _unitOfWork.Complete();
+            return result > 0;
         }
 
        
