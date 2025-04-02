@@ -59,15 +59,31 @@ namespace CareFlow.Service.Services
         {
             var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(id);
             if (patient is null) return false;
-            _unitOfWork.Repository<Patient>().DeleteAsync(patient);
+            _unitOfWork.Repository<Patient>().Delete(patient);
             var result = await _unitOfWork.Complete();
             return result > 0;
         }
 
        
-        public Task<PatientDto> UpdatePatient(PatientDto patientDto)
+        public async Task<PatientToReturnDto> UpdatePatient(PatientDto patientDto)
         {
-            throw new NotImplementedException();
+            if (patientDto is null || patientDto.id == Guid.Empty)
+                throw new KeyNotFoundException("Invalid patient data");
+
+            var existingPatient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientDto.id);
+            if(existingPatient is null) throw new KeyNotFoundException("Patient not found");
+
+            _mapper.Map(patientDto, existingPatient);
+
+            _unitOfWork.Repository<Patient>().Update(existingPatient);
+
+            var result = await _unitOfWork.Complete();
+
+            if (result > 0) 
+            return _mapper.Map<Patient, PatientToReturnDto>(existingPatient);
+            else
+                throw new InvalidOperationException("An error occurred while update");
+
         }
     }
 }

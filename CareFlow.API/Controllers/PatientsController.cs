@@ -48,10 +48,28 @@ namespace CareFlow.API.Controllers
         [HttpDelete]
         public async Task<ActionResult<ActionDoneSuccessfullyDto>> Delete(Guid id)
         {
-           var result =  await _patientService.DeletePatient(id);
+            var result = await _patientService.DeletePatient(id);
             if (result is false) return BadRequest(new ApiResponse(400));
             return Ok(new ActionDoneSuccessfullyDto("Patient was deleted successfully"));
         }
-        
+
+
+        [HttpPut]
+        public async Task<ActionResult<PatientToReturnDto>> Update(PatientDto model)
+        {
+            var updatedPatient = await _patientService.UpdatePatient(model);
+
+            return Ok(updatedPatient);
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }

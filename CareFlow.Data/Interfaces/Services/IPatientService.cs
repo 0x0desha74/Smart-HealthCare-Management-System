@@ -14,7 +14,7 @@ namespace CareFlow.Core.Interfaces.Services
         Task<IReadOnlyList<PatientToReturnDto>> GetPatients();
         Task<PatientToReturnDto> GetPatient(Guid id);
         Task<PatientDto> CreatePatient(PatientDto patientDto);
-        Task<PatientDto> UpdatePatient(PatientDto patientDto);
+        Task<PatientToReturnDto> UpdatePatient(PatientDto patientDto);
         Task<bool> DeletePatient(Guid id);
     }
 }

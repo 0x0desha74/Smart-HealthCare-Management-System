@@ -14,7 +14,7 @@ namespace CareFlow.Core.Interfaces.Repositories
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> spec); 
         Task<T> GetEntityWithAsync(ISpecification<T> spec);
         Task AddAsync(T entity);
-        void UpdateAsync(T entity);
-        void DeleteAsync(T entity);
+        void Update(T entity);
+        void Delete(T entity);
     }
 }

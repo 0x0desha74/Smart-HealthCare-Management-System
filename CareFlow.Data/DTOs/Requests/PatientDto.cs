@@ -10,6 +10,7 @@ namespace CareFlow.Core.DTOs.In
 {
    public class PatientDto
     {
+        public Guid id { get; set; }
         [MaxLength(50)]
         [Required]
         public string FirstName { get; set; }
