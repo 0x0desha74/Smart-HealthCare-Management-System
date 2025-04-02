@@ -15,6 +15,7 @@ namespace CareFlow.API.Extensions
         {
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
+            services.AddScoped(typeof(IPhoneService), typeof(PhoneService));
             services.AddAutoMapper(typeof(MappingProfiles));
 
        
