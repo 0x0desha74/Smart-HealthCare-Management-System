@@ -50,7 +50,7 @@ namespace CareFlow.API.Controllers
         {
             var result = await _patientService.DeletePatient(id);
             if (result is false) return BadRequest(new ApiResponse(400));
-            return Ok(new ActionDoneSuccessfullyDto("Patient was deleted successfully"));
+            return NoContent();
         }
 
 
@@ -61,11 +61,6 @@ namespace CareFlow.API.Controllers
 
             return Ok(updatedPatient);
         }
-
-
-
-
-
 
 
 

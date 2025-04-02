@@ -27,6 +27,14 @@ namespace CareFlow.API.Controllers
         }
 
 
+        [HttpGet("{phoneId}")]
+        public async Task<ActionResult<PhoneToReturnDto>> GetPhoneOfPatient(Guid patientId, Guid phoneId)
+        {
+            var phone = await _phoneService.GetPhoneOfPatient(patientId, phoneId);
+            if (phone is null) return NotFound(new ApiResponse(404));
+            return Ok(phone);
+        }
+
 
 
         [HttpPost]

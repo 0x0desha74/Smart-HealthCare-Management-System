@@ -23,6 +23,27 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
+
+        public async Task<IReadOnlyList<PhoneToReturnDto>> GetPhonesOfPatient(Guid patientId)
+        {
+            var spec = new PhoneSpecifications(patientId);
+
+            var phones = await _unitOfWork.Repository<Phone>().GetAllWithSpecAsync(spec);
+            if (phones is null) return null;
+            return _mapper.Map<IReadOnlyList<PhoneToReturnDto>>(phones);
+        }
+
+
+        public async Task<PhoneToReturnDto> GetPhoneOfPatient(Guid patientId, Guid id)
+        {
+            var spec = new PhoneSpecifications(patientId, id);
+            var phone = await _unitOfWork.Repository<Phone>().GetEntityWithAsync(spec);
+            if (phone is null) return null;
+            return _mapper.Map<PhoneToReturnDto>(phone);
+        }
+
+
+
         public async Task<PhoneDto> CreatePhone(PhoneDto phoneDto, Guid patientId)
         {
             if (phoneDto.Id != Guid.Empty)
@@ -41,24 +62,14 @@ namespace CareFlow.Service.Services
 
         }
 
+
+
         public Task<bool> DeletePhone(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PhoneToReturnDto> GetPhoneOfPatient(Guid patientId, Guid id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public async Task<IReadOnlyList<PhoneToReturnDto>> GetPhonesOfPatient(Guid patientId)
-        {
-            var spec = new PhoneSpecifications(patientId);
-            
-            var phones = await _unitOfWork.Repository<Phone>().GetAllWithSpecAsync(spec);
-            if (phones is null) return null;
-            return _mapper.Map<IReadOnlyList<PhoneToReturnDto>>(phones);
-        }
 
         public Task<PhoneToReturnDto> UpdatePhone(Guid patientId, PhoneDto phoneDto)
         {
