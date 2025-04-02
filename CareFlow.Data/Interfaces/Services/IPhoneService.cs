@@ -11,10 +11,10 @@ namespace CareFlow.Core.Interfaces.Services
 {
     public interface IPhoneService
     {
-        Task<IReadOnlyList<PhoneToReturnDto>> GetPhones();
-        Task<PhoneToReturnDto> GetPhone(Guid id);
+        Task<IReadOnlyList<PhoneToReturnDto>> GetPhonesOfPatient(Guid patientId);
+        Task<PhoneToReturnDto> GetPhoneOfPatient(Guid patientId,Guid id);
         Task<PhoneDto> CreatePhone(PhoneDto phoneDto,Guid patientId);
-        Task<PhoneToReturnDto> UpdatePhone(PhoneDto phoneDto);
+        Task<PhoneToReturnDto> UpdatePhone(Guid patientId,PhoneDto phoneDto);
         Task<bool> DeletePhone(Guid id);
     }
 }

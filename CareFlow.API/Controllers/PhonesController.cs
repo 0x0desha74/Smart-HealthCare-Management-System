@@ -1,4 +1,6 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,17 @@ namespace CareFlow.API.Controllers
         {
             _phoneService = phoneService;
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<PhoneToReturnDto>>> GetPhones(Guid patientId)
+        {
+            var phones = await _phoneService.GetPhonesOfPatient(patientId);
+            if (phones is null) return NotFound(new ApiResponse(404, "No phones assigned for this user"));
+            return Ok(phones);
+        }
+
+
+
 
         [HttpPost]
         public async Task<ActionResult<PhoneDto>> Create(PhoneDto model,Guid patientId)

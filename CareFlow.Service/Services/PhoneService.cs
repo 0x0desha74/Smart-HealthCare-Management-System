@@ -3,6 +3,7 @@ using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -45,17 +46,21 @@ namespace CareFlow.Service.Services
             throw new NotImplementedException();
         }
 
-        public Task<PhoneToReturnDto> GetPhone(Guid id)
+        public Task<PhoneToReturnDto> GetPhoneOfPatient(Guid patientId, Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IReadOnlyList<PhoneToReturnDto>> GetPhones()
+        public async Task<IReadOnlyList<PhoneToReturnDto>> GetPhonesOfPatient(Guid patientId)
         {
-            throw new NotImplementedException();
+            var spec = new PhoneSpecifications(patientId);
+            
+            var phones = await _unitOfWork.Repository<Phone>().GetAllWithSpecAsync(spec);
+            if (phones is null) return null;
+            return _mapper.Map<IReadOnlyList<PhoneToReturnDto>>(phones);
         }
 
-        public Task<PhoneToReturnDto> UpdatePhone(PhoneDto phoneDto)
+        public Task<PhoneToReturnDto> UpdatePhone(Guid patientId, PhoneDto phoneDto)
         {
             throw new NotImplementedException();
         }
