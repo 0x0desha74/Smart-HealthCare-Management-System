@@ -25,5 +25,32 @@ namespace CareFlow.Repository.Identity
                 await userManager.CreateAsync(user, "Pa$$word123");
             }
         }
+
+
+
+        public async static Task SeedRoles(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager)
+        {
+            List<string> roles = new List<string>()
+            {
+                "Admin",
+                "Patient",
+                "Doctor"
+            };
+            foreach(var role in roles)
+            {
+                if(!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            var adminUser = await userManager.FindByEmailAsync("mustafa.elsayed@gmail.com");
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+
+
+
+
+
+        }
     }
 }

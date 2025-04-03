@@ -59,8 +59,9 @@ namespace CareFlow.API
                 await identityContext.Database.MigrateAsync();
 
                 var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 await AppIdentityDbContextSeed.SeedUser(userManager);
-
+                await AppIdentityDbContextSeed.SeedRoles(roleManager, userManager);
             }
             catch (Exception ex)
             {
