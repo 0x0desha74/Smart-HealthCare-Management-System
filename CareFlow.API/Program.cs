@@ -1,7 +1,10 @@
 
 using CareFlow.API.Extensions;
 using CareFlow.API.Middlewares;
+using CareFlow.Core.Entities.Identity;
 using CareFlow.Repository.Data;
+using CareFlow.Repository.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -24,15 +27,23 @@ namespace CareFlow.API
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-            builder.Services.AddApplicationServices();
-            builder.Services.AddSwaggerServices();
+            
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found");
                 options.UseSqlServer(connectionString);
             });
+            
+            builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                var identityString = builder.Configuration.GetConnectionString("IdentityConnection") ?? throw new InvalidOperationException("Connection string not found");
+                options.UseSqlServer(identityString);
+            });
 
+            builder.Services.AddApplicationServices();
+            builder.Services.AddSwaggerServices();
+            builder.Services.AddIdentityServices();
 
             var app = builder.Build();
 
@@ -43,6 +54,13 @@ namespace CareFlow.API
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 await context.Database.MigrateAsync();
+
+                var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+                await identityContext.Database.MigrateAsync();
+
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                await AppIdentityDbContextSeed.SeedUser(userManager);
+
             }
             catch (Exception ex)
             {
@@ -61,7 +79,7 @@ namespace CareFlow.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
 
             app.MapControllers();
 

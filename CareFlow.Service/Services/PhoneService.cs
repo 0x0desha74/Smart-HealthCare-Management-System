@@ -76,9 +76,19 @@ namespace CareFlow.Service.Services
 
 
 
-        public Task<PhoneToReturnDto> UpdatePhone(Guid patientId, PhoneDto phoneDto)
+        public async Task<PhoneToReturnDto> UpdatePhone(Guid patientId, PhoneDto phoneDto)
         {
-            throw new NotImplementedException();
+            if (phoneDto is null || phoneDto.Id == Guid.Empty)
+                throw new KeyNotFoundException("Invalid phone data");
+            var spec = new PhoneSpecifications(patientId, phoneDto.Id);
+            var existingPhone = await _unitOfWork.Repository<Phone>().GetEntityWithAsync(spec);
+            if (existingPhone is null) throw new KeyNotFoundException("phone not found");
+            _mapper.Map(phoneDto, existingPhone);
+
+            _unitOfWork.Repository<Phone>().Update(existingPhone);
+            var result = await _unitOfWork.Complete();
+            if (result > 0) return _mapper.Map<PhoneToReturnDto>(existingPhone);
+            throw new InvalidOperationException("An error happed occurred while updating the phone");
         }
     }
 }

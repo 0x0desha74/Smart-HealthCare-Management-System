@@ -45,6 +45,15 @@ namespace CareFlow.API.Controllers
         }
 
 
+        [HttpPut]
+        public async Task<ActionResult<PhoneToReturnDto>> Update(Guid patientId, PhoneDto model)
+        {
+            var phone = await _phoneService.UpdatePhone(patientId, model);
+            return Ok(phone);
+
+        }
+
+
 
         [HttpDelete("{phoneId}")]
         public async Task<IActionResult> Delete(Guid patientId,Guid phoneId)
@@ -52,7 +61,9 @@ namespace CareFlow.API.Controllers
             var isDeleted = await _phoneService.DeletePhone(patientId, phoneId);
             if (isDeleted) return NoContent();
             return BadRequest(new ApiResponse(400, "An error occurred while deleting the phone number"));
-
         }
+
+        
+
     }
 }
