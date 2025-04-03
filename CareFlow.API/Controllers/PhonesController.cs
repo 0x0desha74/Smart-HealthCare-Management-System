@@ -43,5 +43,16 @@ namespace CareFlow.API.Controllers
             var phone = await _phoneService.CreatePhone(model, patientId);
             return Ok(phone);
         }
+
+
+
+        [HttpDelete("{phoneId}")]
+        public async Task<IActionResult> Delete(Guid patientId,Guid phoneId)
+        {
+            var isDeleted = await _phoneService.DeletePhone(patientId, phoneId);
+            if (isDeleted) return NoContent();
+            return BadRequest(new ApiResponse(400, "An error occurred while deleting the phone number"));
+
+        }
     }
 }

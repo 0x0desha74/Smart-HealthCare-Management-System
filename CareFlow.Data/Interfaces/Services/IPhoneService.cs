@@ -15,6 +15,6 @@ namespace CareFlow.Core.Interfaces.Services
         Task<PhoneToReturnDto> GetPhoneOfPatient(Guid patientId,Guid id);
         Task<PhoneDto> CreatePhone(PhoneDto phoneDto,Guid patientId);
         Task<PhoneToReturnDto> UpdatePhone(Guid patientId,PhoneDto phoneDto);
-        Task<bool> DeletePhone(Guid id);
+        Task<bool> DeletePhone(Guid patientid,Guid id);
     }
 }

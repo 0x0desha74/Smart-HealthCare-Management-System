@@ -64,9 +64,14 @@ namespace CareFlow.Service.Services
 
 
 
-        public Task<bool> DeletePhone(Guid id)
+        public async Task<bool> DeletePhone(Guid patientId,Guid id)
         {
-            throw new NotImplementedException();
+            var spec = new PhoneSpecifications(patientId, id);
+           var phone = await _unitOfWork.Repository<Phone>().GetEntityWithAsync(spec);
+            if (phone is null) throw new KeyNotFoundException("Invalid phone Id provided");
+            _unitOfWork.Repository<Phone>().Delete(phone);
+            var result = await _unitOfWork.Complete();
+            return result > 0;
         }
 
 
