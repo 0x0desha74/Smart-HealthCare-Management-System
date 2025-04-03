@@ -2,6 +2,7 @@
 using CareFlow.Core.DTOs.In;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -18,7 +19,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-
+        //[Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<PatientToReturnDto>>> GetPatients()
         {
@@ -27,7 +28,7 @@ namespace CareFlow.API.Controllers
             return Ok(patients);
         }
 
-
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<PatientToReturnDto>> GetPatient(Guid id)
         {
@@ -45,6 +46,7 @@ namespace CareFlow.API.Controllers
             return Ok(patient);
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<ActionDoneSuccessfullyDto>> Delete(Guid id)
         {
