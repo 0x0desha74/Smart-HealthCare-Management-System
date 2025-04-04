@@ -10,5 +10,6 @@ namespace CareFlow.Core.Interfaces.Services
    public interface IAllergyService
     {
         Task<AllergyDto> AddAllergyToPatient(Guid patientId,AllergyDto allergyDto);
+        Task<bool> DeleteAllergyFromPatient(Guid patientId, Guid allergyId);
     }
 }

@@ -2,6 +2,7 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,16 @@ namespace CareFlow.Service.Services
             if (result > 0) return _mapper.Map<AllergyDto>(allergy);
             throw new InvalidOperationException("An error occurred while add allergy to patient");
 
+        }
+
+        public async Task<bool> DeleteAllergyFromPatient(Guid patientId, Guid allergyId)
+        {
+            var spec = new AllergySpecifications(patientId, allergyId);
+            var allergy = await _unitOfWork.Repository<Allergy>().GetEntityWithAsync(spec);
+            if (allergy is null) throw new KeyNotFoundException("Invalid allergy Id provided");
+            _unitOfWork.Repository<Allergy>().Delete(allergy);
+            var result = await _unitOfWork.Complete();
+            return result > 0; 
         }
     }
 }
