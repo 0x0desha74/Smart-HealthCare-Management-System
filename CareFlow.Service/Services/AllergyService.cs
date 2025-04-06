@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
@@ -51,6 +52,16 @@ namespace CareFlow.Service.Services
             _unitOfWork.Repository<Allergy>().Delete(allergy);
             var result = await _unitOfWork.Complete();
             return result > 0; 
+        }
+
+        public async Task<IReadOnlyList<AllergyToReturnDto>> GetAllergiesForPatient(Guid patientId)
+        {
+           var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientId);
+            if (patient is null) throw new KeyNotFoundException("Invalid patient id provided");
+            var spec = new AllergySpecifications(patientId);
+            var allergies = await _unitOfWork.Repository<Allergy>().GetAllWithSpecAsync(spec);
+            if (allergies is null) return null;
+            return _mapper.Map<IReadOnlyList<AllergyToReturnDto>>(allergies);
         }
     }
 }
