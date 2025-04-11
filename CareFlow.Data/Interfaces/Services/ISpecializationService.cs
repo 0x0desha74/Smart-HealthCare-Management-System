@@ -10,6 +10,7 @@ namespace CareFlow.Core.Interfaces.Services
    public interface ISpecializationService
     {
         Task<IReadOnlyList<SpecializationDto>> GetSpecializationsAsync();
+        Task<SpecializationDto> GetSpecializationAsync(Guid id);
         Task AddSpecializationAsync(SpecializationDto specializationDto); 
         
     }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers
 {
-   
+
     public class SpecializationsController : BaseApiController
     {
         private readonly ISpecializationService _specializationService;
@@ -27,6 +27,13 @@ namespace CareFlow.API.Controllers
             return Ok(specializations);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SpecializationDto>> GetSpecialization(Guid id)
+        {
+            var specialization = await _specializationService.GetSpecializationAsync(id);
+            if (specialization is null) return NotFound(new ApiResponse(404));
+            return Ok(specialization);
+        }
 
 
 

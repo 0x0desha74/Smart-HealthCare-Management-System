@@ -33,6 +33,12 @@ namespace CareFlow.Service.Services
 
 
 
+        public async Task<SpecializationDto> GetSpecializationAsync(Guid id)
+        {
+            var specialization = await _unitOfWork.Repository<Specialization>().GetByIdAsync(id);
+            if (specialization is null) return null;
+            return _mapper.Map<SpecializationDto>(specialization);
+        }
 
 
 
@@ -45,13 +51,6 @@ namespace CareFlow.Service.Services
             var result = await _unitOfWork.Complete();
             if (result <= 0) throw new InvalidOperationException("An error occurred while creating specialization");
         }
-
-
-
-
-
-
-
 
     }
 }
