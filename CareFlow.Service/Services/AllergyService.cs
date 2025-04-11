@@ -63,5 +63,9 @@ namespace CareFlow.Service.Services
             if (allergies is null) return null;
             return _mapper.Map<IReadOnlyList<AllergyToReturnDto>>(allergies);
         }
+
+
+
+
     }
 }
