@@ -42,7 +42,7 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task AddSpecializationAsync(SpecializationDto specializationDto)
+        public async Task CreateSpecializationAsync(SpecializationDto specializationDto)
         {
             if (specializationDto.Id != Guid.Empty)
                 throw new Exception("Invalid Data Provided, Id should be null");
@@ -52,5 +52,31 @@ namespace CareFlow.Service.Services
             if (result <= 0) throw new InvalidOperationException("An error occurred while creating specialization");
         }
 
+        public async Task<SpecializationDto> UpdateSpecializationAsync(SpecializationDto specializationDto)
+        {
+            if (specializationDto is null || specializationDto.Id == Guid.Empty)
+                throw new ArgumentException("Specialization data is not valid");
+
+            var existingSpec = await _unitOfWork.Repository<Specialization>().GetByIdAsync(specializationDto.Id);
+            if (existingSpec is null)
+                return null;
+
+            _mapper.Map(specializationDto, existingSpec);
+            _unitOfWork.Repository<Specialization>().Update(existingSpec);
+            var result = await _unitOfWork.Complete();
+            if (result > 0) return _mapper.Map<SpecializationDto>(existingSpec);
+            throw new InvalidOperationException("An error occurred while updating");
+
+        }
+
+        public async Task<bool> DeleteSpecializationAsync(Guid id)
+        {
+            var specialization = await _unitOfWork.Repository<Specialization>().GetByIdAsync(id);
+            if (specialization is null)
+                throw new KeyNotFoundException("Invalid Specialization Id");
+            _unitOfWork.Repository<Specialization>().Delete(specialization);
+            var result = await _unitOfWork.Complete();
+            return result > 0;
+        }
     }
 }

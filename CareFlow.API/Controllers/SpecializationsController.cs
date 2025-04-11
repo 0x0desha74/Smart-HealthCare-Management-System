@@ -36,13 +36,34 @@ namespace CareFlow.API.Controllers
         }
 
 
-
-        //[Authorize("Admin")]
+        //[Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(SpecializationDto model)
         {
-            await _specializationService.AddSpecializationAsync(model);
+            await _specializationService.CreateSpecializationAsync(model);
             return Ok();
         }
+
+        //[Authorize(Roles ="Admin")]
+
+        [HttpPut]
+        public async Task<ActionResult<SpecializationDto>> Update(SpecializationDto model)
+        {
+            var updatedSpecialization = await _specializationService.UpdateSpecializationAsync(model);
+            if (updatedSpecialization is null) return NotFound(new ApiResponse(404, "Invalid Specialization Id"));
+            return Ok(updatedSpecialization);
+        }
+
+        //[Authorize(Roles ="Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var isDeleted = await _specializationService.DeleteSpecializationAsync(id);
+            if (!isDeleted) return BadRequest(new ApiResponse(400));
+            return NoContent();
+        }
+
+
+
     }
 }

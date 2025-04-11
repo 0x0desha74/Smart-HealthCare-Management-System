@@ -11,7 +11,9 @@ namespace CareFlow.Core.Interfaces.Services
     {
         Task<IReadOnlyList<SpecializationDto>> GetSpecializationsAsync();
         Task<SpecializationDto> GetSpecializationAsync(Guid id);
-        Task AddSpecializationAsync(SpecializationDto specializationDto); 
+        Task CreateSpecializationAsync(SpecializationDto specializationDto);
+        Task<SpecializationDto> UpdateSpecializationAsync(SpecializationDto specializationDto);
+        Task<bool> DeleteSpecializationAsync(Guid id);
         
     }
 }
