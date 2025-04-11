@@ -70,6 +70,40 @@ namespace CareFlow.Service.Services
             return _mapper.Map<DoctorToReturnDto>(doctor);
         }
 
-      
+        public async Task<DoctorToReturnDto> UpdateDoctorAsync(DoctorDto doctorDto)
+        {
+            if (doctorDto.Id == Guid.Empty)
+                throw new ArgumentException("Doctor ID must not be null");
+
+            var spec = new DoctorSpecifications(doctorDto.Id);
+            var existingDoctor = await _unitOfWork.Repository<Doctor>().GetEntityWithAsync(spec);
+
+            if (existingDoctor is null) return null;
+
+            _mapper.Map(doctorDto, existingDoctor);
+
+            var specializationSpec = new SpecializationSpecifications(doctorDto.SpecializationsIds);
+            var specializations = await _unitOfWork.Repository<Specialization>().GetAllWithSpecAsync(specializationSpec);
+
+            existingDoctor.Specializations.Clear();
+
+            foreach(var specialization in specializations)
+            {
+                existingDoctor.Specializations.Add(specialization);
+            }
+
+            _unitOfWork.Repository<Doctor>().Update(existingDoctor);
+            var result = await _unitOfWork.Complete();
+
+            if (result <= 0)
+                throw new InvalidOperationException("An error occurred while updating the entity");
+
+            return _mapper.Map<DoctorToReturnDto>(existingDoctor);
+        }
+
+        public Task<bool> DeleteDoctorAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -40,5 +40,14 @@ namespace CareFlow.API.Controllers
             var doctor = await _doctorService.CreateDoctorAsync(model);
             return Ok(doctor);
         }
+
+        [HttpPut]
+        public async Task<ActionResult<DoctorToReturnDto>> Update(DoctorDto model)
+        {
+            var doctor = await _doctorService.UpdateDoctorAsync(model);
+            if (doctor is null) return NotFound(new ApiResponse(404,"Doctor Not Found, Id is invalid"));
+            return Ok(doctor);
+        }
+
     }
 }
