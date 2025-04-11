@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.Interfaces;
+using CareFlow.Core.Interfaces.Services;
+using CareFlow.Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CareFlow.Service.Services
+{
+    public class SpecializationService : ISpecializationService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public SpecializationService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+
+        public async Task AddSpecializationAsync(SpecializationDto specializationDto)
+        {
+            if (specializationDto.Id != Guid.Empty)
+                throw new Exception("Invalid Data Provided, Id should be null");
+            var specialization = _mapper.Map<Specialization>(specializationDto);
+            await _unitOfWork.Repository<Specialization>().AddAsync(specialization);
+            var result = await _unitOfWork.Complete();
+            if (result <= 0) throw new InvalidOperationException("An error occurred while creating specialization");
+        }
+    }
+}

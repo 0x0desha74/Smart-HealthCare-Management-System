@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace CareFlow.Core.Interfaces.Services
 {
-   public interface IAppointmentService
+   public interface ISpecializationService
     {
-        Task<AppointmentDto> AddAppointmentToPatient(Guid patientId, AppointmentDto appointmentDto);
+        Task AddSpecializationAsync(SpecializationDto specializationDto); 
+        
     }
 }

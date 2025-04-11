@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CareFlow.Data.Entities
+namespace CareFlow.Core.DTOs.Requests
 {
-    public class Specialization:BaseEntity
+    public class SpecializationDto
     {
-       
+        public Guid Id { get; set; }
         [MaxLength(100)]
+        [Required]
         public string Name { get; set; }
         [MaxLength(2500)]
         public string? Description { get; set; }
-        public ICollection<Doctor> Doctors { get; set; } = new HashSet<Doctor>();
     }
 }
