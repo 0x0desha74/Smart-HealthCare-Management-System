@@ -32,6 +32,13 @@ namespace CareFlow.Service.Services
             return _mapper.Map<IReadOnlyList<ClinicToReturnDto>>(clinics);
         }
 
+        public async Task<ClinicToReturnDto> GetClinic(Guid id)
+        {
+            var spec = new ClinicSpecifications(id);
+            var clinic = await _unitOfWork.Repository<Clinic>().GetEntityWithAsync(spec);
+            if (clinic is null) return null;
+            return _mapper.Map<ClinicToReturnDto>(clinic);
+        }
 
 
         public async Task<ClinicDto> CreateClinicAsync(ClinicDto clinicDto)
@@ -57,6 +64,6 @@ namespace CareFlow.Service.Services
             throw new InvalidOperationException("An error occurred while creating clinic entity.");
         }
 
-
+    
     }
 }

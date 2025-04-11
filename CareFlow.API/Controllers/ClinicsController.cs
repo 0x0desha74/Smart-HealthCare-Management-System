@@ -25,8 +25,18 @@ namespace CareFlow.API.Controllers
             var clinic = await _clinicService.CreateClinicAsync(model);
             return Ok(clinic);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClinicToReturnDto>> GetClinic(Guid id)
+        {
+            var clinic = await _clinicService.GetClinic(id);
+            if (clinic is null) return NotFound(new ApiResponse(404));
+            return Ok(clinic);
+        }
+
         
-        
+
+
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ClinicToReturnDto>>> GetClinics()
         {
