@@ -24,6 +24,6 @@ namespace CareFlow.Data.Entities
         public ICollection<MedicalHistory> MedicalHistories { get; set; } = new HashSet<MedicalHistory>();
         public Clinic Clinic { get; set; }
         
-        public Guid ClinicId { get; set; }
+        public Guid? ClinicId { get; set; }
     }
 }

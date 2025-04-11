@@ -64,6 +64,8 @@ namespace CareFlow.Service.Services
             var clinic = await _unitOfWork.Repository<Clinic>().GetEntityWithAsync(spec);
             if (clinic is null) return false;
             _unitOfWork.Repository<Clinic>().Delete(clinic);
+            _unitOfWork.Repository<Location>().Delete(clinic.Location);
+
             var result = await _unitOfWork.Complete();
             return result > 0 ? true : throw new InvalidOperationException("An error occurred while deleting the clinic entity.");
 

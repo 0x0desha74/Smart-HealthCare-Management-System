@@ -26,6 +26,8 @@ namespace CareFlow.API.Helper
             CreateMap<Location, LocationDto>().ReverseMap();
             CreateMap<Clinic, ClinicToReturnDto>();
             CreateMap<Location, LocationToReturnDto>();
+            CreateMap<Doctor, DoctorDto>().ReverseMap();
+            CreateMap<Doctor, DoctorToReturnDto>().ReverseMap();
 
         }
     }
