@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,16 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
+        public async Task<IReadOnlyList<ClinicToReturnDto>> GetClinics()
+        {
+            var spec = new ClinicSpecifications();
+            var clinics = await _unitOfWork.Repository<Clinic>().GetAllWithSpecAsync(spec);
+            if (clinics is null) return null;
+            return _mapper.Map<IReadOnlyList<ClinicToReturnDto>>(clinics);
+        }
+
+
+
         public async Task<ClinicDto> CreateClinicAsync(ClinicDto clinicDto)
         {
             if (clinicDto is null || clinicDto.Id != Guid.Empty)
@@ -38,11 +50,13 @@ namespace CareFlow.Service.Services
             clinic.LocationId = location.Id;
 
             await _unitOfWork.Repository<Clinic>().AddAsync(clinic);
-            
+
             var result = await _unitOfWork.Complete();
-            
+
             if (result > 0) return _mapper.Map<ClinicDto>(clinic);
             throw new InvalidOperationException("An error occurred while creating clinic entity.");
         }
+
+
     }
 }
