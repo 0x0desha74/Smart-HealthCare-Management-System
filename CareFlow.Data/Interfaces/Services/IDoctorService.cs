@@ -10,7 +10,8 @@ namespace CareFlow.Core.Interfaces.Services
 {
     public interface IDoctorService
     {
-        Task<IReadOnlyList<DoctorToReturnDto>> GetDoctors();
+        Task<IReadOnlyList<DoctorToReturnDto>> GetDoctorsAsync();
+        Task<DoctorToReturnDto> GetDoctorAsync(Guid id);
         Task<DoctorToReturnDto> CreateDoctorAsync(DoctorDto doctorDto);
     }
 }

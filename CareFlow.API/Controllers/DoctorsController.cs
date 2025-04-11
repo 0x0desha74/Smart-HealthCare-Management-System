@@ -20,12 +20,19 @@ namespace CareFlow.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<DoctorToReturnDto>>> GetDoctors()
         {
-            var doctors = await _doctorService.GetDoctors();
+            var doctors = await _doctorService.GetDoctorsAsync();
             if (doctors is null) return NotFound(new ApiResponse(404));
             return Ok(doctors);
         }
 
 
+        [HttpGet("{id}")]
+       public async Task<ActionResult<DoctorToReturnDto>> GetDoctor(Guid id)
+        {
+            var doctor = await _doctorService.GetDoctorAsync(id);
+            if (doctor is null) return NotFound(new ApiResponse(404, "Doctor not found"));
+            return Ok(doctor);
+        }
 
         [HttpPost]
         public async Task<ActionResult<DoctorToReturnDto>> Create(DoctorDto model)

@@ -25,7 +25,7 @@ namespace CareFlow.Service.Services
         }
 
 
-        public async Task<IReadOnlyList<DoctorToReturnDto>> GetDoctors()
+        public async Task<IReadOnlyList<DoctorToReturnDto>> GetDoctorsAsync()
         {
             var spec = new DoctorSpecifications();
             var doctors = await _unitOfWork.Repository<Doctor>().GetAllWithSpecAsync(spec);
@@ -34,6 +34,15 @@ namespace CareFlow.Service.Services
 
         }
 
+
+        public async Task<DoctorToReturnDto> GetDoctorAsync(Guid id)
+        {
+            var spec = new DoctorSpecifications(id);
+            var doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithAsync(spec);
+            if (doctor is null)
+                return null;
+            return _mapper.Map<DoctorToReturnDto>(doctor);
+        }
 
 
 
@@ -61,6 +70,6 @@ namespace CareFlow.Service.Services
             return _mapper.Map<DoctorToReturnDto>(doctor);
         }
 
-        
+      
     }
 }
