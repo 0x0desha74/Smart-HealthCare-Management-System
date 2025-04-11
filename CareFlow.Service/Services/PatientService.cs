@@ -30,8 +30,7 @@ namespace CareFlow.Service.Services
             var spec = new PatientSpecifications();
             var patients = await _unitOfWork.Repository<Patient>().GetAllWithSpecAsync(spec);
             if (patients is null) return null;
-            var mappedPatients = _mapper.Map<IReadOnlyList<Patient>, IReadOnlyList<PatientToReturnDto>>(patients);
-            return mappedPatients;
+            return _mapper.Map<IReadOnlyList<Patient>, IReadOnlyList<PatientToReturnDto>>(patients);
         }
 
 

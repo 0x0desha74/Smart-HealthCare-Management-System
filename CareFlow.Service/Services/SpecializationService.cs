@@ -22,6 +22,20 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
+
+        public async Task<IReadOnlyList<SpecializationDto>> GetSpecializationsAsync()
+        {
+            var specializations = await _unitOfWork.Repository<Specialization>().GetAllAsync();
+            if(specializations is null) return null;
+            return _mapper.Map<IReadOnlyList<SpecializationDto>>(specializations);
+
+        }
+
+
+
+
+
+
         public async Task AddSpecializationAsync(SpecializationDto specializationDto)
         {
             if (specializationDto.Id != Guid.Empty)
@@ -31,5 +45,13 @@ namespace CareFlow.Service.Services
             var result = await _unitOfWork.Complete();
             if (result <= 0) throw new InvalidOperationException("An error occurred while creating specialization");
         }
+
+
+
+
+
+
+
+
     }
 }

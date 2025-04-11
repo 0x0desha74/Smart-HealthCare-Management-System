@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,19 @@ namespace CareFlow.API.Controllers
         {
             _specializationService = specializationService;
         }
+
+
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<SpecializationDto>>> GetSpecializations()
+        {
+            var specializations = await _specializationService.GetSpecializationsAsync();
+            if (specializations is null) return NotFound(new ApiResponse(404));
+            return Ok(specializations);
+        }
+
+
+
 
         //[Authorize("Admin")]
         [HttpPost]
