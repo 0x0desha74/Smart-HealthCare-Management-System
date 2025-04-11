@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CareFlow.Core.DTOs.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace CareFlow.Core.Interfaces.Services
 {
     public interface IClinicService
     {
-
+        Task<ClinicDto> CreateClinicAsync(ClinicDto clinicDto);
     }
 }

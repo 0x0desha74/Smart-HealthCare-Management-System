@@ -69,5 +69,7 @@ namespace CareFlow.Repository.Repositories
         {
             await _dbContext.Set<T>().AddAsync(entity);
         }
+
+      
     }
 }

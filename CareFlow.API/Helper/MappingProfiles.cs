@@ -22,6 +22,8 @@ namespace CareFlow.API.Helper
                 .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}"))
                 .ForMember(d => d.Doctor, O => O.MapFrom(s => $"{s.Doctor.FirstName} {s.Doctor.LastName}"));
             CreateMap<Specialization, SpecializationDto>().ReverseMap();
+            CreateMap<Clinic, ClinicDto>().ReverseMap();
+            CreateMap<Location, LocationDto>().ReverseMap();
 
         }
     }

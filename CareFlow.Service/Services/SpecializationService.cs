@@ -45,7 +45,7 @@ namespace CareFlow.Service.Services
         public async Task CreateSpecializationAsync(SpecializationDto specializationDto)
         {
             if (specializationDto.Id != Guid.Empty)
-                throw new Exception("Invalid Data Provided, Id should be null");
+                throw new ArgumentException("Invalid Data Provided, Id should be null");
             var specialization = _mapper.Map<Specialization>(specializationDto);
             await _unitOfWork.Repository<Specialization>().AddAsync(specialization);
             var result = await _unitOfWork.Complete();

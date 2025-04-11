@@ -4,6 +4,7 @@ using CareFlow.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareFlow.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250411125818_ModifyCountryNameInLocationTable")]
+    partial class ModifyCountryNameInLocationTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,9 +190,6 @@ namespace CareFlow.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId")
-                        .IsUnique();
-
                     b.ToTable("Clinics");
                 });
 
@@ -324,7 +324,10 @@ namespace CareFlow.Repository.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Country")
+                    b.Property<Guid>("ClinicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Counrty")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -340,6 +343,9 @@ namespace CareFlow.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClinicId")
+                        .IsUnique();
 
                     b.ToTable("Locations");
                 });
@@ -589,17 +595,6 @@ namespace CareFlow.Repository.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("CareFlow.Data.Entities.Clinic", b =>
-                {
-                    b.HasOne("CareFlow.Data.Entities.Location", "Location")
-                        .WithOne()
-                        .HasForeignKey("CareFlow.Data.Entities.Clinic", "LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Location");
-                });
-
             modelBuilder.Entity("CareFlow.Data.Entities.Doctor", b =>
                 {
                     b.HasOne("CareFlow.Data.Entities.Clinic", "Clinic")
@@ -650,6 +645,15 @@ namespace CareFlow.Repository.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("CareFlow.Data.Entities.Location", b =>
+                {
+                    b.HasOne("CareFlow.Data.Entities.Clinic", null)
+                        .WithOne("Location")
+                        .HasForeignKey("CareFlow.Data.Entities.Location", "ClinicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CareFlow.Data.Entities.Patient", b =>
@@ -741,6 +745,9 @@ namespace CareFlow.Repository.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("Doctors");
+
+                    b.Navigation("Location")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CareFlow.Data.Entities.Doctor", b =>
