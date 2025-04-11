@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers
 {
- 
+
     public class ClinicsController : BaseApiController
     {
         private readonly IClinicService _clinicService;
@@ -34,8 +34,6 @@ namespace CareFlow.API.Controllers
             return Ok(clinic);
         }
 
-        
-
 
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ClinicToReturnDto>>> GetClinics()
@@ -43,6 +41,24 @@ namespace CareFlow.API.Controllers
             var clinics = await _clinicService.GetClinics();
             if (clinics is null) return NotFound(new ApiResponse(404));
             return Ok(clinics);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<ActionResult<ClinicToReturnDto>> Update(ClinicDto model)
+        {
+            var clinic = await _clinicService.UpdateClinicAsync(model);
+            return Ok(clinic);
+        }
+
+
+        //[Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var isDeleted = await _clinicService.DeleteClinic(id);
+            if (!isDeleted) return NotFound(new ApiResponse(404, "Invalid clinic ID provided"));
+            return NoContent();
         }
 
     }

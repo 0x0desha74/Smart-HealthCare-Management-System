@@ -15,7 +15,7 @@ namespace CareFlow.Repository.Data.Configurations
         {
             builder.HasOne(c => c.Location)
                 .WithOne()
-                .HasForeignKey<Clinic>(c=>c.LocationId)
+                .HasForeignKey<Clinic>(l => l.LocationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(c => c.Doctors)
