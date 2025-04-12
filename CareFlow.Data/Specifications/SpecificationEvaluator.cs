@@ -1,6 +1,4 @@
 ﻿using CareFlow.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 
 namespace CareFlow.Core.Specifications
@@ -15,7 +13,7 @@ namespace CareFlow.Core.Specifications
                 query = query.Where(spec.Criteria);
 
 
-            query = spec.Includes.Aggregate( query, (current, include) => include(current));
+            query = spec.Includes.Aggregate(query, (current, include) => include(current));
             return query;
 
         }

@@ -15,9 +15,9 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(a => a.Clinic).ThenInclude(p => p.Location));
 
         }
-        public AppointmentSpecifications(Guid id):base(a=>a.Id==id)
+        public AppointmentSpecifications(Guid id) : base(a => a.Id == id)
         {
-            
+
 
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));

@@ -2,7 +2,6 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers
@@ -19,6 +18,7 @@ namespace CareFlow.API.Controllers
 
 
 
+        //[Authorize(Roles = "Patient")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetAppointments()
         {
@@ -45,7 +45,7 @@ namespace CareFlow.API.Controllers
             return Ok(appointment);
         }
 
-
+        //[Authorize(Roles = "Patient")]
         [HttpPut]
         public async Task<ActionResult<AppointmentToReturnDto>> Update(AppointmentUpdateDto model)
         {

@@ -1,5 +1,4 @@
 ﻿using CareFlow.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace CareFlow.Core.Specifications
