@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CareFlow.Core.DTOs.Requests
 {
-    public class AppointmentDto
+    public class AppointmentCreateDto
     {
-        public Guid Id { get; set; }
         [Required]
         public DateTime AppointmentDate { get; set; }
         [Required]

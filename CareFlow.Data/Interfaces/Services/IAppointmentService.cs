@@ -7,6 +7,7 @@ namespace CareFlow.Core.Interfaces.Services
     {
         Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsAsync();
         Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id);
-        Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentDto appointmentDto);
+        Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentCreateDto appointmentDto);
+        Task<AppointmentToReturnDto> UpdateAppointmentAsync(AppointmentUpdateDto appointmentDto);
     }
 }

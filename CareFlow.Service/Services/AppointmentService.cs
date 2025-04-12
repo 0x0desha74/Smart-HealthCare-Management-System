@@ -47,10 +47,8 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentDto appointmentDto)
+        public async Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentCreateDto appointmentDto)
         {
-            if (appointmentDto.Id != Guid.Empty)
-                throw new ArgumentException("Invalid appointment data provided, Appointment id must be null");
 
             var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(appointmentDto.PatientId);
             if (patient is null)
@@ -77,6 +75,36 @@ namespace CareFlow.Service.Services
 
         }
 
-     
+        public async Task<AppointmentToReturnDto> UpdateAppointmentAsync(AppointmentUpdateDto appointmentDto)
+        {
+            if (appointmentDto.Id == Guid.Empty)
+                throw new ArgumentException("Invalid appointment data provided, Id must no not be null");
+
+            var spec = new AppointmentSpecifications(appointmentDto.Id);
+            var existingAppointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
+
+            if (existingAppointment is null)
+                throw new KeyNotFoundException("Appointment not found, Invalid appointment Id provided");
+
+
+            var doctor = await _unitOfWork.Repository<Doctor>().GetByIdAsync(appointmentDto.DoctorId);
+
+            if (doctor is null)
+                throw new KeyNotFoundException("Doctor not found, Invalid doctor Id provided");
+
+            var clinic = await _unitOfWork.Repository<Clinic>().GetByIdAsync(appointmentDto.ClinicId);
+
+            if (clinic is null)
+                throw new KeyNotFoundException("Clinic not found, Invalid clinic Id provided");
+
+            _mapper.Map(appointmentDto, existingAppointment);
+
+            _unitOfWork.Repository<Appointment>().Update(existingAppointment);
+            var result = await _unitOfWork.Complete();
+
+            if (result <= 0)
+                throw new InvalidOperationException("An error occurred while updating the appointment entity");
+            return _mapper.Map<AppointmentToReturnDto>(existingAppointment);
+        }
     }
 }

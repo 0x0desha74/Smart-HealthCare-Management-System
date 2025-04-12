@@ -39,12 +39,19 @@ namespace CareFlow.API.Controllers
 
         //[Authorize(Roles = "Patient")]
         [HttpPost]
-        public async Task<ActionResult<AppointmentToReturnDto>> Create(AppointmentDto model)
+        public async Task<ActionResult<AppointmentToReturnDto>> Create(AppointmentCreateDto model)
         {
             var appointment = await _appointmentService.CreateAppointmentAsync(model);
             return Ok(appointment);
         }
 
+
+        [HttpPut]
+        public async Task<ActionResult<AppointmentToReturnDto>> Update(AppointmentUpdateDto model)
+        {
+            var appointment = await _appointmentService.UpdateAppointmentAsync(model);
+            return Ok(appointment);
+        }
 
     }
 }
