@@ -1,4 +1,5 @@
 ﻿using CareFlow.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CareFlow.Core.Specifications
 {
@@ -6,12 +7,12 @@ namespace CareFlow.Core.Specifications
     {
         public DoctorSpecifications(Guid id) : base(d => d.Id == id)
         {
-            Includes.Add(d => d.Specializations);
+            AddIncludes(q => q.Include(d => d.Specializations));
         }
 
         public DoctorSpecifications()
         {
-            Includes.Add(d => d.Specializations);
+            AddIncludes(q => q.Include(d => d.Specializations));
         }
     }
 }

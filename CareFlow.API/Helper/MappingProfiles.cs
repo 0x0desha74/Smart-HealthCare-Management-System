@@ -17,6 +17,7 @@ namespace CareFlow.API.Helper
             CreateMap<AllergyDto, Allergy>().ReverseMap();
             CreateMap<Allergy, AllergyToReturnDto>();
             CreateMap<Appointment, AppointmentDto>().ReverseMap();
+            CreateMap<Appointment, AppointmentDetailsDto>().ReverseMap();
             CreateMap<Appointment, AppointmentToReturnDto>()
                 .ForMember(d => d.Clinic, O => O.MapFrom(s => s.Clinic.Name))
                 .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}"))

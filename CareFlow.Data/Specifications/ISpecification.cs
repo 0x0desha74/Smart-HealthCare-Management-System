@@ -5,6 +5,7 @@ namespace CareFlow.Core.Specifications
     public interface ISpecification<T>
     {
         Expression<Func<T, bool>> Criteria { get; set; }
-        List<Expression<Func<T, object>>> Includes { get; set; }
+        List<Func<IQueryable<T>, IQueryable<T>>> Includes { get; }
+
     }
 }

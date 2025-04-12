@@ -3,6 +3,7 @@ using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
 
 namespace CareFlow.Service.Services
@@ -17,6 +18,27 @@ namespace CareFlow.Service.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+
+
+
+        public async Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id)
+        {
+            var spec = new AppointmentSpecifications(id);
+            var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
+
+            if (appointment is null)
+                throw new KeyNotFoundException("Appointment not found, Invalid appointment ID");
+
+            return _mapper.Map<AppointmentDetailsDto>(appointment);
+        }
+
+
+
+
+
+
+
 
         public async Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentDto appointmentDto)
         {
@@ -47,5 +69,7 @@ namespace CareFlow.Service.Services
 
 
         }
+
+
     }
 }
