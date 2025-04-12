@@ -5,6 +5,7 @@ namespace CareFlow.Core.Interfaces.Services
 {
     public interface IAppointmentService
     {
+        Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsAsync();
         Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id);
         Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentDto appointmentDto);
     }

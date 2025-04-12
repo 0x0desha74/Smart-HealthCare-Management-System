@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,17 @@ namespace CareFlow.API.Controllers
         {
             _appointmentService = appointmentService;
         }
+
+
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetAppointments()
+        {
+            var appointments = await _appointmentService.GetAppointmentsAsync();
+            if (appointments is null) return NotFound(new ApiResponse(404));
+            return Ok(appointments);
+        }
+
 
 
         [HttpGet("{id}")]

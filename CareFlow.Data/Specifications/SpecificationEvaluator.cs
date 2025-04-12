@@ -20,10 +20,6 @@ namespace CareFlow.Core.Specifications
 
         }
 
-
-
-
-
     }
 }
 

@@ -34,7 +34,14 @@ namespace CareFlow.Service.Services
         }
 
 
+        public async Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsAsync()
+        {
+            var spec = new AppointmentSpecifications();
+            var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
 
+            if (appointments is null) return null;
+            return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+        }
 
 
 
@@ -70,6 +77,6 @@ namespace CareFlow.Service.Services
 
         }
 
-
+     
     }
 }
