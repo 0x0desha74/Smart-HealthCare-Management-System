@@ -19,12 +19,15 @@ namespace CareFlow.Core.DTOs.Response
         public string Reason { get; set; }
         [MaxLength(1000)]
         public string? Notes { get; set; }
+
         public Guid PatientId { get; set; }
         public string Patient { get; set; }
+
         public Guid DoctorId { get; set; }
         public string Doctor { get; set; }
+
         public Guid ClinicId { get; set; }
-        public Clinic Clinic { get; set; }
+        public string Clinic { get; set; }
 
     }
 }

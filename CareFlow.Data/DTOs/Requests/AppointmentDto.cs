@@ -24,6 +24,9 @@ namespace CareFlow.Core.DTOs.Requests
         [MaxLength(1000)]
         [Required]
         public string? Notes { get; set; }
+
+        [Required]
+        public Guid PatientId { get; set; }
         [Required]
         public Guid DoctorId { get; set; }
         [Required]

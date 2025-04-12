@@ -1,4 +1,5 @@
 ﻿using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.DTOs.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace CareFlow.Core.Interfaces.Services
 {
    public interface IAppointmentService
     {
-        Task<AppointmentDto> AddAppointmentToPatient(Guid patientId, AppointmentDto appointmentDto);
+        Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentDto appointmentDto);
     }
 }
