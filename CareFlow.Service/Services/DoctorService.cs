@@ -87,7 +87,7 @@ namespace CareFlow.Service.Services
 
             existingDoctor.Specializations.Clear();
 
-            foreach(var specialization in specializations)
+            foreach (var specialization in specializations)
             {
                 existingDoctor.Specializations.Add(specialization);
             }
@@ -101,9 +101,17 @@ namespace CareFlow.Service.Services
             return _mapper.Map<DoctorToReturnDto>(existingDoctor);
         }
 
-        public Task<bool> DeleteDoctorAsync(Guid id)
+        public async Task<bool> DeleteDoctorAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var spec = new DoctorSpecifications(id);
+            var doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithAsync(spec);
+            if (doctor is null) return false;
+            _unitOfWork.Repository<Doctor>().Delete(doctor);
+            var result = await _unitOfWork.Complete();
+            return result > 0 ? true : throw new InvalidOperationException("An error occurred while deleting doctor entity");
+
+
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,8 @@ namespace CareFlow.API.Controllers
             return Ok(doctor);
         }
 
+
+        //[Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<ActionResult<DoctorToReturnDto>> Create(DoctorDto model)
         {
@@ -41,6 +44,8 @@ namespace CareFlow.API.Controllers
             return Ok(doctor);
         }
 
+
+        //[Authorize(Roles ="Admin")]
         [HttpPut]
         public async Task<ActionResult<DoctorToReturnDto>> Update(DoctorDto model)
         {
@@ -49,5 +54,14 @@ namespace CareFlow.API.Controllers
             return Ok(doctor);
         }
 
+
+        //[Authorize(Roles ="Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var isDeleted = await _doctorService.DeleteDoctorAsync(id);
+            if (!isDeleted) return NotFound(new ApiResponse(404, "Doctor not found, Invalid doctor Id"));
+            return NoContent();
+        }
     }
 }
