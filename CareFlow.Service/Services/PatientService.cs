@@ -5,11 +5,6 @@ using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
@@ -39,7 +34,7 @@ namespace CareFlow.Service.Services
             var spec = new PatientSpecifications(id);
             var patient = await _unitOfWork.Repository<Patient>().GetEntityWithAsync(spec);
             if (patient is null) return null;
-           return _mapper.Map<Patient, PatientToReturnDto>(patient);
+            return _mapper.Map<Patient, PatientToReturnDto>(patient);
 
         }
 
@@ -63,14 +58,14 @@ namespace CareFlow.Service.Services
             return result > 0;
         }
 
-       
+
         public async Task<PatientToReturnDto> UpdatePatient(PatientDto patientDto)
         {
             if (patientDto is null || patientDto.id == Guid.Empty)
                 throw new KeyNotFoundException("Invalid patient data");
 
             var existingPatient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientDto.id);
-            if(existingPatient is null) throw new KeyNotFoundException("Patient not found");
+            if (existingPatient is null) throw new KeyNotFoundException("Patient not found");
 
             _mapper.Map(patientDto, existingPatient);
 
@@ -78,8 +73,8 @@ namespace CareFlow.Service.Services
 
             var result = await _unitOfWork.Complete();
 
-            if (result > 0) 
-            return _mapper.Map<Patient, PatientToReturnDto>(existingPatient);
+            if (result > 0)
+                return _mapper.Map<Patient, PatientToReturnDto>(existingPatient);
             else
                 throw new InvalidOperationException("An error occurred while update");
 

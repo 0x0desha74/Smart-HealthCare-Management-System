@@ -2,13 +2,11 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers
 {
-   
+
     public class DoctorsController : BaseApiController
     {
         private readonly IDoctorService _doctorService;
@@ -28,7 +26,7 @@ namespace CareFlow.API.Controllers
 
 
         [HttpGet("{id}")]
-       public async Task<ActionResult<DoctorToReturnDto>> GetDoctor(Guid id)
+        public async Task<ActionResult<DoctorToReturnDto>> GetDoctor(Guid id)
         {
             var doctor = await _doctorService.GetDoctorAsync(id);
             if (doctor is null) return NotFound(new ApiResponse(404, "Doctor not found"));
@@ -50,7 +48,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<DoctorToReturnDto>> Update(DoctorDto model)
         {
             var doctor = await _doctorService.UpdateDoctorAsync(model);
-            if (doctor is null) return NotFound(new ApiResponse(404,"Doctor Not Found, Id is invalid"));
+            if (doctor is null) return NotFound(new ApiResponse(404, "Doctor Not Found, Id is invalid"));
             return Ok(doctor);
         }
 

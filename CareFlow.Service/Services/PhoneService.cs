@@ -5,11 +5,6 @@ using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
@@ -64,10 +59,10 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<bool> DeletePhone(Guid patientId,Guid id)
+        public async Task<bool> DeletePhone(Guid patientId, Guid id)
         {
             var spec = new PhoneSpecifications(patientId, id);
-           var phone = await _unitOfWork.Repository<Phone>().GetEntityWithAsync(spec);
+            var phone = await _unitOfWork.Repository<Phone>().GetEntityWithAsync(spec);
             if (phone is null) throw new KeyNotFoundException("Invalid phone Id provided");
             _unitOfWork.Repository<Phone>().Delete(phone);
             var result = await _unitOfWork.Complete();

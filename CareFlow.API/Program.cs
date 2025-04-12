@@ -7,7 +7,6 @@ using CareFlow.Repository.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace CareFlow.API
 {
@@ -27,14 +26,14 @@ namespace CareFlow.API
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-            
+
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found");
                 options.UseSqlServer(connectionString);
             });
-            
+
             builder.Services.AddDbContext<AppIdentityDbContext>(options =>
             {
                 var identityString = builder.Configuration.GetConnectionString("IdentityConnection") ?? throw new InvalidOperationException("Connection string not found");

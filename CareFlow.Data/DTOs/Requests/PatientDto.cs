@@ -1,14 +1,9 @@
 ﻿using CareFlow.Data.Entities.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Core.DTOs.In
 {
-   public class PatientDto
+    public class PatientDto
     {
         public Guid id { get; set; }
         [MaxLength(50)]
@@ -24,7 +19,7 @@ namespace CareFlow.Core.DTOs.In
         [Required]
         public BloodType bloodType { get; set; }
         [Required]
-        [Range(0,300)]
+        [Range(0, 300)]
         public double Height { get; set; }
         [Required]
         [Range(0, 500)]

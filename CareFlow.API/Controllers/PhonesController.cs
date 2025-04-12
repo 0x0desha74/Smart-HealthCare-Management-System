@@ -2,7 +2,6 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers
@@ -38,7 +37,7 @@ namespace CareFlow.API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PhoneDto>> Create(PhoneDto model,Guid patientId)
+        public async Task<ActionResult<PhoneDto>> Create(PhoneDto model, Guid patientId)
         {
             var phone = await _phoneService.CreatePhone(model, patientId);
             return Ok(phone);
@@ -56,14 +55,14 @@ namespace CareFlow.API.Controllers
 
 
         [HttpDelete("{phoneId}")]
-        public async Task<IActionResult> Delete(Guid patientId,Guid phoneId)
+        public async Task<IActionResult> Delete(Guid patientId, Guid phoneId)
         {
             var isDeleted = await _phoneService.DeletePhone(patientId, phoneId);
             if (isDeleted) return NoContent();
             return BadRequest(new ApiResponse(400, "An error occurred while deleting the phone number"));
         }
 
-        
+
 
     }
 }

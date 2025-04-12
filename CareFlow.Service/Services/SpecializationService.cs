@@ -3,11 +3,6 @@ using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
@@ -26,7 +21,7 @@ namespace CareFlow.Service.Services
         public async Task<IReadOnlyList<SpecializationDto>> GetSpecializationsAsync()
         {
             var specializations = await _unitOfWork.Repository<Specialization>().GetAllAsync();
-            if(specializations is null) return null;
+            if (specializations is null) return null;
             return _mapper.Map<IReadOnlyList<SpecializationDto>>(specializations);
 
         }

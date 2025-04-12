@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CareFlow.Data.Entities
 {
-    public class Instruction:BaseEntity
+    public class Instruction : BaseEntity
     {
         [MaxLength(100)]
         public string Title { get; set; }

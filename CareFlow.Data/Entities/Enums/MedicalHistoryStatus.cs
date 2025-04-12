@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CareFlow.Core.Entities.Enums
+﻿namespace CareFlow.Core.Entities.Enums
 {
     public enum MedicalHistoryStatus
     {

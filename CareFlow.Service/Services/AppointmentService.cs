@@ -4,11 +4,6 @@ using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
@@ -37,7 +32,7 @@ namespace CareFlow.Service.Services
                 throw new KeyNotFoundException("Clinic not found, Invalid clinic ID");
 
             var doctor = await _unitOfWork.Repository<Doctor>().GetByIdAsync(appointmentDto.DoctorId);
-                if (doctor is null)
+            if (doctor is null)
                 throw new KeyNotFoundException("Doctor not found, Invalid doctor ID");
 
             var appointment = _mapper.Map<Appointment>(appointmentDto);

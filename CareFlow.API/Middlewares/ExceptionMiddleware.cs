@@ -1,5 +1,4 @@
 ﻿using CareFlow.API.Errors;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net;
 using System.Text.Json;
 
@@ -35,7 +34,8 @@ namespace CareFlow.API.Middlewares
                     : new ApiExceptionResponse((int)HttpStatusCode.InternalServerError);
 
 
-                var options = new JsonSerializerOptions() {
+                var options = new JsonSerializerOptions()
+                {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
                 var json = JsonSerializer.Serialize(response, options);
@@ -46,7 +46,7 @@ namespace CareFlow.API.Middlewares
 
         }
 
-        
+
 
     }
 }

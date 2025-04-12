@@ -1,19 +1,14 @@
 ﻿using CareFlow.Core.Entities.Enums;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Core.Entities
 {
-   public class MedicalHistory:BaseEntity
+    public class MedicalHistory : BaseEntity
     {
         public string Diagnosis { get; set; }
         public string DiagnosisCode { get; set; }
         public string TreatmentSummery { get; set; }
-        public string ClinicalNotes{ get; set; }
+        public string ClinicalNotes { get; set; }
         public DateTime RecordDate { get; set; } = DateTime.UtcNow;
 
         public MedicalHistoryStatus Status { get; set; } = MedicalHistoryStatus.Active;

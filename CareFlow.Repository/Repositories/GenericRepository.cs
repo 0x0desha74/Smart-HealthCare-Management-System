@@ -3,11 +3,6 @@ using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
 using CareFlow.Repository.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Repository.Repositories
 {
@@ -40,12 +35,12 @@ namespace CareFlow.Repository.Repositories
         public async Task<T> GetEntityWithAsync(ISpecification<T> spec)
         {
             return await ApplySpecifications(spec).FirstOrDefaultAsync();
-            
+
         }
 
 
 
-     
+
         public void Delete(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
@@ -70,6 +65,6 @@ namespace CareFlow.Repository.Repositories
             await _dbContext.Set<T>().AddAsync(entity);
         }
 
-      
+
     }
 }

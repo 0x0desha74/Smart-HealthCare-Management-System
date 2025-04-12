@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CareFlow.Data.Entities
 {
-   public class Location:BaseEntity
+    public class Location : BaseEntity
     {
         [MaxLength(500)]
         public string AddressLine1 { get; set; }

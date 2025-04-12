@@ -5,11 +5,6 @@ using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
@@ -32,7 +27,7 @@ namespace CareFlow.Service.Services
             var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientId);
             if (patient is null)
                 throw new KeyNotFoundException("Attempting to add allergy to not existed patient");
-            
+
             var allergy = _mapper.Map<Allergy>(allergyDto);
 
             allergy.PatientId = patientId;
@@ -51,12 +46,12 @@ namespace CareFlow.Service.Services
             if (allergy is null) throw new KeyNotFoundException("Invalid allergy Id provided");
             _unitOfWork.Repository<Allergy>().Delete(allergy);
             var result = await _unitOfWork.Complete();
-            return result > 0; 
+            return result > 0;
         }
 
         public async Task<IReadOnlyList<AllergyToReturnDto>> GetAllergiesForPatient(Guid patientId)
         {
-           var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientId);
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(patientId);
             if (patient is null) throw new KeyNotFoundException("Invalid patient id provided");
             var spec = new AllergySpecifications(patientId);
             var allergies = await _unitOfWork.Repository<Allergy>().GetAllWithSpecAsync(spec);
