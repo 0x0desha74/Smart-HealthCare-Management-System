@@ -2,10 +2,12 @@
 using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.Entities.Identity;
 using CareFlow.Core.Interfaces;
+using CareFlow.Core.Interfaces.Services;
 using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +16,16 @@ namespace CareFlow.Service.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
-        public AuthService(UserManager<AppUser> userManager, IMapper mapper, IUnitOfWork unitOfWork)
+        public AuthService(UserManager<AppUser> userManager, IMapper mapper, IUnitOfWork unitOfWork, ITokenService tokenService)
         {
             _userManager = userManager;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _tokenService = tokenService;
         }
 
         public async Task<AuthDto> RegisterAsync(RegisterDto dto)
@@ -54,19 +58,22 @@ namespace CareFlow.Service.Services
             await _userManager.AddToRoleAsync(user, "Patient");
 
             var patient = _mapper.Map<Patient>(dto);
-            patient.AppUserId = user.Id;
+            patient.AppUserId = user.Id.ToString();
             await _unitOfWork.Repository<Patient>().AddAsync(patient);
             var patientCreationResult = await _unitOfWork.Complete();
+
             if (patientCreationResult <= 0)
                 throw new InvalidOperationException("An error occurred while creating patient entity");
+
+            var token = await _tokenService.CreateTokenAsync(user, _userManager);
 
             return new AuthDto() { 
             Email=dto.Email,
             Username  = dto.Username,
             IsAuthenticated=true,
             Roles = new List<string>() { "Patient"},
-            Token = "",
-            ExpiresOn = DateTime.Now
+            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            ExpiresOn = token.ValidTo
             };
             
         }
