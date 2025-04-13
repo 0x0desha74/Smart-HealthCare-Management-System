@@ -25,6 +25,7 @@ namespace CareFlow.API.Controllers
             var appointments = await _appointmentService.GetAppointmentsAsync();
             if (appointments is null) return NotFound(new ApiResponse(404));
             return Ok(appointments);
+            
         }
 
 

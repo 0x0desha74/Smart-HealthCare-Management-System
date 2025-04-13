@@ -15,7 +15,7 @@ namespace CareFlow.Data.Entities
         public BloodType bloodType { get; set; }
         public double Height { get; set; }
         public double Weight { get; set; }
-
+        public string AppUserId { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
         public Doctor Doctor { get; set; }
         public ICollection<Phone> PhoneNumbers { get; set; } = new HashSet<Phone>();

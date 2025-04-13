@@ -1,10 +1,8 @@
 
 using CareFlow.API.Extensions;
 using CareFlow.API.Middlewares;
-using CareFlow.Core.Entities.Identity;
 using CareFlow.Repository.Data;
-using CareFlow.Repository.Identity;
-using Microsoft.AspNetCore.Identity;
+using CareFlow.Repository.Data.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -42,7 +40,7 @@ namespace CareFlow.API
 
             builder.Services.AddApplicationServices();
             builder.Services.AddSwaggerServices();
-            builder.Services.AddIdentityServices();
+            builder.Services.AddIdentityServices(builder.Configuration);
 
             var app = builder.Build();
 
@@ -57,10 +55,10 @@ namespace CareFlow.API
                 var identityContext = services.GetRequiredService<AppIdentityDbContext>();
                 await identityContext.Database.MigrateAsync();
 
-                var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                await AppIdentityDbContextSeed.SeedUser(userManager);
-                await AppIdentityDbContextSeed.SeedRoles(roleManager, userManager);
+                //var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                //var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                //await AppIdentityDbContextSeed.SeedUser(userManager);
+                //await AppIdentityDbContextSeed.SeedRoles(roleManager, userManager);
             }
             catch (Exception ex)
             {
@@ -78,8 +76,8 @@ namespace CareFlow.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 
