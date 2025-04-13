@@ -78,7 +78,7 @@ namespace CareFlow.API
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseStatusCodePagesWithReExecute("errors/{0}");
             app.MapControllers();
 
             app.Run();
