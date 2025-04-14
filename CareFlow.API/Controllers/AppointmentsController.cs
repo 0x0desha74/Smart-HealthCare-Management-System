@@ -54,5 +54,14 @@ namespace CareFlow.API.Controllers
             return Ok(appointment);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var isDeleted = await _appointmentService.DeleteAppointmentAsync(id);
+            if (!isDeleted)
+                return NotFound(new ApiResponse(404,"Appointment not found, Invalid appointment ID"));
+            return NoContent();
+        }
+
     }
 }

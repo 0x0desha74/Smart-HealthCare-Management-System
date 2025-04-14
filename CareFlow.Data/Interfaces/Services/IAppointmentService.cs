@@ -9,5 +9,6 @@ namespace CareFlow.Core.Interfaces.Services
         Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id);
         Task<AppointmentToReturnDto> CreateAppointmentAsync(AppointmentCreateDto appointmentDto);
         Task<AppointmentToReturnDto> UpdateAppointmentAsync(AppointmentUpdateDto appointmentDto);
+        Task<bool> DeleteAppointmentAsync(Guid id);
     }
 }

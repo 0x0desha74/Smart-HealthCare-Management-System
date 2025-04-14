@@ -5,6 +5,7 @@ using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
+using Microsoft.Identity.Client;
 
 namespace CareFlow.Service.Services
 {
@@ -105,6 +106,21 @@ namespace CareFlow.Service.Services
             if (result <= 0)
                 throw new InvalidOperationException("An error occurred while updating the appointment entity");
             return _mapper.Map<AppointmentToReturnDto>(existingAppointment);
+        }
+
+        public async Task<bool> DeleteAppointmentAsync(Guid id)
+        {
+            var spec= new AppointmentSpecifications(id);
+            var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
+
+            if (appointment is null)
+                return false;
+
+            _unitOfWork.Repository<Appointment>().Delete(appointment);
+            var result = await _unitOfWork.Complete();
+
+           return result > 0? true: throw new InvalidOperationException("An error occurred while deleting appointment entity");
+    
         }
     }
 }
