@@ -67,15 +67,41 @@ namespace CareFlow.Service.Services
 
             var token = await _tokenService.CreateTokenAsync(user, _userManager);
 
-            return new AuthDto() { 
-            Email=dto.Email,
-            Username  = dto.Username,
-            IsAuthenticated=true,
-            Roles = new List<string>() { "Patient"},
-            Token = new JwtSecurityTokenHandler().WriteToken(token),
-            ExpiresOn = token.ValidTo
+            return new AuthDto()
+            {
+                Email = dto.Email,
+                Username = dto.Username,
+                IsAuthenticated = true,
+                Roles = new List<string>() { "Patient" },
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                ExpiresOn = token.ValidTo
             };
-            
+
         }
+
+
+
+
+        public async Task<AuthDto> GetTokenAsync(GetTokenDto dto)
+        {
+            var authDto = new AuthDto();
+
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user is null || !await _userManager.CheckPasswordAsync(user, dto.Password))
+                return new AuthDto() { Message = "Invalid Email or Password" };
+
+
+            var token = await _tokenService.CreateTokenAsync(user, _userManager);
+            var rolesList = await _userManager.GetRolesAsync(user);
+            authDto.IsAuthenticated = true;
+            authDto.Email = user.Email;
+            authDto.Username = user.UserName;
+            authDto.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            authDto.ExpiresOn = token.ValidTo;
+            authDto.Roles = rolesList.ToList();
+
+            return authDto;
+        }
+
     }
 }
