@@ -14,5 +14,6 @@ namespace CareFlow.Core.Specifications
         {
             AddIncludes(q => q.Include(d => d.Specializations));
         }
+        
     }
 }

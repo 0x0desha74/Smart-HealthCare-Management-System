@@ -106,5 +106,25 @@ namespace CareFlow.Service.Services
 
 
         }
+
+        public async Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsOfDoctor(string userId)
+        {
+            var spec = new AppointmentsDoctorSpecifications(userId);
+            var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
+            if (appointments is null)
+                return null;
+            return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+        }
+
+        public async Task<AppointmentToReturnDto> GetAppointmentOfDoctor(Guid appointmentId, string userId)
+        {
+            var spec = new AppointmentsDoctorSpecifications(appointmentId, userId);
+            var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
+
+            if (appointment is null)
+                return null;
+
+            return _mapper.Map<AppointmentToReturnDto>(appointment);
+        }
     }
 }

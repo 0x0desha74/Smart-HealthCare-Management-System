@@ -1,12 +1,16 @@
 ﻿using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CareFlow.Core.Specifications
 {
-    public class AppointmentSpecifications : BaseSpecification<Appointment>
+    public class AppointmentsPatientSpecifications : BaseSpecification<Appointment>
     {
-
-        public AppointmentSpecifications()
+        public AppointmentsPatientSpecifications(string userId) : base(a => a.Patient.AppUserId == userId)
         {
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));
@@ -15,7 +19,7 @@ namespace CareFlow.Core.Specifications
 
         }
 
-        public AppointmentSpecifications(Guid id) : base(a => a.Id == id)
+        public AppointmentsPatientSpecifications(Guid id, string userId) : base(a => a.Id == id && a.Patient.AppUserId == userId)
         {
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));
@@ -23,7 +27,5 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(a => a.Clinic).ThenInclude(p => p.Location));
 
         }
-
-       
     }
 }

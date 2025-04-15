@@ -3,6 +3,7 @@ using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CareFlow.API.Controllers
 {
@@ -34,15 +35,6 @@ namespace CareFlow.API.Controllers
         }
 
 
-        ////[Authorize(Roles ="Admin")]
-        //[HttpPost]
-        //public async Task<ActionResult<DoctorToReturnDto>> Create(DoctorDto model)
-        //{
-        //    var doctor = await _doctorService.CreateDoctorAsync(model);
-        //    return Ok(doctor);
-        //}
-
-
         //[Authorize(Roles ="Admin")]
         [HttpPut]
         public async Task<ActionResult<DoctorToReturnDto>> Update(DoctorDto model)
@@ -60,6 +52,30 @@ namespace CareFlow.API.Controllers
             var isDeleted = await _doctorService.DeleteDoctorAsync(id);
             if (!isDeleted) return NotFound(new ApiResponse(404, "Doctor not found, Invalid doctor Id"));
             return NoContent();
+        }
+
+
+        [HttpGet("appointments")]
+        public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetAppointmentsOfDoctor()
+        {
+            var userId = User.FindFirstValue("uid");
+            var appointments = await _doctorService.GetAppointmentsOfDoctor(userId);
+
+            if (appointments is null)
+                return NotFound(new ApiResponse(404));
+            return Ok(appointments);
+        }
+
+
+        [HttpGet("appointments/{id}")]
+        public async Task<ActionResult<AppointmentToReturnDto>> GetAppointmentOfDoctor(Guid id)
+        {
+            var userId = User.FindFirstValue("uid");
+            var appointment = await _doctorService.GetAppointmentOfDoctor(id,userId);
+
+            if (appointment is null)
+                return NotFound(new ApiResponse(404));
+            return Ok(appointment);
         }
     }
 }
