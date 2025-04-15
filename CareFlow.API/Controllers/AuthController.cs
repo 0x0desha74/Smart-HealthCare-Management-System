@@ -1,6 +1,5 @@
 ﻿using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CareFlow.Core.Configurations
+﻿namespace CareFlow.Core.Configurations
 {
-   public class JWT
+    public class JWT
     {
         public string Key { get; set; }
         public string Issuer { get; set; }

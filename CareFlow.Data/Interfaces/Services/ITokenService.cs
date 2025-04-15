@@ -7,6 +7,6 @@ namespace CareFlow.Core.Interfaces.Services
 {
     public interface ITokenService
     {
-        Task<JwtSecurityToken> CreateTokenAsync(AppUser user,UserManager<AppUser> userManager);
+        Task<JwtSecurityToken> CreateTokenAsync(AppUser user, UserManager<AppUser> userManager);
     }
 }

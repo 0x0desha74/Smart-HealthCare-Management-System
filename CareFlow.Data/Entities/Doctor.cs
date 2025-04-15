@@ -13,7 +13,7 @@ namespace CareFlow.Data.Entities
         [MaxLength(100)]
         public string LicenceNumber { get; set; }
         public string? PictureUrl { get; set; }
-        public Gender Gender{ get; set; }
+        public Gender Gender { get; set; }
         public DateOnly BirthData { get; set; }
         public int YearOfExperience { get; set; }
         public string AppUserId { get; set; }

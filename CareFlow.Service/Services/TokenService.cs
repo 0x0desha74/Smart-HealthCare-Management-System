@@ -4,19 +4,15 @@ using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly  JWT _jwt;
+        private readonly JWT _jwt;
 
         public TokenService(IOptions<JWT> jwt)
         {
@@ -50,7 +46,7 @@ namespace CareFlow.Service.Services
                 audience: _jwt.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(_jwt.DurationInDays),
-                signingCredentials:signingCredentials
+                signingCredentials: signingCredentials
 
                 );
             return token;

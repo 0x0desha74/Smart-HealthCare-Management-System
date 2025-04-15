@@ -3,14 +3,8 @@ using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.Entities.Identity;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
-using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {

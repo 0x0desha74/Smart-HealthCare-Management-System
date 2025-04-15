@@ -42,9 +42,9 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task CreateDoctorAsync(DoctorRegisterDto doctorDto,string userId)
+        public async Task CreateDoctorAsync(DoctorRegisterDto doctorDto, string userId)
         {
-           
+
             var spec = new SpecializationSpecifications(doctorDto.SpecializationsIds);
             var specializations = await _unitOfWork.Repository<Specialization>().GetAllWithSpecAsync(spec);
 

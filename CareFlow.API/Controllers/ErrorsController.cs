@@ -1,5 +1,4 @@
 ﻿using CareFlow.API.Errors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers

@@ -8,7 +8,7 @@ namespace CareFlow.Core.Interfaces.Services
     {
         Task<IReadOnlyList<DoctorToReturnDto>> GetDoctorsAsync();
         Task<DoctorToReturnDto> GetDoctorAsync(Guid id);
-        Task CreateDoctorAsync(DoctorRegisterDto doctorDto,string userId);
+        Task CreateDoctorAsync(DoctorRegisterDto doctorDto, string userId);
         Task<DoctorToReturnDto> UpdateDoctorAsync(DoctorDto doctorDto);
         Task<bool> DeleteDoctorAsync(Guid id);
     }

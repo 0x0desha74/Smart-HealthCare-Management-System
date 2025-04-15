@@ -25,7 +25,7 @@ namespace CareFlow.API.Controllers
             var appointments = await _appointmentService.GetAppointmentsAsync();
             if (appointments is null) return NotFound(new ApiResponse(404));
             return Ok(appointments);
-            
+
         }
 
 
@@ -59,7 +59,7 @@ namespace CareFlow.API.Controllers
         {
             var isDeleted = await _appointmentService.DeleteAppointmentAsync(id);
             if (!isDeleted)
-                return NotFound(new ApiResponse(404,"Appointment not found, Invalid appointment ID"));
+                return NotFound(new ApiResponse(404, "Appointment not found, Invalid appointment ID"));
             return NoContent();
         }
 
