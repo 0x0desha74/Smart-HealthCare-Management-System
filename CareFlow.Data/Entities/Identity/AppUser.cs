@@ -8,6 +8,6 @@ namespace CareFlow.Core.Entities.Identity
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]
-        public string LasrName { get; set; }
+        public string LastName { get; set; }
     }
 }

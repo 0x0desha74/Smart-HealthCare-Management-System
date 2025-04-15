@@ -18,15 +18,24 @@ namespace CareFlow.API.Controllers
 
 
 
-        [HttpPost("register")]
-        public async Task<ActionResult<AuthDto>> RegisterAsync(RegisterDto model)
+        [HttpPost("register/patient")]
+        public async Task<ActionResult<AuthDto>> RegisterAsync(PatientRegisterDto model)
         {
-            var result = await _authService.RegisterAsync(model);
+            var result = await _authService.PatientRegisterAsync(model);
             if (!result.IsAuthenticated)
                 return BadRequest(result.Message);
             return Ok(result);
         }
 
+
+        [HttpPost("register/doctor")]
+        public async Task<ActionResult<AuthDto>> RegisterAsync(DoctorRegisterDto model)
+        {
+            var result = await _authService.DoctorRegisterAsync(model);
+            if (!result.IsAuthenticated)
+                return BadRequest(result.Message);
+            return Ok(result);
+        }
 
 
         [HttpPost("token")]

@@ -9,7 +9,8 @@ namespace CareFlow.Core.Interfaces
 {
     public interface IAuthService
     {
-        Task<AuthDto> RegisterAsync(RegisterDto dto);
+        Task<AuthDto> PatientRegisterAsync(PatientRegisterDto dto);
+        Task<AuthDto> DoctorRegisterAsync(DoctorRegisterDto dto);
         Task<AuthDto> GetTokenAsync(GetTokenDto dto);
     }
 }

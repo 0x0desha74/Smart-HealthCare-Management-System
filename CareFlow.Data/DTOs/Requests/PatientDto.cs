@@ -5,6 +5,7 @@ namespace CareFlow.Core.DTOs.In
 {
     public class PatientDto
     {
+        [Required]
         public Guid id { get; set; }
         [MaxLength(50)]
         [Required]

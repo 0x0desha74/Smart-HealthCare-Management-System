@@ -35,13 +35,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<PatientDto>> Create([FromBody] PatientDto model)
-        {
-            var patient = await _patientService.CreatePatient(model);
-            if (patient is null) return BadRequest(new ApiResponse(400));
-            return Ok(patient);
-        }
+       
 
         //[Authorize(Roles = "Admin")]
         [HttpDelete]

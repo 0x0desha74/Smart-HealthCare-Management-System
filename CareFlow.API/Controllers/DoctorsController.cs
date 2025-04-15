@@ -34,13 +34,13 @@ namespace CareFlow.API.Controllers
         }
 
 
-        //[Authorize(Roles ="Admin")]
-        [HttpPost]
-        public async Task<ActionResult<DoctorToReturnDto>> Create(DoctorDto model)
-        {
-            var doctor = await _doctorService.CreateDoctorAsync(model);
-            return Ok(doctor);
-        }
+        ////[Authorize(Roles ="Admin")]
+        //[HttpPost]
+        //public async Task<ActionResult<DoctorToReturnDto>> Create(DoctorDto model)
+        //{
+        //    var doctor = await _doctorService.CreateDoctorAsync(model);
+        //    return Ok(doctor);
+        //}
 
 
         //[Authorize(Roles ="Admin")]

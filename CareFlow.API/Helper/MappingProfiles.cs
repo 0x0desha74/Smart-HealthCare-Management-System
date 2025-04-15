@@ -13,11 +13,13 @@ namespace CareFlow.API.Helper
         {
             CreateMap<PatientDto, Patient>().ReverseMap();
             CreateMap<Patient, PatientToReturnDto>();
-            CreateMap<RegisterDto, Patient>()
+            CreateMap<PatientRegisterDto, Patient>()
                 .ForMember(d => d.FirstName, O => O.MapFrom(s => s.FirstName))
                 .ForMember(d => d.LastName, O => O.MapFrom(s => s.LastName))
                 .ForMember(d => d.BirthDate, O => O.MapFrom(s => s.BirthDate))
-                .ForMember(d => d.Gender, O => O.MapFrom(s => s.Gender));
+                .ForMember(d => d.Gender, O => O.MapFrom(s => s.Gender)).ReverseMap();
+            CreateMap< PatientRegisterDto,RegisterDto>();
+
 
             CreateMap<PhoneDto, Phone>().ReverseMap();
             CreateMap<Phone, PhoneToReturnDto>();
@@ -35,8 +37,11 @@ namespace CareFlow.API.Helper
             CreateMap<Location, LocationDto>().ReverseMap();
             CreateMap<Clinic, ClinicToReturnDto>();
             CreateMap<Location, LocationToReturnDto>();
+
             CreateMap<Doctor, DoctorDto>().ReverseMap();
             CreateMap<Doctor, DoctorToReturnDto>().ReverseMap();
+            CreateMap< DoctorRegisterDto,Doctor>().ReverseMap();
+            CreateMap< DoctorRegisterDto,RegisterDto>();
 
         }
     }

@@ -16,70 +16,57 @@ namespace CareFlow.Service.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly IPatientService _patientService;
+        private readonly IDoctorService _doctorService;
         private readonly ITokenService _tokenService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public AuthService(UserManager<AppUser> userManager, IMapper mapper, IUnitOfWork unitOfWork, ITokenService tokenService)
+        public AuthService(UserManager<AppUser> userManager, IMapper mapper, ITokenService tokenService, IPatientService patientService, IDoctorService doctorService, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
             _tokenService = tokenService;
+            _patientService = patientService;
+            _doctorService = doctorService;
+            _roleManager = roleManager;
         }
 
-        public async Task<AuthDto> RegisterAsync(RegisterDto dto)
+
+
+        public async Task<AuthDto> PatientRegisterAsync(PatientRegisterDto dto)
         {
-            if (await _userManager.FindByEmailAsync(dto.Email) is not null)
-                return new AuthDto() { Message = "Email already exists" };
+            var registerDto = _mapper.Map<RegisterDto>(dto);
+            var (user, errors) = await CreateUserAsync(registerDto, "Patient");
 
-            if (await _userManager.FindByNameAsync(dto.Username) is not null)
-                return new AuthDto() { Message = "Username already exists" };
-
-            var user = new AppUser()
-            {
-                FirstName = dto.FirstName,
-                LasrName = dto.LastName,
-                Email = dto.Email,
-                UserName = dto.Username
-            };
-
-            var result = await _userManager.CreateAsync(user, dto.Password);
-
-            if (!result.Succeeded)
-            {
-                var errors = string.Empty;
-
-                foreach (var error in result.Errors)
-                    errors += $"{error.Description}";
+            if (user is null)
                 return new AuthDto() { Message = errors };
-            }
 
-            await _userManager.AddToRoleAsync(user, "Patient");
 
-            var patient = _mapper.Map<Patient>(dto);
-            patient.AppUserId = user.Id.ToString();
-            await _unitOfWork.Repository<Patient>().AddAsync(patient);
-            var patientCreationResult = await _unitOfWork.Complete();
-
-            if (patientCreationResult <= 0)
-                throw new InvalidOperationException("An error occurred while creating patient entity");
+            await _patientService.CreatePatientAsync(dto, user.Id);
 
             var token = await _tokenService.CreateTokenAsync(user, _userManager);
 
-            return new AuthDto()
-            {
-                Email = dto.Email,
-                Username = dto.Username,
-                IsAuthenticated = true,
-                Roles = new List<string>() { "Patient" },
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                ExpiresOn = token.ValidTo
-            };
+            return await GenerateAuthDtoAsync(user);
 
         }
 
 
+
+        public async Task<AuthDto> DoctorRegisterAsync(DoctorRegisterDto dto)
+        {
+            var registerDto = _mapper.Map<RegisterDto>(dto);
+            var (user, errors) = await CreateUserAsync(registerDto, "Doctor");
+
+            if (user is null)
+                return new AuthDto() { Message = errors };
+
+
+            await _doctorService.CreateDoctorAsync(dto, user.Id);
+
+            return await GenerateAuthDtoAsync(user);
+
+        }
 
 
         public async Task<AuthDto> GetTokenAsync(GetTokenDto dto)
@@ -101,6 +88,52 @@ namespace CareFlow.Service.Services
             authDto.Roles = rolesList.ToList();
 
             return authDto;
+        }
+
+
+
+
+
+        private async Task<(AppUser?, string?)> CreateUserAsync(RegisterDto dto, string role)
+        {
+            if (await _userManager.FindByEmailAsync(dto.Email) is not null)
+                return (null, "Email already exists");
+
+            if (await _userManager.FindByNameAsync(dto.Username) is not null)
+                return (null, "Username already exists");
+
+            var user = new AppUser()
+            {
+                Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                UserName = dto.Username,
+            };
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join("|", result.Errors.Select(e => e.Description));
+                return (null, errors);
+            }
+            await _userManager.AddToRoleAsync(user, role);
+
+            return (user, null);
+        }
+
+        private async Task<AuthDto> GenerateAuthDtoAsync(AppUser user)
+        {
+            var token = await _tokenService.CreateTokenAsync(user, _userManager);
+            var roles = await _userManager.GetRolesAsync(user);
+            return new AuthDto()
+            {
+                Email = user.Email,
+                Username = user.UserName,
+                IsAuthenticated = true,
+                Roles = roles.ToList(),
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                ExpiresOn = token.ValidTo
+            };
         }
 
     }

@@ -16,7 +16,7 @@ namespace CareFlow.Core.DTOs.Requests
         [Required]
         public string LicenceNumber { get; set; }
         [Required]
-        public string PictureUrl { get; set; }
+        public string? PictureUrl { get; set; }
         [Required]
         public int YearOfExperience { get; set; }
         [Required]

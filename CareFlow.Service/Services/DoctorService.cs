@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
@@ -41,11 +42,9 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<DoctorToReturnDto> CreateDoctorAsync(DoctorDto doctorDto)
+        public async Task CreateDoctorAsync(DoctorRegisterDto doctorDto,string userId)
         {
-            if (doctorDto.Id != Guid.Empty)
-                throw new ArgumentException("Invalid doctor data provided");
-
+           
             var spec = new SpecializationSpecifications(doctorDto.SpecializationsIds);
             var specializations = await _unitOfWork.Repository<Specialization>().GetAllWithSpecAsync(spec);
 
@@ -55,14 +54,13 @@ namespace CareFlow.Service.Services
             var doctor = _mapper.Map<Doctor>(doctorDto);
 
             doctor.Specializations = specializations.ToList();
-
+            doctor.AppUserId = userId;
             await _unitOfWork.Repository<Doctor>().AddAsync(doctor);
             var result = await _unitOfWork.Complete();
 
             if (result <= 0)
                 throw new InvalidOperationException("An error occurred while creating doctor entity");
 
-            return _mapper.Map<DoctorToReturnDto>(doctor);
         }
 
         public async Task<DoctorToReturnDto> UpdateDoctorAsync(DoctorDto doctorDto)

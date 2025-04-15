@@ -10,6 +10,9 @@ namespace CareFlow.Repository.Data.Configurations
         {
             builder.HasMany(d => d.Specializations)
                 .WithMany(s => s.Doctors);
+
+            builder.Property(d => d.Gender)
+                .HasConversion<string>();
         }
     }
 }

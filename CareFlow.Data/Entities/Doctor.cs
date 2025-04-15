@@ -1,4 +1,5 @@
 ﻿using CareFlow.Core.Entities;
+using CareFlow.Data.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace CareFlow.Data.Entities
@@ -11,8 +12,11 @@ namespace CareFlow.Data.Entities
         public string LastName { get; set; }
         [MaxLength(100)]
         public string LicenceNumber { get; set; }
-        public string PictureUrl { get; set; }
+        public string? PictureUrl { get; set; }
+        public Gender Gender{ get; set; }
+        public DateOnly BirthData { get; set; }
         public int YearOfExperience { get; set; }
+        public string AppUserId { get; set; }
         public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<Specialization> Specializations { get; set; } = new HashSet<Specialization>();

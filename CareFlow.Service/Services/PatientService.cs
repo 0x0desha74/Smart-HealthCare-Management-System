@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.DTOs.In;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
@@ -18,7 +19,16 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+        public async Task CreatePatientAsync(PatientRegisterDto patientDto, string userId)
+        {
+            var patient = _mapper.Map<Patient>(patientDto);
+            patient.AppUserId = userId;
+            await _unitOfWork.Repository<Patient>().AddAsync(patient);
+            var result = await _unitOfWork.Complete();
 
+            if (result <= 0)
+                throw new InvalidOperationException("An error occurred while creating patient entity");
+        }
 
         public async Task<IReadOnlyList<PatientToReturnDto>> GetPatients()
         {
@@ -39,15 +49,7 @@ namespace CareFlow.Service.Services
         }
 
 
-        public async Task<PatientDto> CreatePatient(PatientDto patientDto)
-        {
-            var patient = _mapper.Map<PatientDto, Patient>(patientDto);
 
-            await _unitOfWork.Repository<Patient>().AddAsync(patient);
-            var result = await _unitOfWork.Complete();
-            if (result > 0) return _mapper.Map<Patient, PatientDto>(patient);
-            return null;
-        }
 
         public async Task<bool> DeletePatient(Guid id)
         {

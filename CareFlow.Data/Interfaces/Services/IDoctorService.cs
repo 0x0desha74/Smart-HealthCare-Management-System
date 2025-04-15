@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.Core.DTOs.Identity;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 
 namespace CareFlow.Core.Interfaces.Services
@@ -7,7 +8,7 @@ namespace CareFlow.Core.Interfaces.Services
     {
         Task<IReadOnlyList<DoctorToReturnDto>> GetDoctorsAsync();
         Task<DoctorToReturnDto> GetDoctorAsync(Guid id);
-        Task<DoctorToReturnDto> CreateDoctorAsync(DoctorDto doctorDto);
+        Task CreateDoctorAsync(DoctorRegisterDto doctorDto,string userId);
         Task<DoctorToReturnDto> UpdateDoctorAsync(DoctorDto doctorDto);
         Task<bool> DeleteDoctorAsync(Guid id);
     }
