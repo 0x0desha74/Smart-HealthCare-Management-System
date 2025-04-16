@@ -93,15 +93,25 @@ namespace CareFlow.Service.Services
             return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
         }
 
-        public async Task<AppointmentDetailsDto> GetAppointmentOfPatient(Guid appointmentId,string userId)
+        public async Task<AppointmentDetailsDto> GetAppointmentOfPatient(Guid appointmentId, string userId)
         {
-            var spec = new AppointmentsPatientSpecifications(appointmentId,userId);
+            var spec = new AppointmentsPatientSpecifications(appointmentId, userId);
             var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
 
             if (appointment is null)
                 return null;
 
             return _mapper.Map<AppointmentDetailsDto>(appointment);
+        }
+
+        public async Task<IReadOnlyList<AppointmentToReturnDto>> GetUpcomingAppointmentsOfPatientAsync(string userId)
+        {
+            var spec = new UpcomingPatientAppointmentSpecifications(userId);
+            var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
+
+            if (appointments is null)
+                return null;
+            return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
         }
     }
 }

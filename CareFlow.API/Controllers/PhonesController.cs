@@ -21,7 +21,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<PhoneToReturnDto>>> GetPhones(Guid patientId)
         {
             var phones = await _phoneService.GetPhonesOfPatient(patientId);
-            if (phones is null) return NotFound(new ApiResponse(404, "No phones assigned for this user"));
+            if (!phones.Any()) return NotFound(new ApiResponse(404, "No phones assigned for this user"));
             return Ok(phones);
         }
 

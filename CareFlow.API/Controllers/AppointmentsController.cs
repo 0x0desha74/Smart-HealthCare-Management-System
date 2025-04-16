@@ -23,7 +23,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetAppointments()
         {
             var appointments = await _appointmentService.GetAppointmentsAsync();
-            if (appointments is null) return NotFound(new ApiResponse(404));
+            if (!appointments.Any()) return NotFound(new ApiResponse(404));
             return Ok(appointments);
 
         }

@@ -37,7 +37,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<ClinicToReturnDto>>> GetClinics()
         {
             var clinics = await _clinicService.GetClinics();
-            if (clinics is null) return NotFound(new ApiResponse(404));
+            if (!clinics.Any()) return NotFound(new ApiResponse(404));
             return Ok(clinics);
         }
 

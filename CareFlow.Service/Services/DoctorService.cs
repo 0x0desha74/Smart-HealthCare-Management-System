@@ -126,5 +126,14 @@ namespace CareFlow.Service.Services
 
             return _mapper.Map<AppointmentToReturnDto>(appointment);
         }
+
+        public async Task<IReadOnlyList<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor(string userId)
+        {
+            var spec = new UpcomingPatientAppointmentsSpecifications(userId);
+            var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
+            if (!appointments.Any())
+                return null;
+            return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+        }
     }
 }

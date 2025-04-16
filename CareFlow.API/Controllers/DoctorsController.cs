@@ -21,7 +21,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<DoctorToReturnDto>>> GetDoctors()
         {
             var doctors = await _doctorService.GetDoctorsAsync();
-            if (doctors is null) return NotFound(new ApiResponse(404));
+            if (!doctors.Any()) return NotFound(new ApiResponse(404));
             return Ok(doctors);
         }
 
@@ -61,7 +61,7 @@ namespace CareFlow.API.Controllers
             var userId = User.FindFirstValue("uid");
             var appointments = await _doctorService.GetAppointmentsOfDoctor(userId);
 
-            if (appointments is null)
+            if (!appointments.Any())
                 return NotFound(new ApiResponse(404));
             return Ok(appointments);
         }
@@ -76,6 +76,17 @@ namespace CareFlow.API.Controllers
             if (appointment is null)
                 return NotFound(new ApiResponse(404));
             return Ok(appointment);
+        }
+
+        [HttpGet("appointments/upcoming")]
+        public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetUpcomingAppointments()
+        {
+            var userId = User.FindFirstValue("uid");
+            var appointments = await _doctorService.GetUpcomingAppointmentOfDoctor(userId);
+
+            if (!appointments.Any()) return NotFound(new ApiResponse(404,"No upcoming appointments"));
+            return Ok(appointments);
+
         }
     }
 }

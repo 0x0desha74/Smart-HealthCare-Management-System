@@ -21,7 +21,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<SpecializationDto>>> GetSpecializations()
         {
             var specializations = await _specializationService.GetSpecializationsAsync();
-            if (specializations is null) return NotFound(new ApiResponse(404));
+            if (!specializations.Any()) return NotFound(new ApiResponse(404));
             return Ok(specializations);
         }
 

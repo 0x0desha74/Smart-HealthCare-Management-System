@@ -13,5 +13,6 @@ namespace CareFlow.Core.Interfaces.Services
         Task<bool> DeleteDoctorAsync(Guid id);
         Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsOfDoctor(string userId);
         Task<AppointmentToReturnDto> GetAppointmentOfDoctor(Guid appointmentId, string userId);
+        Task<IReadOnlyList<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor(string userId);
     }
 }

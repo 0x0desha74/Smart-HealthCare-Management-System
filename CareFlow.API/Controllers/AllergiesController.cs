@@ -22,7 +22,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<AllergyToReturnDto>>> GetAllergiesForPatient(Guid patientId)
         {
             var allergies = await _allergyService.GetAllergiesForPatient(patientId);
-            if (allergies is null) return NotFound(new ApiResponse(404, "No allergies assigned for this patient"));
+            if (!allergies.Any()) return NotFound(new ApiResponse(404, "No allergies assigned for this patient"));
             return Ok(allergies);
         }
 
