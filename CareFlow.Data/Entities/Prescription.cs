@@ -4,8 +4,8 @@ namespace CareFlow.Data.Entities
 {
     public class Prescription : BaseEntity
     {
-        public DateTime IssueDate { get; set; }
-        public DateTime ExpiryDate { get; set; }
+        public DateTime IssueDate { get; set; } = DateTime.UtcNow;
+        public DateTime ExpiryDate => IssueDate.AddMonths(6);
         public string Instruction { get; set; }
         public PrescriptionStatus Status { get; set; }
 

@@ -20,6 +20,8 @@ namespace CareFlow.API.Extensions
             services.AddScoped(typeof(ISpecializationService), typeof(SpecializationService));
             services.AddScoped(typeof(IDoctorService), typeof(DoctorService));
             services.AddScoped(typeof(IAppointmentService), typeof(AppointmentService));
+            services.AddScoped(typeof(IMedicalHistoryService), typeof(MedicalHistoryService));
+            services.AddScoped(typeof(IPrescriptionService), typeof(PrescriptionService));
             services.AddScoped(typeof(IAuthService), typeof(AuthService));
             services.AddScoped(typeof(ITokenService), typeof(TokenService));
             services.AddAutoMapper(typeof(MappingProfiles));

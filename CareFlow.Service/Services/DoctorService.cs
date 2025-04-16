@@ -102,9 +102,6 @@ namespace CareFlow.Service.Services
             _unitOfWork.Repository<Doctor>().Delete(doctor);
             var result = await _unitOfWork.Complete();
             return result > 0 ? true : throw new InvalidOperationException("An error occurred while deleting doctor entity");
-
-
-
         }
 
         public async Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsOfDoctor(string userId)
@@ -131,7 +128,7 @@ namespace CareFlow.Service.Services
         {
             var spec = new UpcomingPatientAppointmentsSpecifications(userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
-            if (!appointments.Any())
+            if (appointments is null)
                 return null;
             return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
         }
