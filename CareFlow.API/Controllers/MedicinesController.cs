@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,26 @@ namespace CareFlow.API.Controllers
         {
             _medicineService = medicineService;
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<MedicineToReturnDto>>> GetAllAsync()
+        {
+            var medicines = await _medicineService.GetMedicinesAsync();
+            if (medicines is null)
+                return NotFound(new ApiResponse(404));
+            return Ok(medicines);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MedicineToReturnDto>> GetByIdAsync(Guid id)
+        {
+            var medicine = await _medicineService.GetMedicineAsync(id);
+            if (medicine is null)
+                return NotFound(new ApiResponse(404));
+            return Ok(medicine);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<MedicineToReturnDto>> CreateAsync(MedicineToCreateDto model)

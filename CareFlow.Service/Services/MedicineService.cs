@@ -23,6 +23,24 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
+
+        public async Task<IReadOnlyList<MedicineToReturnDto>> GetMedicinesAsync()
+        {
+            var medicines = await _unitOfWork.Repository<Medicine>().GetAllAsync();
+            if (!medicines.Any())
+                return null;
+            return _mapper.Map<IReadOnlyList<MedicineToReturnDto>>(medicines);
+        }
+
+        public async Task<MedicineToReturnDto> GetMedicineAsync(Guid id)
+        {
+            var medicine = await _unitOfWork.Repository<Medicine>().GetByIdAsync(id);
+            if (medicine is null)
+                return null;
+            return _mapper.Map<MedicineToReturnDto>(medicine);
+        }
+
+
         public async Task<MedicineToReturnDto> CreateMedicineAsync(MedicineToCreateDto dto)
         {
             var medicine = _mapper.Map<Medicine>(dto);
@@ -33,6 +51,8 @@ namespace CareFlow.Service.Services
                 return _mapper.Map<MedicineToReturnDto>(medicine);
             throw new InvalidOperationException("An error occurred while creating medicine entity");
         }
+
+      
 
         public async Task<MedicineToReturnDto> UpdateMedicineAsync(MedicineToUpdateDto dto)
         {
@@ -48,5 +68,7 @@ namespace CareFlow.Service.Services
             throw new InvalidOperationException("An error occurred while updating the medicine entity");
 
         }
+
+       
     }
 }
