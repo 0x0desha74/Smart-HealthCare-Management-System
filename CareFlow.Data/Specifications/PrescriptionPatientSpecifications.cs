@@ -8,5 +8,10 @@ namespace CareFlow.Core.Specifications
         {
 
         }
+
+        public PrescriptionPatientSpecifications(Guid patientId,Guid prescriptionId) : base(p => p.PatientId == patientId&&p.Id== prescriptionId)
+        {
+
+        }
     }
 }

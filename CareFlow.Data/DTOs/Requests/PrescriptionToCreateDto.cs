@@ -7,8 +7,6 @@ namespace CareFlow.Core.DTOs.Requests
     {
 
         [Required, MaxLength(1500)]
-        public string Instruction { get; set; }
-        [Required, MaxLength(1500)]
         public string Diagnosis { get; set; }
         [Required, MaxLength(1500)]
         public string TreatmentSummary { get; set; }
@@ -24,8 +22,8 @@ namespace CareFlow.Core.DTOs.Requests
         [Required]
         public Guid PatientId { get; set; }
         public List<Guid> MedicinesIds { get; set; }
-        [Required]
-        public Guid MedicalHistoryId { get; set; }
+        public List<InstructionToCreateDto> Instructions { get; set; } = new();
+        public Guid? MedicalHistoryId { get; set; }
 
     }
 }

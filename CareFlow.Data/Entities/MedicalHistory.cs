@@ -22,7 +22,6 @@ namespace CareFlow.Core.Entities
 
         public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();
         public ICollection<Document> Documents { get; set; } = new HashSet<Document>();
-        public ICollection<Instruction> Instructions { get; set; } = new HashSet<Instruction>();
 
 
 

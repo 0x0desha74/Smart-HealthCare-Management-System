@@ -19,6 +19,11 @@ namespace CareFlow.Repository.Data.Configurations
                 .HasForeignKey(p => p.DoctorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            builder.HasMany(m => m.Instructions)
+           .WithOne()
+           .HasForeignKey(i => i.PrescriptionId)
+           .OnDelete(DeleteBehavior.NoAction);
+
             builder.HasOne(p => p.Patient)
             .WithMany(pa => pa.Prescriptions)
             .HasForeignKey(p => p.PatientId)

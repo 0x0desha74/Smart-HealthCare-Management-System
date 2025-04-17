@@ -6,7 +6,6 @@ namespace CareFlow.Data.Entities
     {
         public DateTime IssueDate { get; set; } = DateTime.UtcNow;
         public DateTime ExpiryDate => IssueDate.AddMonths(6);
-        public string Instruction { get; set; }
         public PrescriptionStatus Status { get; set; }
 
         public Patient Patient { get; set; }
@@ -16,6 +15,7 @@ namespace CareFlow.Data.Entities
         public Guid? DoctorId { get; set; }
 
         public ICollection<Medicine> Medicines { get; set; }
+        public ICollection<Instruction> Instructions { get; set; } = new HashSet<Instruction>();
 
         public Guid MedicalHistoryId { get; set; }
     }
