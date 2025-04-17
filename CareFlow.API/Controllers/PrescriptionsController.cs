@@ -3,6 +3,7 @@ using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CareFlow.API.Controllers
 {
@@ -19,7 +20,8 @@ namespace CareFlow.API.Controllers
         [HttpPost]
         public async Task<ActionResult<PrescriptionToReturnDto>> Create(PrescriptionToCreateDto model)
         {
-            var createdPrescription = await _prescriptionService.CreatePrescriptionAsync(model);
+            var userId = User.FindFirstValue("uid");
+            var createdPrescription = await _prescriptionService.CreatePrescriptionAsync(model,userId);
             return Ok(createdPrescription);
         }
     }

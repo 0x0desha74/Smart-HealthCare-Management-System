@@ -29,8 +29,6 @@ namespace CareFlow.Core.DTOs.Requests
         public PrescriptionStatus Status { get; set; } = PrescriptionStatus.Active;
         [Required]
         public Guid PatientId { get; set; }
-        [Required]
-        public Guid DoctorId { get; set; }
         public List<Guid> MedicinesIds { get; set; }
         [Required]
         public Guid MedicalHistoryId { get; set; }

@@ -27,31 +27,38 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<PrescriptionToReturnDto> CreatePrescriptionAsync(PrescriptionToCreateDto dto)
+        public async Task<PrescriptionToReturnDto> CreatePrescriptionAsync(PrescriptionToCreateDto dto,string userId)
         {
-            var medicalHistoryDto = _mapper.Map<MedicalHistoryToCreateDto>(dto);
-            var createdMedicalHistory = await _medicalHistoryService.CreateMedicalHistoryAsync(medicalHistoryDto);
+            var doctorSpec = new DoctorSpecifications(userId);
+            var doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithAsync(doctorSpec);
+            MedicalHistory CreatedMedicalHistory = new MedicalHistory();
+            if (dto.MedicalHistoryId == Guid.Empty)
+            {
+               var medicalHistoryDto = _mapper.Map<MedicalHistoryToCreateDto>(dto);
+                CreatedMedicalHistory = await _medicalHistoryService.CreateMedicalHistoryAsync(medicalHistoryDto,doctor.Id);
+            }
 
             var prescription = _mapper.Map<Prescription>(dto);
-            prescription.MedicalHistoryId = createdMedicalHistory.Id;
+            prescription.MedicalHistoryId = CreatedMedicalHistory.Id;
 
-            var MedicalHistorySpec = new MedicineSpecifications(dto.MedicinesIds);
-            var medicines = await _unitOfWork.Repository<Medicine>().GetAllWithSpecAsync(MedicalHistorySpec);
-            if (medicines is null)
-                throw new KeyNotFoundException("Medicines not found, Invalid medicines Ids provided");
+            var medicinesSpec = new MedicineSpecifications(dto.MedicinesIds);
+            var medicines = await _unitOfWork.Repository<Medicine>().GetAllWithSpecAsync(medicinesSpec);
+
             prescription.Medicines = medicines.ToList();
+            prescription.DoctorId = doctor.Id;
+
 
 
             await _unitOfWork.Repository<Prescription>().AddAsync(prescription);
             var result = await _unitOfWork.Complete();
+            if (result <= 0)
+            throw new InvalidOperationException("An error occurred while creating prescription entity");
 
-            if(result <=0)
-                throw new InvalidOperationException("An error occurred while creating prescription entity");
-
-            var PrescriptionSpec = new PrescriptionSpecifications(createdMedicalHistory.Id);
-
-            var createdPrescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(PrescriptionSpec);
+            var spec = new PrescriptionWithPatientAndDoctorAndSpecifications(CreatedMedicalHistory.Id);
+            var createdPrescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(spec);
             return _mapper.Map<PrescriptionToReturnDto>(createdPrescription);
+          
+
         }
     }
 }

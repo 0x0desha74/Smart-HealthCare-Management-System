@@ -10,7 +10,7 @@ namespace CareFlow.API.Controllers
     {
         public IActionResult Error(int code)
         {
-            return NotFound(new ApiResponse(404));
+            return NotFound(new ApiResponse(404,"Not found endpoint"));
         }
     }
 }

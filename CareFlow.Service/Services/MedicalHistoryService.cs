@@ -3,6 +3,7 @@ using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.Entities;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,16 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<MedicalHistory> CreateMedicalHistoryAsync(MedicalHistoryToCreateDto dto)
+        public async Task<MedicalHistory> CreateMedicalHistoryAsync(MedicalHistoryToCreateDto dto,Guid doctorId)
         {
+            var spec = new MedicalHistorySpecifications(dto.PatientId);
+            var existingMedicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(spec);
+             
+            if (existingMedicalHistory is not null)
+                return existingMedicalHistory;
+
             var medicalHistory = _mapper.Map<MedicalHistory>(dto);
+            medicalHistory.DoctorId = doctorId;
             await _unitOfWork.Repository<MedicalHistory>().AddAsync(medicalHistory);
             var result = await _unitOfWork.Complete();
 
