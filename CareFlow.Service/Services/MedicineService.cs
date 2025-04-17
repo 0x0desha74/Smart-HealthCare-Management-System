@@ -45,14 +45,14 @@ namespace CareFlow.Service.Services
         {
             var medicine = _mapper.Map<Medicine>(dto);
             await _unitOfWork.Repository<Medicine>().AddAsync(medicine);
-            var result =await _unitOfWork.Complete();
+            var result = await _unitOfWork.Complete();
 
             if (result > 0)
                 return _mapper.Map<MedicineToReturnDto>(medicine);
             throw new InvalidOperationException("An error occurred while creating medicine entity");
         }
 
-      
+
 
         public async Task<MedicineToReturnDto> UpdateMedicineAsync(MedicineToUpdateDto dto)
         {
@@ -69,6 +69,18 @@ namespace CareFlow.Service.Services
 
         }
 
-       
+        public async Task<bool> DeleteMedicineAsync(Guid id)
+        {
+            var medicine = await _unitOfWork.Repository<Medicine>().GetByIdAsync(id);
+            if (medicine is null)
+                return false;
+
+            _unitOfWork.Repository<Medicine>().Delete(medicine);
+            var result = await _unitOfWork.Complete();
+
+            return result > 0 ? true :
+                 throw new InvalidOperationException("An error occurred while deleting medicine entity");
+
+        }
     }
 }

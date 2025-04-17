@@ -9,5 +9,6 @@ namespace CareFlow.Core.Interfaces.Services
         Task<MedicineToReturnDto> GetMedicineAsync(Guid id);
         Task<MedicineToReturnDto> CreateMedicineAsync(MedicineToCreateDto dto);
         Task<MedicineToReturnDto> UpdateMedicineAsync(MedicineToUpdateDto dto);
+        Task<bool> DeleteMedicineAsync(Guid id);
     }
 }

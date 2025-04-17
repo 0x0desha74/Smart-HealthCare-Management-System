@@ -50,5 +50,15 @@ namespace CareFlow.API.Controllers
             var updatedMedicine = await _medicineService.UpdateMedicineAsync(model);
             return Ok(updatedMedicine);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            var isDeleted = await _medicineService.DeleteMedicineAsync(id);
+            if (!isDeleted)
+                return NotFound(new ApiResponse(404));
+            return NoContent();
+
+        }
     }
 }
