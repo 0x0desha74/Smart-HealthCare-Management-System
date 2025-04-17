@@ -24,10 +24,10 @@ namespace CareFlow.API.Helper
 
             CreateMap<PhoneDto, Phone>().ReverseMap();
             CreateMap<Phone, PhoneToReturnDto>();
-            
+
             CreateMap<AllergyDto, Allergy>().ReverseMap();
             CreateMap<Allergy, AllergyToReturnDto>();
-            
+
             CreateMap<Appointment, AppointmentCreateDto>().ReverseMap();
             CreateMap<Appointment, AppointmentUpdateDto>().ReverseMap();
             CreateMap<Appointment, AppointmentDetailsDto>().ReverseMap();
@@ -35,12 +35,12 @@ namespace CareFlow.API.Helper
                 .ForMember(d => d.Clinic, O => O.MapFrom(s => s.Clinic.Name))
                 .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}"))
                 .ForMember(d => d.Doctor, O => O.MapFrom(s => $"{s.Doctor.FirstName} {s.Doctor.LastName}"));
-            
+
             CreateMap<Specialization, SpecializationDto>().ReverseMap();
-            
+
             CreateMap<Clinic, ClinicDto>().ReverseMap();
             CreateMap<Clinic, ClinicToReturnDto>();
-            
+
             CreateMap<Location, LocationDto>().ReverseMap();
             CreateMap<Location, LocationToReturnDto>();
 
@@ -51,16 +51,17 @@ namespace CareFlow.API.Helper
 
             CreateMap<PrescriptionToCreateDto, Prescription>();
             CreateMap<Prescription, PrescriptionToReturnDto>()
-                .ForMember(d=>d.Doctor,O=>O.MapFrom(s=> $"{s.Doctor.FirstName} {s.Doctor.LastName}"))
-                .ForMember(d=>d.Patient, O=>O.MapFrom(s=> $"{s.Patient.FirstName} {s.Patient.LastName}")).ReverseMap();
+                .ForMember(d => d.Doctor, O => O.MapFrom(s => $"{s.Doctor.FirstName} {s.Doctor.LastName}"))
+                .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}")).ReverseMap();
 
             CreateMap<Medicine, MedicineToReturnDto>();
+            CreateMap<MedicineToCreateDto, Medicine>();
 
-            CreateMap<PrescriptionToCreateDto,MedicalHistoryToCreateDto>();
-            CreateMap<MedicalHistoryToCreateDto,MedicalHistory>();
+            CreateMap<PrescriptionToCreateDto, MedicalHistoryToCreateDto>();
+            CreateMap<MedicalHistoryToCreateDto, MedicalHistory>();
 
 
-        
+
         }
     }
 }

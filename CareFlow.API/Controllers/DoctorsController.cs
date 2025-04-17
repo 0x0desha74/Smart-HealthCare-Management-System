@@ -71,7 +71,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<AppointmentToReturnDto>> GetAppointmentOfDoctor(Guid id)
         {
             var userId = User.FindFirstValue("uid");
-            var appointment = await _doctorService.GetAppointmentOfDoctor(id,userId);
+            var appointment = await _doctorService.GetAppointmentOfDoctor(id, userId);
 
             if (appointment is null)
                 return NotFound(new ApiResponse(404));
@@ -84,7 +84,7 @@ namespace CareFlow.API.Controllers
             var userId = User.FindFirstValue("uid");
             var appointments = await _doctorService.GetUpcomingAppointmentOfDoctor(userId);
 
-            if (!appointments.Any()) return NotFound(new ApiResponse(404,"No upcoming appointments"));
+            if (!appointments.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));
             return Ok(appointments);
 
         }

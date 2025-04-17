@@ -1,14 +1,9 @@
 ﻿using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Core.Specifications
 {
-    public class AppointmentsDoctorSpecifications:BaseSpecification<Appointment>
+    public class AppointmentsDoctorSpecifications : BaseSpecification<Appointment>
     {
         public AppointmentsDoctorSpecifications(string userId) : base(a => a.Doctor.AppUserId == userId)
         {

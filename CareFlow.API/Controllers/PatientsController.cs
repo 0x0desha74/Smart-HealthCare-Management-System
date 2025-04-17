@@ -2,7 +2,6 @@
 using CareFlow.Core.DTOs.In;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
-using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -71,7 +70,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<AppointmentDetailsDto>> GetAppointmentOfPatient(Guid id)
         {
             var userId = User.FindFirstValue("uid");
-            var appointment = await _patientService.GetAppointmentOfPatient(id,userId);
+            var appointment = await _patientService.GetAppointmentOfPatient(id, userId);
 
             return appointment is not null ? Ok(appointment) : BadRequest(new ApiResponse(404));
         }

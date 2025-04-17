@@ -1,13 +1,12 @@
 ﻿using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace CareFlow.API.Controllers
 {
-   
+
     public class PrescriptionsController : BaseApiController
     {
         private readonly IPrescriptionService _prescriptionService;
@@ -21,7 +20,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<PrescriptionToReturnDto>> Create(PrescriptionToCreateDto model)
         {
             var userId = User.FindFirstValue("uid");
-            var createdPrescription = await _prescriptionService.CreatePrescriptionAsync(model,userId);
+            var createdPrescription = await _prescriptionService.CreatePrescriptionAsync(model, userId);
             return Ok(createdPrescription);
         }
     }

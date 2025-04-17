@@ -24,6 +24,6 @@ namespace CareFlow.Core.Specifications
 
         }
 
-       
+
     }
 }

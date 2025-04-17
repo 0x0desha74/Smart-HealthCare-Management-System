@@ -6,11 +6,6 @@ using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
@@ -27,15 +22,15 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<PrescriptionToReturnDto> CreatePrescriptionAsync(PrescriptionToCreateDto dto,string userId)
+        public async Task<PrescriptionToReturnDto> CreatePrescriptionAsync(PrescriptionToCreateDto dto, string userId)
         {
             var doctorSpec = new DoctorSpecifications(userId);
             var doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithAsync(doctorSpec);
             MedicalHistory CreatedMedicalHistory = new MedicalHistory();
             if (dto.MedicalHistoryId == Guid.Empty)
             {
-               var medicalHistoryDto = _mapper.Map<MedicalHistoryToCreateDto>(dto);
-                CreatedMedicalHistory = await _medicalHistoryService.CreateMedicalHistoryAsync(medicalHistoryDto,doctor.Id);
+                var medicalHistoryDto = _mapper.Map<MedicalHistoryToCreateDto>(dto);
+                CreatedMedicalHistory = await _medicalHistoryService.CreateMedicalHistoryAsync(medicalHistoryDto, doctor.Id);
             }
 
             var prescription = _mapper.Map<Prescription>(dto);
@@ -52,12 +47,12 @@ namespace CareFlow.Service.Services
             await _unitOfWork.Repository<Prescription>().AddAsync(prescription);
             var result = await _unitOfWork.Complete();
             if (result <= 0)
-            throw new InvalidOperationException("An error occurred while creating prescription entity");
+                throw new InvalidOperationException("An error occurred while creating prescription entity");
 
             var spec = new PrescriptionWithPatientAndDoctorAndSpecifications(CreatedMedicalHistory.Id);
             var createdPrescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(spec);
             return _mapper.Map<PrescriptionToReturnDto>(createdPrescription);
-          
+
 
         }
     }

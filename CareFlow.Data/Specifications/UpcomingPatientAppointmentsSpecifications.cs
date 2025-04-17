@@ -1,17 +1,12 @@
 ﻿using CareFlow.Data.Entities;
 using CareFlow.Data.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Core.Specifications
 {
-  public  class UpcomingPatientAppointmentsSpecifications:BaseSpecification<Appointment>
+    public class UpcomingPatientAppointmentsSpecifications : BaseSpecification<Appointment>
     {
-        public UpcomingPatientAppointmentsSpecifications(string userId):base(a=>a.Doctor.AppUserId==userId&&a.Status == AppointmentStatus.Pending)
+        public UpcomingPatientAppointmentsSpecifications(string userId) : base(a => a.Doctor.AppUserId == userId && a.Status == AppointmentStatus.Pending)
         {
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));

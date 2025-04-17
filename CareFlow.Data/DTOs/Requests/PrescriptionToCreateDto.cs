@@ -1,24 +1,18 @@
 ﻿using CareFlow.Data.Entities.Enums;
-using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace CareFlow.Core.DTOs.Requests
 {
-   public class PrescriptionToCreateDto
+    public class PrescriptionToCreateDto
     {
-        
-        [Required,MaxLength(1500)]
+
+        [Required, MaxLength(1500)]
         public string Instruction { get; set; }
-        [Required,MaxLength(1500)]
+        [Required, MaxLength(1500)]
         public string Diagnosis { get; set; }
-        [Required,MaxLength(1500)]
+        [Required, MaxLength(1500)]
         public string TreatmentSummary { get; set; }
-        [Required,MaxLength(1500)]
+        [Required, MaxLength(1500)]
         public string ClinicalNotes { get; set; }
         [Required]
         public DateTime OnSetDate { get; set; }

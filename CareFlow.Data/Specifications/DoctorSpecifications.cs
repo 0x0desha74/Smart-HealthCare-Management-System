@@ -14,7 +14,7 @@ namespace CareFlow.Core.Specifications
         {
             AddIncludes(q => q.Include(d => d.Specializations));
         }
-        public DoctorSpecifications(string userId):base(d=>d.AppUserId==userId)
+        public DoctorSpecifications(string userId) : base(d => d.AppUserId == userId)
         {
             AddIncludes(q => q.Include(d => d.Specializations));
         }
