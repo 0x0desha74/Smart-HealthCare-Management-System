@@ -19,8 +19,15 @@ namespace CareFlow.API.Controllers
         [HttpPost]
         public async Task<ActionResult<MedicineToReturnDto>> CreateAsync(MedicineToCreateDto model)
         {
-            var medicine = await _medicineService.CreateMedicineAsync(model);
-            return Ok(medicine);
+            var createdMedicine = await _medicineService.CreateMedicineAsync(model);
+            return Ok(createdMedicine);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<MedicineToReturnDto>> UpdateAsync(MedicineToUpdateDto model)
+        {
+            var updatedMedicine = await _medicineService.UpdateMedicineAsync(model);
+            return Ok(updatedMedicine);
         }
     }
 }

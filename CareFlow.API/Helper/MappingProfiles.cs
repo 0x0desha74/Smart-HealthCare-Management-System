@@ -56,6 +56,7 @@ namespace CareFlow.API.Helper
 
             CreateMap<Medicine, MedicineToReturnDto>();
             CreateMap<MedicineToCreateDto, Medicine>();
+            CreateMap<MedicineToUpdateDto, Medicine>();
 
             CreateMap<PrescriptionToCreateDto, MedicalHistoryToCreateDto>();
             CreateMap<MedicalHistoryToCreateDto, MedicalHistory>();

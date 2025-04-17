@@ -33,5 +33,20 @@ namespace CareFlow.Service.Services
                 return _mapper.Map<MedicineToReturnDto>(medicine);
             throw new InvalidOperationException("An error occurred while creating medicine entity");
         }
+
+        public async Task<MedicineToReturnDto> UpdateMedicineAsync(MedicineToUpdateDto dto)
+        {
+            var existingMedicine = await _unitOfWork.Repository<Medicine>().GetByIdAsync(dto.Id);
+            if (existingMedicine is null)
+                throw new KeyNotFoundException("Medicine not found, Invalid medicine ID provided");
+            _mapper.Map(dto, existingMedicine);
+
+            _unitOfWork.Repository<Medicine>().Update(existingMedicine);
+            var result = await _unitOfWork.Complete();
+            if (result > 0)
+                return _mapper.Map<MedicineToReturnDto>(existingMedicine);
+            throw new InvalidOperationException("An error occurred while updating the medicine entity");
+
+        }
     }
 }
