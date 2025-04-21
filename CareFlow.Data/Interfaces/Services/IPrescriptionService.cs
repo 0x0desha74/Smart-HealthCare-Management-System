@@ -7,5 +7,6 @@ namespace CareFlow.Core.Interfaces.Services
     {
         Task<PrescriptionToReturnDto> CreatePrescriptionAsync(PrescriptionToCreateDto dto, string userId);
         Task<PrescriptionToReturnDto> GetPrescriptionAsync(Guid id,string userId);
+        //Task<PrescriptionToReturnDto> GetPrescriptionAsync(string userId);
     }
 }

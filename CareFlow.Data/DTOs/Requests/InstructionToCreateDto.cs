@@ -8,5 +8,6 @@ namespace CareFlow.Core.DTOs.Requests
         public string Title { get; set; }
         [Required, MaxLength(2500)]
         public string Description { get; set; }
+        public Guid Patientid { get; set; }
     }
 }

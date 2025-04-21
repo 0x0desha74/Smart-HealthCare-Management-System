@@ -29,7 +29,12 @@ namespace CareFlow.Service.Services
             var doctorSpec = new DoctorSpecifications(userId);
             var doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithAsync(doctorSpec);
 
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(dto.PatientId);
+            if (patient is null)
+                throw new ArgumentException("Patient not found, Invalid patient ID.");
+
             MedicalHistory CreatedMedicalHistory = null;
+
             if (dto.MedicalHistoryId == Guid.Empty)
             {
                 var medicalHistoryDto = _mapper.Map<MedicalHistoryToCreateDto>(dto);
@@ -37,19 +42,26 @@ namespace CareFlow.Service.Services
             }
 
             var prescription = _mapper.Map<Prescription>(dto);
+           
             prescription.MedicalHistoryId = CreatedMedicalHistory != null ? CreatedMedicalHistory.Id
                 : dto.MedicalHistoryId;
+            prescription.DoctorId = doctor.Id;
 
 
 
             var medicinesSpec = new MedicineSpecifications(dto.MedicinesIds);
             var medicines = await _unitOfWork.Repository<Medicine>().GetAllWithSpecAsync(medicinesSpec);
-
             prescription.Medicines = medicines.ToList();
-            prescription.DoctorId = doctor.Id;
 
+            var instructions =  _mapper.Map<IReadOnlyList<Instruction>>(dto.Instructions);
+            
+            foreach(var instruction in instructions)
+            {
+                instruction.PatientId= prescription.PatientId;
+                instruction.DoctorId = doctor.Id;
+            }
 
-
+            prescription.Instructions = instructions.ToList();
 
             await _unitOfWork.Repository<Prescription>().AddAsync(prescription);
             var result = await _unitOfWork.Complete();
@@ -60,7 +72,7 @@ namespace CareFlow.Service.Services
            
 
             var effectiveMedicalHistory = CreatedMedicalHistory is not null ? CreatedMedicalHistory.Id : dto.MedicalHistoryId;
-            var spec = new PrescriptionWithPatientAndDoctorSpecifications(CreatedMedicalHistory.Id);
+            var spec = new PrescriptionWithPatientAndDoctorSpecifications(prescription.MedicalHistoryId);
             var createdPrescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(spec);
 
             return _mapper.Map<PrescriptionToReturnDto>(createdPrescription);

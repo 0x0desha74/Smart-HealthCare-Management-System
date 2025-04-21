@@ -21,8 +21,10 @@ namespace CareFlow.Core.DTOs.Requests
         public PrescriptionStatus Status { get; set; } = PrescriptionStatus.Active;
         [Required]
         public Guid PatientId { get; set; }
+        [Required, MinLength(1)]
         public List<Guid> MedicinesIds { get; set; }
-        //public List<InstructionToCreateDto> Instructions { get; set; } = new();
+        [Required, MinLength(1)]
+        public List<InstructionToCreateDto> Instructions { get; set; } = new();
         public Guid MedicalHistoryId { get; set; }
 
     }

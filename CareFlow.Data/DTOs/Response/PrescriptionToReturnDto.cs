@@ -7,7 +7,6 @@ namespace CareFlow.Core.DTOs.Response
         public Guid Id { get; set; }
         public DateTime IssueDate { get; set; }
         public DateTime ExpiryDate { get; set; }
-        public string Instruction { get; set; }
         public PrescriptionStatus Status { get; set; }
         public Guid PatientId { get; set; }
         public string Patient { get; set; }
