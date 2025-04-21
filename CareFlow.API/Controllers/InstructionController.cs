@@ -25,9 +25,17 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<Instruction>>> GetAllInstructionsForPrescription(Guid prescriptionId)
         {
             var userId = User.FindFirstValue("uid");
-            var role = User.FindFirstValue(ClaimTypes.Role);
             var instructions = await _instructionService.GetInstructionsForPrescription(prescriptionId, userId);
             return Ok(instructions);
+        }
+
+        [Authorize]
+        [HttpGet("{instructionId}")]
+        public async Task<ActionResult<IReadOnlyList<Instruction>>> GetAllInstructionForPrescription(Guid prescriptionId,Guid instructionId)
+        {
+            var userId = User.FindFirstValue("uid");
+            var instruction = await _instructionService.GetInstructionForPrescription(prescriptionId, instructionId,userId);
+            return Ok(instruction);
         }
 
 

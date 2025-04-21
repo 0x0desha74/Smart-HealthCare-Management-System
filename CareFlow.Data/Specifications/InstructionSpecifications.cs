@@ -4,14 +4,14 @@ namespace CareFlow.Core.Specifications
 {
     public class InstructionSpecifications : BaseSpecification<Instruction>
     {
-        public InstructionSpecifications(Guid prescriptionId, string userId)
-            : base(i => i.PrescriptionId == prescriptionId && (i.Doctor.AppUserId == userId || i.Patient.AppUserId == userId))
+        public InstructionSpecifications(Guid prescriptionId)
+            : base(i => i.PrescriptionId == prescriptionId)
         {
-            
+
 
         }
-        public InstructionSpecifications(Guid prescriptionId, Guid instructionId,string userId)
-         : base(i => i.Id == instructionId && (i.Doctor.AppUserId == userId || i.Patient.AppUserId == userId))
+        public InstructionSpecifications(Guid prescriptionId,Guid instructionId)
+         : base(i => i.Id == instructionId)
         {
 
 
