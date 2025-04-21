@@ -48,7 +48,7 @@ namespace CareFlow.Service.Services
             throw new InvalidOperationException("An error occurred while creating instruction entity");
         }
 
-        public async Task<InstructionToReturnDto> GetInstructionForPrescription(Guid prescriptionId, Guid instructionId, string userId)
+        public async Task<InstructionToReturnDto> GetInstructionForAsync(Guid prescriptionId, Guid instructionId, string userId)
         {
             var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(prescriptionId));
 
@@ -66,7 +66,7 @@ namespace CareFlow.Service.Services
             return _mapper.Map<InstructionToReturnDto>(instruction);
         }
 
-        public async Task<IReadOnlyList<InstructionToReturnDto>> GetInstructionsForPrescription(Guid prescriptionId, string userId)
+        public async Task<IReadOnlyList<InstructionToReturnDto>> GetInstructionsAsync(Guid prescriptionId, string userId)
         {
             var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(prescriptionId));
             if (prescription is null)
@@ -81,14 +81,34 @@ namespace CareFlow.Service.Services
             return _mapper.Map<IReadOnlyList<InstructionToReturnDto>>(instructions);
         }
 
+        public async Task<InstructionToReturnDto> UpdateInstructionAsync(Guid prescriptionId, Guid instructionId, string userId, InstructionToUpdateDto dto)
+        {
+            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(prescriptionId));
+
+            if (prescription is null)
+                throw new KeyNotFoundException("Prescription not found.");
+
+            if (prescription.Doctor.AppUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not.");
+
+            if (!prescription.Instructions.Any(i => i.Id == instructionId))
+                throw new ArgumentException("The instruction does not belong to the specified prescription.");
+
+            var existingInstruction = await _unitOfWork.Repository<Instruction>().GetByIdAsync(instructionId);
+          
+            if ( existingInstruction is null|| dto.Id != instructionId )
+                throw new ArgumentException("Invalid instruction ID provided.");
 
 
+            _mapper.Map(dto, existingInstruction);
+
+            _unitOfWork.Repository<Instruction>().Update(existingInstruction);
+            var result = await _unitOfWork.Complete();
+
+            return result > 0 ? _mapper.Map<InstructionToReturnDto>(existingInstruction)
+                : throw new InvalidOperationException("Failed to update instruction.");
 
 
-
-
-
-
-
+        }
     }
 }

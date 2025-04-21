@@ -22,19 +22,19 @@ namespace CareFlow.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Instruction>>> GetAllInstructionsForPrescription(Guid prescriptionId)
+        public async Task<ActionResult<IReadOnlyList<InstructionToReturnDto>>> GetAllInstructions(Guid prescriptionId)
         {
             var userId = User.FindFirstValue("uid");
-            var instructions = await _instructionService.GetInstructionsForPrescription(prescriptionId, userId);
+            var instructions = await _instructionService.GetInstructionsAsync(prescriptionId, userId);
             return Ok(instructions);
         }
 
         [Authorize]
         [HttpGet("{instructionId}")]
-        public async Task<ActionResult<IReadOnlyList<Instruction>>> GetAllInstructionForPrescription(Guid prescriptionId,Guid instructionId)
+        public async Task<ActionResult<InstructionToReturnDto>> GetInstruction(Guid prescriptionId,Guid instructionId)
         {
             var userId = User.FindFirstValue("uid");
-            var instruction = await _instructionService.GetInstructionForPrescription(prescriptionId, instructionId,userId);
+            var instruction = await _instructionService.GetInstructionForAsync(prescriptionId, instructionId,userId);
             return Ok(instruction);
         }
 
@@ -42,11 +42,22 @@ namespace CareFlow.API.Controllers
 
         [Authorize(Roles = "Doctor")]
         [HttpPost]
-        public async Task<ActionResult<InstructionToReturnDto>> CreateAsync([FromBody] InstructionToCreateDto model, Guid prescriptionId)
+        public async Task<ActionResult<InstructionToReturnDto>> Create([FromBody] InstructionToCreateDto model, Guid prescriptionId)
         {
             var userId = User.FindFirstValue("uid");
             var instruction = await _instructionService.CreateInstructionAsync(model, prescriptionId, userId);
             return Ok(instruction);
         }
+
+        [Authorize(Roles = "Doctor")]
+        [HttpPut("{instructionId}")]
+        public async Task<ActionResult<InstructionToReturnDto>> UpdateInstruction(Guid prescriptionId, Guid instructionId, [FromBody] InstructionToUpdateDto model)
+        {
+            var userId = User.FindFirstValue("uid");
+            var UpdatedInstruction = await _instructionService.UpdateInstructionAsync(prescriptionId, instructionId, userId, model);
+            return Ok(UpdatedInstruction);
+        }
+
+
     }
 }

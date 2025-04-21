@@ -62,6 +62,7 @@ namespace CareFlow.API.Helper
             CreateMap<MedicalHistoryToCreateDto, MedicalHistory>();
 
             CreateMap<InstructionToCreateDto, Instruction>();
+            CreateMap<InstructionToUpdateDto, Instruction>();
             CreateMap<Instruction, InstructionToReturnDto>();
 
 
