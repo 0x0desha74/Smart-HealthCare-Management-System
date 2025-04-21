@@ -26,6 +26,7 @@ namespace CareFlow.Core.DTOs.Requests
         [Required, MinLength(1)]
         public List<InstructionToCreateDto> Instructions { get; set; } = new();
         public Guid MedicalHistoryId { get; set; }
+        public Guid AppointmentId { get; set; }
 
     }
 }

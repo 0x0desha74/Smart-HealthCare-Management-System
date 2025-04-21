@@ -2,6 +2,7 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers
@@ -16,7 +17,7 @@ namespace CareFlow.API.Controllers
             _clinicService = clinicService;
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ClinicDto>> Create(ClinicDto model)
         {
@@ -24,6 +25,7 @@ namespace CareFlow.API.Controllers
             return Ok(clinic);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ClinicToReturnDto>> GetClinic(Guid id)
         {
@@ -32,7 +34,7 @@ namespace CareFlow.API.Controllers
             return Ok(clinic);
         }
 
-
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ClinicToReturnDto>>> GetClinics()
         {
@@ -41,7 +43,7 @@ namespace CareFlow.API.Controllers
             return Ok(clinics);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult<ClinicToReturnDto>> Update(ClinicDto model)
         {
@@ -50,7 +52,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

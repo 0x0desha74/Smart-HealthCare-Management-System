@@ -8,7 +8,7 @@ namespace CareFlow.Core.Interfaces.Services
         Task<InstructionToReturnDto> CreateInstructionAsync(InstructionToCreateDto dto, Guid prescriptionId, string userId);
         Task<IReadOnlyList<InstructionToReturnDto>> GetInstructionsAsync(Guid prescriptionId, string userId);
         Task<InstructionToReturnDto> GetInstructionForAsync(Guid prescriptionId, Guid instructionId, string userId);
-        Task<InstructionToReturnDto> UpdateInstructionAsync( Guid prescriptionId, Guid instructionId, string userId, InstructionToUpdateDto dto);
+        Task<InstructionToReturnDto> UpdateInstructionAsync(Guid prescriptionId, Guid instructionId, string userId, InstructionToUpdateDto dto);
         Task<bool> DeleteInstructionAsync(Guid prescriptionId, Guid instructionId, string userId);
     }
 }

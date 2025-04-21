@@ -71,6 +71,7 @@ namespace CareFlow.Service.Services
             var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(prescriptionId));
             if (prescription is null)
                 throw new KeyNotFoundException("Prescription not found");
+
             if (prescription.Doctor.AppUserId != userId && prescription.Patient.AppUserId != userId)
                 throw new UnauthorizedAccessException("You are not authorized to view instructions");
 
@@ -91,10 +92,10 @@ namespace CareFlow.Service.Services
             if (prescription.Doctor.AppUserId != userId)
                 throw new UnauthorizedAccessException("Authorized!, You are not.");
 
-            
-            var existingInstruction = await _unitOfWork.Repository<Instruction>().GetEntityWithAsync(new InstructionSpecifications(prescriptionId,instructionId));
-          
-            if ( existingInstruction is null|| dto.Id != instructionId )
+
+            var existingInstruction = await _unitOfWork.Repository<Instruction>().GetEntityWithAsync(new InstructionSpecifications(prescriptionId, instructionId));
+
+            if (existingInstruction is null || dto.Id != instructionId)
                 throw new ArgumentException("Invalid instruction ID provided.");
 
 
@@ -115,7 +116,7 @@ namespace CareFlow.Service.Services
 
             if (prescription is null)
                 throw new KeyNotFoundException("Prescription not found.");
-            
+
             if (prescription.Doctor.AppUserId != userId)
                 throw new UnauthorizedAccessException("Authorized!, You are not!");
 

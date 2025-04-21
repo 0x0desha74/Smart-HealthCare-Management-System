@@ -18,6 +18,7 @@ namespace CareFlow.API.Controllers
             _prescriptionService = prescriptionService;
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<PrescriptionToReturnDto>> GetByIdAsync(Guid id)
         {
@@ -45,7 +46,7 @@ namespace CareFlow.API.Controllers
             return Ok(prescriptions);
         }
 
-
+        [Authorize(Roles = "Doctor")]
         [HttpPost]
         public async Task<ActionResult<PrescriptionToReturnDto>> Create(PrescriptionToCreateDto model)
         {

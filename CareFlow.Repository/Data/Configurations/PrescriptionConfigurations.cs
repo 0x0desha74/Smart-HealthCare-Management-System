@@ -20,7 +20,7 @@ namespace CareFlow.Repository.Data.Configurations
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(m => m.Instructions)
-           .WithOne(i=>i.Prescription)
+           .WithOne(i => i.Prescription)
            .HasForeignKey(i => i.PrescriptionId)
            .OnDelete(DeleteBehavior.Cascade);
 
@@ -28,6 +28,11 @@ namespace CareFlow.Repository.Data.Configurations
             .WithMany(pa => pa.Prescriptions)
             .HasForeignKey(p => p.PatientId)
             .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(p => p.MedicalHistory)
+         .WithMany(m => m.Prescriptions)
+         .HasForeignKey(p => p.MedicalHistoryId)
+         .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

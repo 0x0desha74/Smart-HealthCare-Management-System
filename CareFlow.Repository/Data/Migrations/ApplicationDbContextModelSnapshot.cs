@@ -455,6 +455,9 @@ namespace CareFlow.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AppointmentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
@@ -472,6 +475,8 @@ namespace CareFlow.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
 
                     b.HasIndex("DoctorId");
 
@@ -537,7 +542,7 @@ namespace CareFlow.Repository.Migrations
                     b.HasOne("CareFlow.Data.Entities.Doctor", "Doctor")
                         .WithMany("MedicalHistories")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CareFlow.Data.Entities.Patient", "Patient")
@@ -674,6 +679,11 @@ namespace CareFlow.Repository.Migrations
 
             modelBuilder.Entity("CareFlow.Data.Entities.Prescription", b =>
                 {
+                    b.HasOne("CareFlow.Data.Entities.Appointment", null)
+                        .WithMany("Prescriptions")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("CareFlow.Data.Entities.Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
@@ -732,6 +742,11 @@ namespace CareFlow.Repository.Migrations
                 {
                     b.Navigation("Documents");
 
+                    b.Navigation("Prescriptions");
+                });
+
+            modelBuilder.Entity("CareFlow.Data.Entities.Appointment", b =>
+                {
                     b.Navigation("Prescriptions");
                 });
 

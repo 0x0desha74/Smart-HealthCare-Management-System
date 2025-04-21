@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareFlow.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250421123828_addCascadeOnDeleteConstraintToMedicalHistoryAndPrescriptionRelationship")]
-    partial class addCascadeOnDeleteConstraintToMedicalHistoryAndPrescriptionRelationship
+    [Migration("20250421161030_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -458,6 +458,9 @@ namespace CareFlow.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AppointmentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
@@ -475,6 +478,8 @@ namespace CareFlow.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
 
                     b.HasIndex("DoctorId");
 
@@ -540,13 +545,13 @@ namespace CareFlow.Repository.Migrations
                     b.HasOne("CareFlow.Data.Entities.Doctor", "Doctor")
                         .WithMany("MedicalHistories")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CareFlow.Data.Entities.Patient", "Patient")
                         .WithMany("MedicalHistories")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -641,15 +646,17 @@ namespace CareFlow.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CareFlow.Data.Entities.Prescription", null)
+                    b.HasOne("CareFlow.Data.Entities.Prescription", "Prescription")
                         .WithMany("Instructions")
                         .HasForeignKey("PrescriptionId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+
+                    b.Navigation("Prescription");
                 });
 
             modelBuilder.Entity("CareFlow.Data.Entities.Patient", b =>
@@ -675,24 +682,31 @@ namespace CareFlow.Repository.Migrations
 
             modelBuilder.Entity("CareFlow.Data.Entities.Prescription", b =>
                 {
+                    b.HasOne("CareFlow.Data.Entities.Appointment", null)
+                        .WithMany("Prescriptions")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("CareFlow.Data.Entities.Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("CareFlow.Core.Entities.MedicalHistory", null)
+                    b.HasOne("CareFlow.Core.Entities.MedicalHistory", "MedicalHistory")
                         .WithMany("Prescriptions")
                         .HasForeignKey("MedicalHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CareFlow.Data.Entities.Patient", "Patient")
                         .WithMany("Prescriptions")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Doctor");
+
+                    b.Navigation("MedicalHistory");
 
                     b.Navigation("Patient");
                 });
@@ -731,6 +745,11 @@ namespace CareFlow.Repository.Migrations
                 {
                     b.Navigation("Documents");
 
+                    b.Navigation("Prescriptions");
+                });
+
+            modelBuilder.Entity("CareFlow.Data.Entities.Appointment", b =>
+                {
                     b.Navigation("Prescriptions");
                 });
 

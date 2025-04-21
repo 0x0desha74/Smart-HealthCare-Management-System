@@ -11,21 +11,19 @@ namespace CareFlow.Repository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Clinics",
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OpeningTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    ClosingTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Website = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsOpen24Hours = table.Column<bool>(type: "bit", nullable: false)
+                    AddressLine1 = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clinics", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,11 +47,36 @@ namespace CareFlow.Repository.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Specializations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clinics",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OpeningTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    ClosingTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsOpen24Hours = table.Column<bool>(type: "bit", nullable: false),
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clinics", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clinics_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,9 +87,12 @@ namespace CareFlow.Repository.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LicenceNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthData = table.Column<DateOnly>(type: "date", nullable: false),
                     YearOfExperience = table.Column<int>(type: "int", nullable: false),
-                    ClinicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AppUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClinicId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,29 +103,6 @@ namespace CareFlow.Repository.Migrations
                         principalTable: "Clinics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Locations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AddressLine1 = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Conuntry = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    ClinicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Locations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Locations_Clinics_ClinicId",
-                        column: x => x.ClinicId,
-                        principalTable: "Clinics",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -138,7 +141,8 @@ namespace CareFlow.Repository.Migrations
                     bloodType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Height = table.Column<double>(type: "float", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
-                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AppUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -211,54 +215,36 @@ namespace CareFlow.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Documents",
+                name: "MedicalHistories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocumentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Documents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Documents_Patients_PatientId",
-                        column: x => x.PatientId,
-                        principalTable: "Patients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Instructions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsComplete = table.Column<bool>(type: "bit", nullable: false),
+                    Diagnosis = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TreatmentSummary = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClinicalNotes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecordDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OnSetDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RequiredFollowUp = table.Column<bool>(type: "bit", nullable: false),
+                    FollowUpDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Instructions", x => x.Id);
+                    table.PrimaryKey("PK_MedicalHistories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Instructions_Doctors_DoctorId",
+                        name: "FK_MedicalHistories_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Instructions_Patients_PatientId",
+                        name: "FK_MedicalHistories_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -283,20 +269,54 @@ namespace CareFlow.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DocumentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MedicalHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Documents_MedicalHistories_MedicalHistoryId",
+                        column: x => x.MedicalHistoryId,
+                        principalTable: "MedicalHistories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Documents_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Prescriptions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Instruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MedicalHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AppointmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Prescriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Prescriptions_Appointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Prescriptions_Doctors_DoctorId",
                         column: x => x.DoctorId,
@@ -304,9 +324,49 @@ namespace CareFlow.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
+                        name: "FK_Prescriptions_MedicalHistories_MedicalHistoryId",
+                        column: x => x.MedicalHistoryId,
+                        principalTable: "MedicalHistories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Prescriptions_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Instructions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
+                    PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PrescriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Instructions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Instructions_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Instructions_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Instructions_Prescriptions_PrescriptionId",
+                        column: x => x.PrescriptionId,
+                        principalTable: "Prescriptions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -356,6 +416,12 @@ namespace CareFlow.Repository.Migrations
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clinics_LocationId",
+                table: "Clinics",
+                column: "LocationId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Doctors_ClinicId",
                 table: "Doctors",
                 column: "ClinicId");
@@ -364,6 +430,11 @@ namespace CareFlow.Repository.Migrations
                 name: "IX_DoctorSpecialization_SpecializationsId",
                 table: "DoctorSpecialization",
                 column: "SpecializationsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Documents_MedicalHistoryId",
+                table: "Documents",
+                column: "MedicalHistoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Documents_PatientId",
@@ -381,10 +452,19 @@ namespace CareFlow.Repository.Migrations
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_ClinicId",
-                table: "Locations",
-                column: "ClinicId",
-                unique: true);
+                name: "IX_Instructions_PrescriptionId",
+                table: "Instructions",
+                column: "PrescriptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MedicalHistories_DoctorId",
+                table: "MedicalHistories",
+                column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MedicalHistories_PatientId",
+                table: "MedicalHistories",
+                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicinePrescription_PrescriptionsId",
@@ -402,9 +482,19 @@ namespace CareFlow.Repository.Migrations
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Prescriptions_AppointmentId",
+                table: "Prescriptions",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Prescriptions_DoctorId",
                 table: "Prescriptions",
                 column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Prescriptions_MedicalHistoryId",
+                table: "Prescriptions",
+                column: "MedicalHistoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prescriptions_PatientId",
@@ -419,9 +509,6 @@ namespace CareFlow.Repository.Migrations
                 name: "Allergies");
 
             migrationBuilder.DropTable(
-                name: "Appointments");
-
-            migrationBuilder.DropTable(
                 name: "DoctorSpecialization");
 
             migrationBuilder.DropTable(
@@ -429,9 +516,6 @@ namespace CareFlow.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Instructions");
-
-            migrationBuilder.DropTable(
-                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "MedicinePrescription");
@@ -449,6 +533,12 @@ namespace CareFlow.Repository.Migrations
                 name: "Prescriptions");
 
             migrationBuilder.DropTable(
+                name: "Appointments");
+
+            migrationBuilder.DropTable(
+                name: "MedicalHistories");
+
+            migrationBuilder.DropTable(
                 name: "Patients");
 
             migrationBuilder.DropTable(
@@ -456,6 +546,9 @@ namespace CareFlow.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clinics");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
         }
     }
 }

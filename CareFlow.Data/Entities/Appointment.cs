@@ -13,6 +13,7 @@ namespace CareFlow.Data.Entities
         [MaxLength(1000)]
         public string? Notes { get; set; }
 
+        public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();
 
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }

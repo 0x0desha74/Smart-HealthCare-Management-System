@@ -6,8 +6,8 @@ namespace CareFlow.Core.Interfaces.Services
     public interface IPrescriptionService
     {
         Task<PrescriptionToReturnDto> CreatePrescriptionAsync(PrescriptionToCreateDto dto, string userId);
-        Task<PrescriptionToReturnDto> GetPrescriptionAsync(Guid id,string userId);
-        Task<IReadOnlyList<PrescriptionToReturnDto>> GetPatientPrescriptions(string userId); 
-        Task<IReadOnlyList<PrescriptionToReturnDto>> GetDoctorPrescriptions(string userId); 
+        Task<PrescriptionToReturnDto> GetPrescriptionAsync(Guid id, string userId);
+        Task<IReadOnlyList<PrescriptionToReturnDto>> GetPatientPrescriptions(string userId);
+        Task<IReadOnlyList<PrescriptionToReturnDto>> GetDoctorPrescriptions(string userId);
     }
 }

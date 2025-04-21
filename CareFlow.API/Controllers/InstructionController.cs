@@ -2,10 +2,8 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
-using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 using System.Security.Claims;
 
 namespace CareFlow.API.Controllers
@@ -33,10 +31,10 @@ namespace CareFlow.API.Controllers
 
         [Authorize]
         [HttpGet("{instructionId}")]
-        public async Task<ActionResult<InstructionToReturnDto>> GetInstruction(Guid prescriptionId,Guid instructionId)
+        public async Task<ActionResult<InstructionToReturnDto>> GetInstruction(Guid prescriptionId, Guid instructionId)
         {
             var userId = User.FindFirstValue("uid");
-            var instruction = await _instructionService.GetInstructionForAsync(prescriptionId, instructionId,userId);
+            var instruction = await _instructionService.GetInstructionForAsync(prescriptionId, instructionId, userId);
             return Ok(instruction);
         }
 
@@ -60,9 +58,9 @@ namespace CareFlow.API.Controllers
             return Ok(UpdatedInstruction);
         }
 
-        [Authorize(Roles="Doctor")]
+        [Authorize(Roles = "Doctor")]
         [HttpDelete("{instructionId}")]
-        public async Task<IActionResult> Delete(Guid prescriptionId,Guid instructionId)
+        public async Task<IActionResult> Delete(Guid prescriptionId, Guid instructionId)
         {
             var userId = User.FindFirstValue("uid");
             var isDeleted = await _instructionService.DeleteInstructionAsync(prescriptionId, instructionId, userId);
