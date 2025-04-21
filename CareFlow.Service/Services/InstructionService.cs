@@ -91,10 +91,8 @@ namespace CareFlow.Service.Services
             if (prescription.Doctor.AppUserId != userId)
                 throw new UnauthorizedAccessException("Authorized!, You are not.");
 
-            if (!prescription.Instructions.Any(i => i.Id == instructionId))
-                throw new ArgumentException("The instruction does not belong to the specified prescription.");
-
-            var existingInstruction = await _unitOfWork.Repository<Instruction>().GetByIdAsync(instructionId);
+            
+            var existingInstruction = await _unitOfWork.Repository<Instruction>().GetEntityWithAsync(new InstructionSpecifications(prescriptionId,instructionId));
           
             if ( existingInstruction is null|| dto.Id != instructionId )
                 throw new ArgumentException("Invalid instruction ID provided.");
@@ -110,5 +108,29 @@ namespace CareFlow.Service.Services
 
 
         }
+
+        public async Task<bool> DeleteInstructionAsync(Guid prescriptionId, Guid instructionId, string userId)
+        {
+            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(prescriptionId));
+
+            if (prescription is null)
+                throw new KeyNotFoundException("Prescription not found.");
+            
+            if (prescription.Doctor.AppUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not!");
+
+            var instruction = await _unitOfWork.Repository<Instruction>().GetEntityWithAsync(new InstructionSpecifications(prescriptionId, instructionId));
+
+            if (instruction is null)
+                return false;
+
+            _unitOfWork.Repository<Instruction>().Delete(instruction);
+            var result = await _unitOfWork.Complete();
+
+            return result > 0 ? true
+                : throw new InvalidOperationException("Failed to update instruction.");
+        }
+
+
     }
 }

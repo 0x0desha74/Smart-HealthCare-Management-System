@@ -1,9 +1,11 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using System.Security.Claims;
 
 namespace CareFlow.API.Controllers
@@ -58,6 +60,15 @@ namespace CareFlow.API.Controllers
             return Ok(UpdatedInstruction);
         }
 
-
+        [Authorize(Roles="Doctor")]
+        [HttpDelete("{instructionId}")]
+        public async Task<IActionResult> Delete(Guid prescriptionId,Guid instructionId)
+        {
+            var userId = User.FindFirstValue("uid");
+            var isDeleted = await _instructionService.DeleteInstructionAsync(prescriptionId, instructionId, userId);
+            if (!isDeleted)
+                return NotFound(new ApiResponse(404, "Instruction not found."));
+            return NoContent();
+        }
     }
 }

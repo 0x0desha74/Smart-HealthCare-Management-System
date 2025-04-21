@@ -11,7 +11,7 @@ namespace CareFlow.Core.Specifications
 
         }
         public InstructionSpecifications(Guid prescriptionId,Guid instructionId)
-         : base(i => i.Id == instructionId)
+         : base(i => i.Id == instructionId && i.PrescriptionId==prescriptionId)
         {
 
 
