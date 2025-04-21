@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
-using CareFlow.Core.Entities;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
@@ -24,10 +18,10 @@ namespace CareFlow.Service.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<InstructionToReturnDto> CreateInstructionAsync(InstructionToCreateDto dto,Guid prescriptionId,string userId)
+        public async Task<InstructionToReturnDto> CreateInstructionAsync(InstructionToCreateDto dto, Guid prescriptionId, string userId)
         {
-           
-            var prescription = await _unitOfWork.Repository<Prescription>().GetByIdAsync(prescriptionId);
+
+            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(prescriptionId));
 
             if (prescription is null)
                 throw new KeyNotFoundException("Prescription not found, Invalid prescription ID provided");
@@ -35,8 +29,14 @@ namespace CareFlow.Service.Services
 
             if (prescription.DoctorId != doctor.Id)
                 throw new UnauthorizedAccessException("You are not authorized to modify this prescription.");
+
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(prescription.Patient.Id);
+            if (patient is null)
+                throw new KeyNotFoundException("Patient not found");
+
             var instruction = _mapper.Map<Instruction>(dto);
-            instruction.PatientId = prescription.PatientId;
+
+            instruction.PatientId = patient.Id;
             instruction.PrescriptionId = prescriptionId;
             instruction.DoctorId = doctor.Id;
 
@@ -47,5 +47,34 @@ namespace CareFlow.Service.Services
                 return _mapper.Map<InstructionToReturnDto>(instruction);
             throw new InvalidOperationException("An error occurred while creating instruction entity");
         }
+
+       
+
+        public async Task<IReadOnlyList<InstructionToReturnDto>> GetInstructionsForPrescription(Guid prescriptionId, string userId)
+        {
+            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(prescriptionId));
+            if (prescription is null)
+                throw new KeyNotFoundException("Prescription not found");
+            if (prescription.Doctor.AppUserId != userId && prescription.Patient.AppUserId != userId)
+                throw new UnauthorizedAccessException("You are not authorized to view instructions");
+
+            var instructions = await _unitOfWork.Repository<Instruction>().GetAllWithSpecAsync(new InstructionSpecifications(prescriptionId, userId));
+            if (!instructions.Any())
+                throw new KeyNotFoundException("Instructions not found.");
+            return _mapper.Map<IReadOnlyList<InstructionToReturnDto>>(instructions);
+        }
+
+
+        //public async Task<InstructionToReturnDto> GetInstructionForPrescription(Guid prescriptionId, Guid instructionId, string userId)
+        //{
+        //    var instruction = await _unitOfWork.Repository<Instruction>().GetEntityWithAsync(new InstructionSpecifications(prescriptionId, instructionId, userId)) ;
+        //}
+        
+
+        
+
+
+
+
     }
 }

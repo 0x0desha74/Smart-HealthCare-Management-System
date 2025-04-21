@@ -26,7 +26,7 @@ namespace CareFlow.Repository.Data.Configurations
                 .HasForeignKey(p => p.MedicalHistoryId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-           
+
 
             builder.HasMany(m => m.Documents)
            .WithOne()

@@ -63,7 +63,7 @@ namespace CareFlow.API.Helper
 
             CreateMap<InstructionToCreateDto, Instruction>();
             CreateMap<Instruction, InstructionToReturnDto>();
-            
+
 
         }
     }

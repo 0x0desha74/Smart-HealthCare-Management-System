@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,19 @@ namespace CareFlow.API.Controllers
         {
             _prescriptionService = prescriptionService;
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PrescriptionToReturnDto>> GetByIdAsync(Guid id)
+        {
+            var userId = User.FindFirstValue("uid");
+            var prescription = await _prescriptionService.GetPrescriptionAsync(id,userId);
+            if (prescription is null) return Unauthorized(new ApiResponse(401));
+            return Ok(prescription);
+        }
+
+
+
+
 
         [HttpPost]
         public async Task<ActionResult<PrescriptionToReturnDto>> Create(PrescriptionToCreateDto model)

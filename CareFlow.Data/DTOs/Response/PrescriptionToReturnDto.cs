@@ -14,6 +14,7 @@ namespace CareFlow.Core.DTOs.Response
         public Guid DoctorId { get; set; }
         public string Doctor { get; set; }
         public ICollection<MedicineToReturnDto> Medicines { get; set; }
+        public ICollection<InstructionToReturnDto> Instructions { get; set; }
 
     }
 }

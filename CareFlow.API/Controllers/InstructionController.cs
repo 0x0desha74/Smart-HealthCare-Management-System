@@ -1,8 +1,8 @@
 ﻿using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -19,12 +19,25 @@ namespace CareFlow.API.Controllers
             _instructionService = instructionService;
         }
 
-        [Authorize(Roles="Doctor")]
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<Instruction>>> GetAllInstructionsForPrescription(Guid prescriptionId)
+        {
+            var userId = User.FindFirstValue("uid");
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            var instructions = await _instructionService.GetInstructionsForPrescription(prescriptionId, userId);
+            return Ok(instructions);
+        }
+
+
+
+        [Authorize(Roles = "Doctor")]
         [HttpPost]
         public async Task<ActionResult<InstructionToReturnDto>> CreateAsync([FromBody] InstructionToCreateDto model, Guid prescriptionId)
         {
             var userId = User.FindFirstValue("uid");
-            var instruction = await _instructionService.CreateInstructionAsync(model, prescriptionId,userId);
+            var instruction = await _instructionService.CreateInstructionAsync(model, prescriptionId, userId);
             return Ok(instruction);
         }
     }

@@ -4,11 +4,6 @@ using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Service.Services
 {
