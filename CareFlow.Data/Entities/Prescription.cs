@@ -1,4 +1,5 @@
-﻿using CareFlow.Data.Entities.Enums;
+﻿using CareFlow.Core.Entities;
+using CareFlow.Data.Entities.Enums;
 
 namespace CareFlow.Data.Entities
 {
@@ -16,7 +17,7 @@ namespace CareFlow.Data.Entities
 
         public ICollection<Medicine> Medicines { get; set; }
         public ICollection<Instruction> Instructions { get; set; } = new HashSet<Instruction>();
-
+        public MedicalHistory MedicalHistory { get; set; }
         public Guid MedicalHistoryId { get; set; }
     }
 }

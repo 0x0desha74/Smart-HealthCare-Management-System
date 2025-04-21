@@ -79,6 +79,23 @@ namespace CareFlow.Service.Services
 
         }
 
+        public async Task<IReadOnlyList<PrescriptionToReturnDto>> GetDoctorPrescriptions(string userId)
+        {
+            var spec = new PrescriptionDoctorSpecifications(userId);
+            return await GetPrescriptionsAsync(spec);
+        }
+
+
+
+        public async Task<IReadOnlyList<PrescriptionToReturnDto>> GetPatientPrescriptions(string userId)
+        {
+            var spec = new PrescriptionPatientSpecifications(userId);
+            return await GetPrescriptionsAsync(spec);
+
+        }
+
+
+
         public async Task<PrescriptionToReturnDto> GetPrescriptionAsync(Guid id,string userId)
         {
             
@@ -87,6 +104,24 @@ namespace CareFlow.Service.Services
             if (prescription is null) return null;
             return _mapper.Map<PrescriptionToReturnDto>(prescription);
 
+        }
+
+
+
+
+
+
+
+
+
+        private async Task<IReadOnlyList<PrescriptionToReturnDto>> GetPrescriptionsAsync(ISpecification<Prescription> spec)
+        {
+            var prescriptions =  await _unitOfWork.Repository<Prescription>().GetAllWithSpecAsync(spec);
+            
+            if (!prescriptions.Any())
+                throw new KeyNotFoundException("Prescriptions not found.");
+
+            return _mapper.Map<IReadOnlyList<PrescriptionToReturnDto>>(prescriptions);
         }
     }
 }

@@ -2,6 +2,7 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -21,13 +22,28 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<PrescriptionToReturnDto>> GetByIdAsync(Guid id)
         {
             var userId = User.FindFirstValue("uid");
-            var prescription = await _prescriptionService.GetPrescriptionAsync(id,userId);
+            var prescription = await _prescriptionService.GetPrescriptionAsync(id, userId);
             if (prescription is null) return Unauthorized(new ApiResponse(401));
             return Ok(prescription);
         }
 
+        [Authorize(Roles = "Doctor")]
+        [HttpGet("doctor")]
+        public async Task<ActionResult<IReadOnlyList<PrescriptionToReturnDto>>> GetDoctorPrescriptions()
+        {
+            var userId = User.FindFirstValue("uid");
+            var prescriptions = await _prescriptionService.GetDoctorPrescriptions(userId);
+            return Ok(prescriptions);
+        }
 
-
+        [Authorize(Roles = "Patient")]
+        [HttpGet("patient")]
+        public async Task<ActionResult<IReadOnlyList<PrescriptionToReturnDto>>> GetPatientPrescriptions()
+        {
+            var userId = User.FindFirstValue("uid");
+            var prescriptions = await _prescriptionService.GetPatientPrescriptions(userId);
+            return Ok(prescriptions);
+        }
 
 
         [HttpPost]

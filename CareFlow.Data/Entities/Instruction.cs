@@ -10,7 +10,7 @@ namespace CareFlow.Data.Entities
         public string? Description { get; set; }
         public Patient Patient { get; set; }
         public Guid PatientId { get; set; }
-
+        public Prescription Prescription{ get; set; }
         public Doctor Doctor { get; set; }
         public Guid? DoctorId { get; set; }
         public Guid PrescriptionId { get; set; }
