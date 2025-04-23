@@ -9,6 +9,6 @@
         public bool RequiredFollowUp { get; set; }
         public DateTime FollowUpDate { get; set; }
         public Guid PatientId { get; set; }
-        public Guid DoctorId { get; set; }
+        //public Guid DoctorId { get; set; }
     }
 }

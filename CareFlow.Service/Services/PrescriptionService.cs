@@ -44,7 +44,7 @@ namespace CareFlow.Service.Services
             if (dto.MedicalHistoryId == Guid.Empty)
             {
                 var medicalHistoryDto = _mapper.Map<MedicalHistoryToCreateDto>(dto);
-                var newMedicalHistory = await _medicalHistoryService.CreateMedicalHistoryAsync(medicalHistoryDto, doctor.Id);
+                var newMedicalHistory = await _medicalHistoryService.CreateMedicalHistoryAsync(medicalHistoryDto, doctor.AppUserId);
                 medicalHistoryId = newMedicalHistory.Id;
             }
 

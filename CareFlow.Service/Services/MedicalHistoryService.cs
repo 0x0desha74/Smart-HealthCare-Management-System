@@ -5,6 +5,7 @@ using CareFlow.Core.Entities;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
+using CareFlow.Data.Entities;
 
 namespace CareFlow.Service.Services
 {
@@ -19,22 +20,26 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<MedicalHistory> CreateMedicalHistoryAsync(MedicalHistoryToCreateDto dto, Guid doctorId)
+        public async Task<MedicalHistoryToReturnDto> CreateMedicalHistoryAsync(MedicalHistoryToCreateDto dto, string doctorUserId)
         {
             var spec = new MedicalHistoryWithPatientIdSpecifications(dto.PatientId);
             var existingMedicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(spec);
 
             if (existingMedicalHistory is not null)
-                return existingMedicalHistory;
+                return _mapper.Map<MedicalHistoryToReturnDto>(existingMedicalHistory);
 
+            var doctor = await _unitOfWork.Repository<Doctor>().GetEntityWithAsync(new DoctorSpecifications(doctorUserId));
+            
             var medicalHistory = _mapper.Map<MedicalHistory>(dto);
-            medicalHistory.DoctorId = doctorId;
+
+            medicalHistory.DoctorId = doctor.Id;
             await _unitOfWork.Repository<MedicalHistory>().AddAsync(medicalHistory);
             var result = await _unitOfWork.Complete();
 
-            if (result > 0)
-                return medicalHistory;
+            if (result <= 0) 
             throw new InvalidOperationException("An error occurred while creating medial history entity");
+            var createdMedicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(new MedicalHistoryWithPatientIdSpecifications(medicalHistory.PatientId));
+                return _mapper.Map<MedicalHistoryToReturnDto>(createdMedicalHistory); 
 
         }
 

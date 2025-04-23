@@ -2,6 +2,7 @@
 using CareFlow.Core.DTOs.In;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -38,11 +39,11 @@ namespace CareFlow.API.Controllers
 
 
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete]
         public async Task<ActionResult<ActionDoneSuccessfullyDto>> Delete(Guid id)
         {
-            var result = await _patientService.DeletePatient(id);
+            var result = await _patientService.DeletePatientAsync(id);
             if (result is false) return BadRequest(new ApiResponse(400));
             return NoContent();
         }

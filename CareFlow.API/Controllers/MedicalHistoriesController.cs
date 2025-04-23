@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Response;
+﻿using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +36,15 @@ namespace CareFlow.API.Controllers
             var medicalHistory = await _medicalHistory.GetMedicalHistoryAsync(id, userId);
             return Ok(medicalHistory);
         }
+
+        [Authorize(Roles = "Doctor")]
+        [HttpPost]
+        public async Task<ActionResult<MedicineToReturnDto>> Create(MedicalHistoryToCreateDto model)
+        {
+            var userId = User.FindFirstValue("uid");
+            var medicalHisotry = await _medicalHistory.CreateMedicalHistoryAsync(model, userId);
+            return Ok(medicalHisotry);
+        }
+
     }
 }

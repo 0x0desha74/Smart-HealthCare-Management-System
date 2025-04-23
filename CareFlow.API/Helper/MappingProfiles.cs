@@ -64,7 +64,8 @@ namespace CareFlow.API.Helper
             CreateMap<PrescriptionToCreateDto, MedicalHistoryToCreateDto>();
             CreateMap<MedicalHistoryToCreateDto, MedicalHistory>();
             CreateMap<MedicalHistory, MedicalHistoryToReturnDto>()
-                .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}"));
+                .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}"))
+                .ForMember(d => d.Doctor, O => O.MapFrom(s => $"{s.Doctor.FirstName} {s.Doctor.LastName}"));
 
             CreateMap<InstructionToCreateDto, Instruction>();
             CreateMap<InstructionToUpdateDto, Instruction>();

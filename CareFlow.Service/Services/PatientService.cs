@@ -51,7 +51,7 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<bool> DeletePatient(Guid id)
+        public async Task<bool> DeletePatientAsync(Guid id)
         {
             var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(id);
             if (patient is null) return false;
