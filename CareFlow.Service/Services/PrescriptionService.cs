@@ -83,7 +83,7 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<IReadOnlyList<PrescriptionToReturnDto>> GetDoctorPrescriptions(string userId)
+        public async Task<IReadOnlyList<PrescriptionToReturnDto>> GetDoctorPrescriptionsAsync(string userId)
         {
             var spec = new PrescriptionDoctorSpecifications(userId);
             return await GetPrescriptionsAsync(spec);
@@ -91,7 +91,7 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<IReadOnlyList<PrescriptionToReturnDto>> GetPatientPrescriptions(string userId)
+        public async Task<IReadOnlyList<PrescriptionToReturnDto>> GetPatientPrescriptionsAsync(string userId)
         {
             var spec = new PrescriptionPatientSpecifications(userId);
             return await GetPrescriptionsAsync(spec);
@@ -110,26 +110,49 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<PrescriptionToReturnDto> UpdatePrescription(Guid id, PrescriptionToUpdateDto dto)
+        public async Task<PrescriptionToReturnDto> UpdatePrescriptionAsync(Guid id, PrescriptionToUpdateDto dto,string userId)
         {
             if (id != dto.Id)
                 throw new ArgumentException("Invalid prescription ID provided.");
             var existingPrescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(id))
                 ?? throw new KeyNotFoundException("Prescription not found.");
+            
+            if (existingPrescription.Doctor.AppUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not.");
+            
             var medicines = await _unitOfWork.Repository<Medicine>().GetAllWithSpecAsync(new MedicineSpecifications(dto.MedicinesIds));
             if (!medicines.Any())
-                throw new KeyNotFoundException("Medicines IDs not found.");
+                throw new KeyNotFoundException("Some Medicines IDs not found.");
+            
             existingPrescription.Medicines = medicines.ToList();
             _mapper.Map(dto, existingPrescription);
 
             _unitOfWork.Repository<Prescription>().Update(existingPrescription);
             var result = await _unitOfWork.Complete();
+           
             if (result <= 0)
                 throw new InvalidOperationException("Failed to update the prescription entity");
             return _mapper.Map<PrescriptionToReturnDto>(existingPrescription);
             
 
         }
+
+
+        public async Task DeletePrescriptionAsync(Guid id,string userId)
+        {
+            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(id,userId))
+                ?? throw new KeyNotFoundException("Prescription not found or you are not authorized to delete this prescription.");
+
+            _unitOfWork.Repository<Prescription>().Delete(prescription);
+            var result = await _unitOfWork.Complete();
+
+            if(result <=0)
+                throw new InvalidOperationException("Failed to delete the prescription entity");
+            
+        }
+
+
+
 
         private async Task<IReadOnlyList<PrescriptionToReturnDto>> GetPrescriptionsAsync(ISpecification<Prescription> spec)
         {

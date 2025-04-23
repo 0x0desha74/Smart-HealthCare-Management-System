@@ -33,7 +33,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<PrescriptionToReturnDto>>> GetDoctorPrescriptions()
         {
             var userId = User.FindFirstValue("uid");
-            var prescriptions = await _prescriptionService.GetDoctorPrescriptions(userId);
+            var prescriptions = await _prescriptionService.GetDoctorPrescriptionsAsync(userId);
             return Ok(prescriptions);
         }
 
@@ -42,7 +42,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<PrescriptionToReturnDto>>> GetPatientPrescriptions()
         {
             var userId = User.FindFirstValue("uid");
-            var prescriptions = await _prescriptionService.GetPatientPrescriptions(userId);
+            var prescriptions = await _prescriptionService.GetPatientPrescriptionsAsync(userId);
             return Ok(prescriptions);
         }
 
@@ -59,8 +59,20 @@ namespace CareFlow.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<PrescriptionToReturnDto>> Update(Guid id, PrescriptionToUpdateDto model)
         {
-            var UpdatedPrescription = await _prescriptionService.UpdatePrescription(id, model);
+            var userId = User.FindFirstValue("uid");
+            var UpdatedPrescription = await _prescriptionService.UpdatePrescriptionAsync(id, model,userId);
             return Ok(UpdatedPrescription);
+        }
+
+
+        [Authorize(Roles = "Doctor")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<PrescriptionToReturnDto>> Delete(Guid id)
+        {
+            var userId = User.FindFirstValue("uid");
+             await _prescriptionService.DeletePrescriptionAsync(id,userId);
+
+            return NoContent();
         }
 
 
