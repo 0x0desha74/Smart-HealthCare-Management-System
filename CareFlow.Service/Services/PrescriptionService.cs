@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
-using CareFlow.Core.Entities;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
@@ -110,49 +109,63 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<PrescriptionToReturnDto> UpdatePrescriptionAsync(Guid id, PrescriptionToUpdateDto dto,string userId)
+        public async Task<PrescriptionToReturnDto> UpdatePrescriptionAsync(Guid id, PrescriptionToUpdateDto dto, string userId)
         {
             if (id != dto.Id)
                 throw new ArgumentException("Invalid prescription ID provided.");
             var existingPrescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(id))
                 ?? throw new KeyNotFoundException("Prescription not found.");
-            
+
             if (existingPrescription.Doctor.AppUserId != userId)
                 throw new UnauthorizedAccessException("Authorized!, You are not.");
-            
+
             var medicines = await _unitOfWork.Repository<Medicine>().GetAllWithSpecAsync(new MedicineSpecifications(dto.MedicinesIds));
             if (!medicines.Any())
                 throw new KeyNotFoundException("Some Medicines IDs not found.");
-            
+
             existingPrescription.Medicines = medicines.ToList();
             _mapper.Map(dto, existingPrescription);
 
             _unitOfWork.Repository<Prescription>().Update(existingPrescription);
             var result = await _unitOfWork.Complete();
-           
+
             if (result <= 0)
                 throw new InvalidOperationException("Failed to update the prescription entity");
             return _mapper.Map<PrescriptionToReturnDto>(existingPrescription);
-            
+
 
         }
 
 
-        public async Task DeletePrescriptionAsync(Guid id,string userId)
+        public async Task DeletePrescriptionAsync(Guid id, string userId)
         {
-            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(id,userId))
+            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(id, userId))
                 ?? throw new KeyNotFoundException("Prescription not found or you are not authorized to delete this prescription.");
 
             _unitOfWork.Repository<Prescription>().Delete(prescription);
             var result = await _unitOfWork.Complete();
 
-            if(result <=0)
+            if (result <= 0)
                 throw new InvalidOperationException("Failed to delete the prescription entity");
-            
+
         }
 
 
+        public async Task<PrescriptionToReturnDto> UpdatePrescriptionStatusAsync(Guid id,PrescriptionStatusToUpdateDto dto, string userId)
+        {
+            var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(id))
+                ?? throw new KeyNotFoundException("Prescription not found.");
+           
+            if (prescription.Doctor.AppUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not.");
+            
+            prescription.Status = dto.Status;
+            _unitOfWork.Repository<Prescription>().Update(prescription);
+            var result = await _unitOfWork.Complete();
 
+            return result > 0 ? _mapper.Map<PrescriptionToReturnDto>(prescription)
+                : throw new InvalidOperationException("Failed to update the prescription status");
+        }
 
         private async Task<IReadOnlyList<PrescriptionToReturnDto>> GetPrescriptionsAsync(ISpecification<Prescription> spec)
         {
@@ -163,5 +176,9 @@ namespace CareFlow.Service.Services
 
             return _mapper.Map<IReadOnlyList<PrescriptionToReturnDto>>(prescriptions);
         }
+
+     
+
+      
     }
 }

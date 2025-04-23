@@ -1,6 +1,5 @@
 ﻿using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 namespace CareFlow.Core.Specifications
 {
     public class AppointmentSpecifications : BaseSpecification<Appointment>
@@ -24,7 +23,7 @@ namespace CareFlow.Core.Specifications
 
         }
 
-        public AppointmentSpecifications(Guid id, Guid patientId,Guid doctorId) : base(a=>a.Id == id&&a.DoctorId==doctorId&&a.PatientId==patientId)
+        public AppointmentSpecifications(Guid id, Guid patientId, Guid doctorId) : base(a => a.Id == id && a.DoctorId == doctorId && a.PatientId == patientId)
         {
         }
     }

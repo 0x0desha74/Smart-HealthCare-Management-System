@@ -9,7 +9,8 @@ namespace CareFlow.Core.Interfaces.Services
         Task<PrescriptionToReturnDto> GetPrescriptionByIdAsync(Guid id, string userId);
         Task<IReadOnlyList<PrescriptionToReturnDto>> GetPatientPrescriptionsAsync(string userId);
         Task<IReadOnlyList<PrescriptionToReturnDto>> GetDoctorPrescriptionsAsync(string userId);
-        Task<PrescriptionToReturnDto> UpdatePrescriptionAsync(Guid id, PrescriptionToUpdateDto dto,string userId);
+        Task<PrescriptionToReturnDto> UpdatePrescriptionAsync(Guid id, PrescriptionToUpdateDto dto, string userId);
         Task DeletePrescriptionAsync(Guid id, string userId);
+        Task<PrescriptionToReturnDto> UpdatePrescriptionStatusAsync(Guid id ,PrescriptionStatusToUpdateDto dto,string userId);
     }
 }

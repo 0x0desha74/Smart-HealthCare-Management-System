@@ -19,7 +19,7 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(p => p.Patient));
             AddIncludes(q => q.Include(p => p.Medicines));
         }
-        public  PrescriptionSpecifications(Guid id) : base(p => p.Id == id)
+        public PrescriptionSpecifications(Guid id) : base(p => p.Id == id)
         {
             AddIncludes(q => q.Include(p => p.Instructions));
             AddIncludes(q => q.Include(p => p.Doctor));

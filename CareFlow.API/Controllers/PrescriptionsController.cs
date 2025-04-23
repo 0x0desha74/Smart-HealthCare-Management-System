@@ -55,12 +55,12 @@ namespace CareFlow.API.Controllers
             return Ok(createdPrescription);
         }
 
-        [Authorize(Roles="Doctor")]
+        [Authorize(Roles = "Doctor")]
         [HttpPut("{id}")]
         public async Task<ActionResult<PrescriptionToReturnDto>> Update(Guid id, PrescriptionToUpdateDto model)
         {
             var userId = User.FindFirstValue("uid");
-            var UpdatedPrescription = await _prescriptionService.UpdatePrescriptionAsync(id, model,userId);
+            var UpdatedPrescription = await _prescriptionService.UpdatePrescriptionAsync(id, model, userId);
             return Ok(UpdatedPrescription);
         }
 
@@ -70,14 +70,18 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<PrescriptionToReturnDto>> Delete(Guid id)
         {
             var userId = User.FindFirstValue("uid");
-             await _prescriptionService.DeletePrescriptionAsync(id,userId);
+            await _prescriptionService.DeletePrescriptionAsync(id, userId);
 
             return NoContent();
         }
 
-
-
-
+        [Authorize(Roles="Doctor")]
+        [HttpPatch("{id}/status")]
+        public async Task<ActionResult<PrescriptionToReturnDto>> UpdateStatus(Guid id,PrescriptionStatusToUpdateDto model)
+        {
+            var userId = User.FindFirstValue("uid");
+            return Ok(await _prescriptionService.UpdatePrescriptionStatusAsync(id, model, userId));
+        }
 
 
 
