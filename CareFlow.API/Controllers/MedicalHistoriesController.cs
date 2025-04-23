@@ -42,9 +42,16 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<MedicineToReturnDto>> Create(MedicalHistoryToCreateDto model)
         {
             var userId = User.FindFirstValue("uid");
-            var medicalHisotry = await _medicalHistory.CreateMedicalHistoryAsync(model, userId);
-            return Ok(medicalHisotry);
+            var medicalHistory = await _medicalHistory.CreateMedicalHistoryAsync(model, userId);
+            return Ok(medicalHistory);
         }
 
+        [Authorize(Roles = "Doctor")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<MedicalHistoryToReturnDto>> Update(Guid id,MedicalHistoryToUpdateDto model)
+        {
+            var medicalHistory = await _medicalHistory.UpdateMedicalHistoryAsync(id, model);
+            return Ok(medicalHistory);
+        }
     }
 }

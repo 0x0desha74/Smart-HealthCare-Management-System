@@ -62,5 +62,18 @@ namespace CareFlow.Service.Services
             return _mapper.Map<MedicalHistoryToReturnDto>(medicalHistory);
 
         }
+
+        public async Task<MedicalHistoryToReturnDto> UpdateMedicalHistoryAsync(Guid id,MedicalHistoryToUpdateDto dto)
+        {
+            var existingMedicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(new MedicalHistorySpecifications(id))
+                ?? throw new KeyNotFoundException("Medical History not found.");
+
+            _mapper.Map(dto, existingMedicalHistory);
+            _unitOfWork.Repository<MedicalHistory>().Update(existingMedicalHistory);
+            var result = await _unitOfWork.Complete();
+
+            return result > 0 ? _mapper.Map<MedicalHistoryToReturnDto>(existingMedicalHistory)
+                : throw new InvalidOperationException("Failed to update the medical history entity");
+        }
     }
 }
