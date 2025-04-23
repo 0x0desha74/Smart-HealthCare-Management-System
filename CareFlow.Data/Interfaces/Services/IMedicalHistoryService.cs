@@ -8,5 +8,6 @@ namespace CareFlow.Core.Interfaces.Services
     {
         Task<MedicalHistory> CreateMedicalHistoryAsync(MedicalHistoryToCreateDto dto, Guid doctorId);
         Task<MedicalHistoryToReturnDto> GetMedicalHistoryAsync(Guid id, string userId);
+        Task<IReadOnlyList<MedicalHistoryToReturnDto>> GetMedicalHistoriesAsync(string doctorUserId);
     }
 }

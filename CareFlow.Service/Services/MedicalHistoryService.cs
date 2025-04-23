@@ -38,6 +38,14 @@ namespace CareFlow.Service.Services
 
         }
 
+        public async Task<IReadOnlyList<MedicalHistoryToReturnDto>> GetMedicalHistoriesAsync(string doctorUserId)
+        {
+            var medicalHistories = await _unitOfWork.Repository<MedicalHistory>().GetAllWithSpecAsync(new MedicalHistorySpecifications(doctorUserId));
+            if (!medicalHistories.Any())
+                throw new KeyNotFoundException("Medical histories not found Or you are not authorized to view these histories");
+            return _mapper.Map<IReadOnlyList<MedicalHistoryToReturnDto>>(medicalHistories);
+        }
+
         public async Task<MedicalHistoryToReturnDto> GetMedicalHistoryAsync(Guid id, string userId)
         {
             var medicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(new MedicalHistorySpecifications(id))
