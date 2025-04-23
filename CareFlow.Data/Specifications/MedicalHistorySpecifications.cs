@@ -1,12 +1,15 @@
 ﻿using CareFlow.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CareFlow.Core.Specifications
 {
     public class MedicalHistorySpecifications : BaseSpecification<MedicalHistory>
     {
-        public MedicalHistorySpecifications(Guid patientId) : base(m => m.PatientId == patientId)
+        public MedicalHistorySpecifications(Guid id) : base(m => m.Id == id)
         {
-
+            AddIncludes(q => q.Include(m => m.Patient));
+            AddIncludes(q => q.Include(m => m.Doctor));
+            AddIncludes(q => q.Include(m => m.Prescriptions));
         }
     }
 }

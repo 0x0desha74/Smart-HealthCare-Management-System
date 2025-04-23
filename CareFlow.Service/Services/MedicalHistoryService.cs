@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
@@ -20,7 +21,7 @@ namespace CareFlow.Service.Services
 
         public async Task<MedicalHistory> CreateMedicalHistoryAsync(MedicalHistoryToCreateDto dto, Guid doctorId)
         {
-            var spec = new MedicalHistorySpecifications(dto.PatientId);
+            var spec = new MedicalHistoryWithPatientIdSpecifications(dto.PatientId);
             var existingMedicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(spec);
 
             if (existingMedicalHistory is not null)
@@ -34,6 +35,18 @@ namespace CareFlow.Service.Services
             if (result > 0)
                 return medicalHistory;
             throw new InvalidOperationException("An error occurred while creating medial history entity");
+
+        }
+
+        public async Task<MedicalHistoryToReturnDto> GetMedicalHistoryAsync(Guid id, string userId)
+        {
+            var medicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(new MedicalHistorySpecifications(id))
+                ?? throw new KeyNotFoundException("Medical History not found.");
+
+            if (medicalHistory.Doctor?.AppUserId != userId && medicalHistory.Patient?.AppUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not.");
+
+            return _mapper.Map<MedicalHistoryToReturnDto>(medicalHistory);
 
         }
     }

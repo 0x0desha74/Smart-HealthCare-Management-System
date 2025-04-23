@@ -75,9 +75,9 @@ namespace CareFlow.API.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles="Doctor")]
+        [Authorize(Roles = "Doctor")]
         [HttpPatch("{id}/status")]
-        public async Task<ActionResult<PrescriptionToReturnDto>> UpdateStatus(Guid id,PrescriptionStatusToUpdateDto model)
+        public async Task<ActionResult<PrescriptionToReturnDto>> UpdateStatus(Guid id, PrescriptionStatusToUpdateDto model)
         {
             var userId = User.FindFirstValue("uid");
             return Ok(await _prescriptionService.UpdatePrescriptionStatusAsync(id, model, userId));

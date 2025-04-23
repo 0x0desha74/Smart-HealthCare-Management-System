@@ -151,14 +151,14 @@ namespace CareFlow.Service.Services
         }
 
 
-        public async Task<PrescriptionToReturnDto> UpdatePrescriptionStatusAsync(Guid id,PrescriptionStatusToUpdateDto dto, string userId)
+        public async Task<PrescriptionToReturnDto> UpdatePrescriptionStatusAsync(Guid id, PrescriptionStatusToUpdateDto dto, string userId)
         {
             var prescription = await _unitOfWork.Repository<Prescription>().GetEntityWithAsync(new PrescriptionSpecifications(id))
                 ?? throw new KeyNotFoundException("Prescription not found.");
-           
+
             if (prescription.Doctor.AppUserId != userId)
                 throw new UnauthorizedAccessException("Authorized!, You are not.");
-            
+
             prescription.Status = dto.Status;
             _unitOfWork.Repository<Prescription>().Update(prescription);
             var result = await _unitOfWork.Complete();
@@ -177,8 +177,8 @@ namespace CareFlow.Service.Services
             return _mapper.Map<IReadOnlyList<PrescriptionToReturnDto>>(prescriptions);
         }
 
-     
 
-      
+
+
     }
 }
