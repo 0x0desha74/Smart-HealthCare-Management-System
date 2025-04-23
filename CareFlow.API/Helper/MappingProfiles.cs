@@ -50,6 +50,7 @@ namespace CareFlow.API.Helper
             CreateMap<DoctorRegisterDto, RegisterDto>();
 
             CreateMap<PrescriptionToCreateDto, Prescription>();
+            CreateMap<PrescriptionToUpdateDto, Prescription>();
             CreateMap<Prescription, PrescriptionToReturnDto>()
                 .ForMember(d => d.Doctor, O => O.MapFrom(s => $"{s.Doctor.FirstName} {s.Doctor.LastName}"))
                 .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}")).ReverseMap();

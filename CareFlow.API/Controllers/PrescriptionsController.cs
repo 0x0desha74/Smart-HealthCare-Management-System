@@ -54,5 +54,22 @@ namespace CareFlow.API.Controllers
             var createdPrescription = await _prescriptionService.CreatePrescriptionAsync(model, userId);
             return Ok(createdPrescription);
         }
+
+        [Authorize(Roles="Doctor")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<PrescriptionToReturnDto>> Update(Guid id, PrescriptionToUpdateDto model)
+        {
+            var UpdatedPrescription = await _prescriptionService.UpdatePrescription(id, model);
+            return Ok(UpdatedPrescription);
+        }
+
+
+
+
+
+
+
+
+
     }
 }
