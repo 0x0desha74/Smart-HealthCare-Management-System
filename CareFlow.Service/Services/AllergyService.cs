@@ -18,7 +18,6 @@ namespace CareFlow.Service.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
         public async Task<AllergyDto> AddAllergyToPatient(Guid patientId, AllergyDto allergyDto)
         {
             if (allergyDto.Id != Guid.Empty)

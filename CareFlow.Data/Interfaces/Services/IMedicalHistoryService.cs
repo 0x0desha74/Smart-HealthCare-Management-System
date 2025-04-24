@@ -1,6 +1,5 @@
 ﻿using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
-using CareFlow.Core.Entities;
 
 namespace CareFlow.Core.Interfaces.Services
 {

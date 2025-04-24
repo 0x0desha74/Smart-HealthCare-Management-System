@@ -48,7 +48,7 @@ namespace CareFlow.API.Controllers
 
         [Authorize(Roles = "Doctor")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<MedicalHistoryToReturnDto>> Update(Guid id,MedicalHistoryToUpdateDto model)
+        public async Task<ActionResult<MedicalHistoryToReturnDto>> Update(Guid id, MedicalHistoryToUpdateDto model)
         {
             var medicalHistory = await _medicalHistory.UpdateMedicalHistoryAsync(id, model);
             return Ok(medicalHistory);

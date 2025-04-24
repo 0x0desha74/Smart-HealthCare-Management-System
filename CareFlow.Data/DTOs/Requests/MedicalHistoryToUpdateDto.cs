@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CareFlow.Core.DTOs.Requests
+﻿namespace CareFlow.Core.DTOs.Requests
 {
-   public class MedicalHistoryToUpdateDto
+    public class MedicalHistoryToUpdateDto
     {
 
         public string Diagnosis { get; set; }
@@ -15,6 +9,6 @@ namespace CareFlow.Core.DTOs.Requests
         public DateTime OnSetDate { get; set; }
         public bool RequiredFollowUp { get; set; }
         public DateTime FollowUpDate { get; set; }
-     
+
     }
 }

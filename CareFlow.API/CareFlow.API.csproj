@@ -18,4 +18,8 @@
     <ProjectReference Include="..\CareFlow.Service\CareFlow.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\documents\" />
+  </ItemGroup>
+
 </Project>
