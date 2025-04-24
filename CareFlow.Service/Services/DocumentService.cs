@@ -28,18 +28,17 @@ namespace CareFlow.Service.Services
             var medicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(new MedicalHistorySpecifications(dto.MedicalHistoryId, dto.PatientId))
                 ?? throw new KeyNotFoundException("Patient OR MedicalHistory not found.");
 
-            //1.Get located file path
+           
 
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), _env.WebRootPath, "documents");
 
 
-            //2.Get file name to make it unique
-            string fileName = $"{Guid.NewGuid()}{dto.File.FileName}";
+           string fileName = $"{Guid.NewGuid()}{dto.File.FileName}";
 
-            //3. Get file path = folderPath + fileName
+           
             string filePath = Path.Combine(folderPath, fileName);
 
-            //4. Save file as stream [Data Per Time]
+           
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
