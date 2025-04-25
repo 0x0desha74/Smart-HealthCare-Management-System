@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
+using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Settings;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace CareFlow.Service.Services
 {
@@ -14,11 +17,25 @@ namespace CareFlow.Service.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _env;
         private readonly IMapper _mapper;
-        public DocumentService(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment env)
+        private readonly IConfiguration _config;
+        public DocumentService(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment env, IConfiguration config)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _env = env;
+            _config = config;
+        }
+
+        public async Task<DocumentToReturnDto> GetDocumentAsync(Guid id, string userId)
+        {
+            var document = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id))
+                ?? throw new KeyNotFoundException("Document not found.");
+            
+
+            if (document.Patient.AppUserId != userId && document.MedicalHistory.Doctor.AppUserId != userId)
+                throw new UnauthorizedAccessException("Authorize!, You are not.");
+
+            return  _mapper.Map<DocumentToReturnDto>(document);
         }
 
         public async Task UploadDocumentAsync(DocumentToUploadDto dto, string userId)
@@ -31,12 +48,14 @@ namespace CareFlow.Service.Services
             if (medicalHistory.Doctor.AppUserId != userId && medicalHistory.Patient.AppUserId != userId)
                 throw new UnauthorizedAccessException("Authorized!, You are not");
 
-                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), _env.WebRootPath, "documents");
 
+                string folderPath = Path.Combine( _env.WebRootPath, "documents"); // folderPath =>/wwwroot/documents/
 
-           string fileName = $"{Guid.NewGuid()}{dto.File.FileName}";
+            string fileExtension = Path.GetExtension(dto.File.FileName);
+           string fileName = $"{Guid.NewGuid()}{fileExtension}";
 
            
+            //filePath => /wwwroot/documents/{fileName}
             string filePath = Path.Combine(folderPath, fileName);
 
            
@@ -51,8 +70,8 @@ namespace CareFlow.Service.Services
             var document = new Document()
             {
                 FileName = fileName,
-                FilePath = filePath,
-                FileType = dto.File.FileName,
+                FileUrl = $"/documents/{fileName}",
+                FileType = dto.File.ContentType,
                 FileSize = dto.File.Length,
                 MedicalHistoryId = dto.MedicalHistoryId,
                 PatientId = dto.PatientId,
@@ -71,6 +90,8 @@ namespace CareFlow.Service.Services
         }
 
 
+
+        
 
     }
 }

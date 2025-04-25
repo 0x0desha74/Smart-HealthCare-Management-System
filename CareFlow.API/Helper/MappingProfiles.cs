@@ -4,6 +4,7 @@ using CareFlow.Core.DTOs.In;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;
+using CareFlow.Core.Settings;
 using CareFlow.Data.Entities;
 
 namespace CareFlow.API.Helper
@@ -71,6 +72,9 @@ namespace CareFlow.API.Helper
             CreateMap<InstructionToCreateDto, Instruction>();
             CreateMap<InstructionToUpdateDto, Instruction>();
             CreateMap<Instruction, InstructionToReturnDto>();
+
+            CreateMap<Document, DocumentToReturnDto>()
+                .ForMember(d=>d.DownloadLink,O=>O.MapFrom<DocumentDownloadUrlResolver>());
 
 
         }
