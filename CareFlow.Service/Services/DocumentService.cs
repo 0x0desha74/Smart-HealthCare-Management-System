@@ -26,11 +26,12 @@ namespace CareFlow.Service.Services
             if (dto.File is null || dto.File.Length == 0)
                 throw new ArgumentException("Invalid File, File Is Required");
             var medicalHistory = await _unitOfWork.Repository<MedicalHistory>().GetEntityWithAsync(new MedicalHistorySpecifications(dto.MedicalHistoryId, dto.PatientId))
-                ?? throw new KeyNotFoundException("Patient OR MedicalHistory not found.");
+                ?? throw new KeyNotFoundException("Patient Or MedicalHistory not found.");
 
-           
+            if (medicalHistory.Doctor.AppUserId != userId && medicalHistory.Patient.AppUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not");
 
-            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), _env.WebRootPath, "documents");
+                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), _env.WebRootPath, "documents");
 
 
            string fileName = $"{Guid.NewGuid()}{dto.File.FileName}";
