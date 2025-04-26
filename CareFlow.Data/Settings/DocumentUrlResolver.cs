@@ -2,14 +2,19 @@
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Data.Entities;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CareFlow.Core.Settings
 {
-    public class DocumentDownloadUrlResolver : IValueResolver<Document, DocumentToReturnDto, string>
+    public class DocumentUrlResolver : IValueResolver<Document, DocumentToReturnDto, string>
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
 
-        public DocumentDownloadUrlResolver(IConfiguration config)
+        public DocumentUrlResolver(IConfiguration config)
         {
             _config = config;
         }
@@ -18,7 +23,7 @@ namespace CareFlow.Core.Settings
         {
             if (!string.IsNullOrEmpty(source.FileUrl))
             {
-                return $"{_config["ApiBaseUrl"]}/api/documents/download/{source.Id}";
+                return $"{_config["ApiBaseUrl"]}{source.FileUrl}";
             }
             return string.Empty;
         }

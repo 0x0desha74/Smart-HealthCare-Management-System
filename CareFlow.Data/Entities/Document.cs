@@ -12,7 +12,6 @@ namespace CareFlow.Data.Entities
         public DateTime UploadedAt { get; set; }
         public string UploadedByUserId { get; set; }
         public bool IsActive { get; set; }
-        public string Version { get; set; }
         public DateTime? DeletedAt { get; set; }
         public Patient Patient { get; set; }
         public Guid MedicalHistoryId { get; set; }

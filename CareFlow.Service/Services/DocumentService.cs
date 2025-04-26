@@ -94,8 +94,7 @@ namespace CareFlow.Service.Services
                 IsActive = true,
                 UploadedAt = DateTime.UtcNow,
                 DeletedAt = null,
-                UploadedByUserId = userId,
-                Version = "1.0"
+                UploadedByUserId = userId
             };
             await _unitOfWork.Repository<Document>().AddAsync(document);
             var result = await _unitOfWork.Complete();
