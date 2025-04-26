@@ -26,6 +26,22 @@ namespace CareFlow.Service.Services
             _config = config;
         }
 
+        public async Task<(byte[] fileDate, string contentType, string fileName)> DownloadDocumentAsync(Guid id, string userId)
+        {
+            var document = await GetDocumentAsync(id, userId);
+
+            var filePath = Path.Combine(_env.WebRootPath, "documents", document.FileName);
+
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("file not exist on the disk.");
+
+            var fileData = File.ReadAllBytes(filePath);
+
+            var contentType = GetFileContextType(document.FileName);
+
+            return (fileData, contentType, document.FileName);
+        }
+
         public async Task<DocumentToReturnDto> GetDocumentAsync(Guid id, string userId)
         {
             var document = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id))
@@ -90,7 +106,17 @@ namespace CareFlow.Service.Services
         }
 
 
-
+        private string GetFileContextType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName);
+            return extension switch
+            {
+                ".jpg" or ".jpeg"=> "image/jpeg",
+                "png" => "image/png",
+                "pdf" => "application/pdf",
+                _ => "application/octet-stream"
+            };
+        }
         
 
     }

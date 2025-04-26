@@ -26,13 +26,22 @@ namespace CareFlow.API.Controllers
             return "File uploaded successfully";
         }
 
-        [Authorize(Roles = "Doctor,Patient")]
+        [Authorize/*(Roles = "Doctor,Patient")*/]
         [HttpGet("{id}")]
         public async Task<ActionResult<DocumentToReturnDto>> GetDocument(Guid id)
         {
             var userId = User.FindFirstValue("uid");
             var document = await _documentService.GetDocumentAsync(id, userId);
             return Ok(document);
+        }
+
+        [Authorize(Roles = "Doctor,Patient")]
+        [HttpGet("download/{id}")]
+        public async Task<IActionResult> DownloadDocumentAsync(Guid id)
+        {
+            var userId = User.FindFirstValue("uid");
+            var (fileData, contentType, fileName) = await _documentService.DownloadDocumentAsync(id, userId);
+            return File(fileData, contentType, fileName);
         }
     }
 }
