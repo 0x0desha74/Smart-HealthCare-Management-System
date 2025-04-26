@@ -16,5 +16,11 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m=>m.Doctor));
         
         }
+        public DocumentSpecifications(string patientUserId) : base(d => d.Patient.AppUserId == patientUserId)
+        {
+            AddIncludes(q => q.Include(d => d.Patient));
+            AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m => m.Doctor));
+
+        }
     }
 }

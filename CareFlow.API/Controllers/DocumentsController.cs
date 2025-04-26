@@ -17,8 +17,22 @@ namespace CareFlow.API.Controllers
         {
             _documentService = documentService;
         }
+      
+
+        [Authorize(Roles ="Patient")]
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<DocumentToReturnDto>>> GetDocuments()
+        {
+            var userId = User.FindFirstValue("uid");
+            var documents = await _documentService.GetDocumentsForPatientAsync(userId);
+            return Ok(documents);
+
+        }
+
         [Authorize(Roles = "Doctor,Patient")]
         [HttpPost]
+
+
         public async Task<ActionResult<string>> Create([FromForm] DocumentToUploadDto model)
         {
             var userId = User.FindFirstValue("uid");
@@ -26,7 +40,7 @@ namespace CareFlow.API.Controllers
             return "File uploaded successfully";
         }
 
-        [Authorize/*(Roles = "Doctor,Patient")*/]
+        [Authorize(Roles = "Doctor,Patient")]
         [HttpGet("{id}")]
         public async Task<ActionResult<DocumentToReturnDto>> GetDocument(Guid id)
         {

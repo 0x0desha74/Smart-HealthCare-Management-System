@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿ using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;
@@ -26,7 +26,7 @@ namespace CareFlow.Service.Services
             _config = config;
         }
 
-        public async Task<(byte[] fileDate, string contentType, string fileName)> DownloadDocumentAsync(Guid id, string userId)
+        public async Task<(byte[] fileDate, string contentType, string fileName)>  DownloadDocumentAsync(Guid id, string userId)
         {
             var document = await GetDocumentAsync(id, userId);
 
@@ -52,6 +52,14 @@ namespace CareFlow.Service.Services
                 throw new UnauthorizedAccessException("Authorize!, You are not.");
 
             return  _mapper.Map<DocumentToReturnDto>(document);
+        }
+
+        public async Task<IReadOnlyList<DocumentToReturnDto>> GetDocumentsForPatientAsync(string userId)
+        {
+            var documents = await _unitOfWork.Repository<Document>().GetAllWithSpecAsync(new DocumentSpecifications(userId));
+            if (!documents.Any())
+                throw new KeyNotFoundException("No Documents found for this patient");
+            return _mapper.Map<IReadOnlyList<DocumentToReturnDto>>(documents);
         }
 
         public async Task UploadDocumentAsync(DocumentToUploadDto dto, string userId)
