@@ -16,6 +16,7 @@ namespace CareFlow.Core.DTOs.Response
         public long FileSize { get; set; }
         public DateTime UploadedAt { get; set; }
         public bool IsActive { get; set; }
+        public string Version { get; set; }
         public Guid PatientId { get; set; }
         public Guid MedicalHistoryId { get; set; }
         public string DownloadLink { get; set; }

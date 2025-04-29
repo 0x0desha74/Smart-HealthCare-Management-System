@@ -62,6 +62,22 @@ namespace CareFlow.Service.Services
             return _mapper.Map<IReadOnlyList<DocumentToReturnDto>>(documents);
         }
 
+        public async Task UpdateDocumentAsync(Guid id, DocumentToUpdateDto dto, string userId)
+        {
+            var existingDocument = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id))
+                ?? throw new KeyNotFoundException("Document not found.");
+            if (existingDocument.UploadedByUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not.");
+
+            _mapper.Map(dto, existingDocument);
+            _unitOfWork.Repository<Document>().Update(existingDocument);
+            var result = await _unitOfWork.Complete();
+            if (result <= 0)
+                throw new InvalidOperationException("Failed to update document entity.");
+                
+
+        }
+
         public async Task UploadDocumentAsync(DocumentToUploadDto dto, string userId)
         {
             if (dto.File is null || dto.File.Length == 0)
@@ -100,6 +116,7 @@ namespace CareFlow.Service.Services
                 MedicalHistoryId = dto.MedicalHistoryId,
                 PatientId = dto.PatientId,
                 IsActive = true,
+                Version = "1.0",
                 UploadedAt = DateTime.UtcNow,
                 DeletedAt = null,
                 UploadedByUserId = userId

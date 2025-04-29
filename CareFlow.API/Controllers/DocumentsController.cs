@@ -50,6 +50,22 @@ namespace CareFlow.API.Controllers
         }
 
         [Authorize(Roles = "Doctor,Patient")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<string>> Update(Guid id,[FromBody]DocumentToUpdateDto model)
+        {
+           await _documentService.UpdateDocumentAsync(id,model,User.FindFirstValue("uid"));
+            return Ok("Document Updated Successfully.");
+        }
+
+
+
+
+
+
+
+
+
+        [Authorize(Roles = "Doctor,Patient")]
         [HttpGet("download/{id}")]
         public async Task<IActionResult> DownloadDocumentAsync(Guid id)
         {
