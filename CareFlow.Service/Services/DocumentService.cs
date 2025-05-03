@@ -26,6 +26,33 @@ namespace CareFlow.Service.Services
             _config = config;
         }
 
+        public async Task<bool> DeleteDocumentAsync(Guid id, string userId)
+        {
+
+            var document = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id));
+
+            if (document is null)
+                return false;
+                
+
+            if (document.UploadedByUserId != userId)
+                throw new UnauthorizedAccessException("Authorized!, You are not.");
+
+            if (document.IsDeleted)
+                throw new InvalidOperationException("Document is already deleted.");
+
+            document.IsDeleted = true;
+            document.DeletedAt = DateTime.UtcNow;
+
+            _unitOfWork.Repository<Document>().Update(document);
+            var result = await _unitOfWork.Complete();
+
+            if (result <= 0)
+                throw new InvalidOperationException("Failed to delete the document entity.");
+            return true;
+
+        }
+
         public async Task<(byte[] fileDate, string contentType, string fileName)>  DownloadDocumentAsync(Guid id, string userId)
         {
             var document = await GetDocumentAsync(id, userId);

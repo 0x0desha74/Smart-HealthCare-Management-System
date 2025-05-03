@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +20,7 @@ namespace CareFlow.API.Controllers
         }
       
 
-        [Authorize(Roles ="Patient")]
+        [Authorize(Roles ="Doctor,Patient")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<DocumentToReturnDto>>> GetDocuments()
         {
@@ -29,10 +30,9 @@ namespace CareFlow.API.Controllers
 
         }
 
+
         [Authorize(Roles = "Doctor,Patient")]
         [HttpPost]
-
-
         public async Task<ActionResult<string>> Create([FromForm] DocumentToUploadDto model)
         {
             var userId = User.FindFirstValue("uid");
@@ -58,13 +58,6 @@ namespace CareFlow.API.Controllers
         }
 
 
-
-
-
-
-
-
-
         [Authorize(Roles = "Doctor,Patient")]
         [HttpGet("download/{id}")]
         public async Task<IActionResult> DownloadDocumentAsync(Guid id)
@@ -73,5 +66,23 @@ namespace CareFlow.API.Controllers
             var (fileData, contentType, fileName) = await _documentService.DownloadDocumentAsync(id, userId);
             return File(fileData, contentType, fileName);
         }
+
+
+
+        [Authorize(Roles = "Doctor,Patient")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var isDeleted = await _documentService.DeleteDocumentAsync(id, User.FindFirstValue("uid"));
+
+            if (!isDeleted)
+                return NotFound(new ApiResponse(404, "Document not found."));
+            return NoContent();
+        }
+
+
+
+
+
     }
 }

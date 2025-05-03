@@ -10,5 +10,6 @@ namespace CareFlow.Core.Interfaces.Services
         Task<(Byte[] fileDate, string contentType, string fileName)> DownloadDocumentAsync(Guid id, string userId);
         Task UpdateDocumentAsync(Guid id,DocumentToUpdateDto dto,string userId);
         Task<IReadOnlyList<DocumentToReturnDto>> GetDocumentsForPatientAsync(string userId);
+        Task<bool> DeleteDocumentAsync(Guid id, string userId);
     }
 }

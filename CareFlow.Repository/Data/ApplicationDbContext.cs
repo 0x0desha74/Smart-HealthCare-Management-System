@@ -1,6 +1,8 @@
 ﻿using CareFlow.Core.Entities;
+using CareFlow.Core.Interfaces;
 using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace CareFlow.Repository.Data
@@ -16,6 +18,24 @@ namespace CareFlow.Repository.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var filter = Expression.Lambda(
+                        Expression.Equal(
+                            Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted)),
+                            Expression.Constant(false)
+                        ),
+                        parameter
+                    );
+
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                }
+            }
+
         }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
