@@ -1,7 +1,8 @@
 ﻿using CareFlow.API.Errors;
-using CareFlow.Core.DTOs.In;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -18,16 +19,17 @@ namespace CareFlow.API.Controllers
         }
 
 
-        //[Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<PatientToReturnDto>>> GetPatients()
+        public async Task<ActionResult<IReadOnlyList<Pagination<PatientToReturnDto>>>> GetPatients([FromQuery] SpecificationParameters specParams)
         {
-            var patients = await _patientService.GetPatients();
-            if (!patients.Any()) return NotFound(new ApiResponse(404));
+            var patients = await _patientService.GetPatients(specParams);
+            if (!patients.Data.Any()) return NotFound(new ApiResponse(404));
             return Ok(patients);
         }
 
-        //[Authorize]
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<PatientToReturnDto>> GetPatient(Guid id)
         {
@@ -39,7 +41,7 @@ namespace CareFlow.API.Controllers
 
 
 
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         [HttpDelete]
         public async Task<ActionResult<ActionDoneSuccessfullyDto>> Delete(Guid id)
         {
@@ -48,7 +50,7 @@ namespace CareFlow.API.Controllers
             return NoContent();
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult<PatientToReturnDto>> Update(PatientDto model)
         {

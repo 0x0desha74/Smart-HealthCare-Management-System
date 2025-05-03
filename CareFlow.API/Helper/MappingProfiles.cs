@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Identity;
-using CareFlow.Core.DTOs.In;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;

@@ -1,12 +1,13 @@
 ﻿using CareFlow.Core.DTOs.Identity;
-using CareFlow.Core.DTOs.In;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
+using CareFlow.Core.Specifications;
 
 namespace CareFlow.Core.Interfaces.Services
 {
     public interface IPatientService
     {
-        Task<IReadOnlyList<PatientToReturnDto>> GetPatients();
+        Task<Pagination<PatientToReturnDto>> GetPatients(SpecificationParameters specParams);
         Task<PatientToReturnDto> GetPatient(Guid id);
         Task CreatePatientAsync(PatientRegisterDto patientDto, string userId);
         Task<PatientToReturnDto> UpdatePatient(PatientDto patientDto);

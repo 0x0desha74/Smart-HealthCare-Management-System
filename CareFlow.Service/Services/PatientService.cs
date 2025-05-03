@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using CareFlow.Core.DTOs.Identity;
-using CareFlow.Core.DTOs.In;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
+
 
 namespace CareFlow.Service.Services
 {
@@ -19,6 +20,7 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+
         public async Task CreatePatientAsync(PatientRegisterDto patientDto, string userId)
         {
             var patient = _mapper.Map<Patient>(patientDto);
@@ -30,12 +32,14 @@ namespace CareFlow.Service.Services
                 throw new InvalidOperationException("An error occurred while creating patient entity");
         }
 
-        public async Task<IReadOnlyList<PatientToReturnDto>> GetPatients()
+        public async Task<Pagination<PatientToReturnDto>> GetPatients(SpecificationParameters specParams)
         {
-            var spec = new PatientSpecifications();
+            var spec = new PatientSpecifications(specParams);
             var patients = await _unitOfWork.Repository<Patient>().GetAllWithSpecAsync(spec);
+            var count = await _unitOfWork.Repository<Patient>().GetCountAsync(spec);
             if (patients is null) return null;
-            return _mapper.Map<IReadOnlyList<Patient>, IReadOnlyList<PatientToReturnDto>>(patients);
+            var data =  _mapper.Map<IReadOnlyList<PatientToReturnDto>>(patients);
+            return new Pagination<PatientToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
 

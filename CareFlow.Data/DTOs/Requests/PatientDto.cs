@@ -1,7 +1,7 @@
 ﻿using CareFlow.Data.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace CareFlow.Core.DTOs.In
+namespace CareFlow.Core.DTOs.Requests
 {
     public class PatientDto
     {

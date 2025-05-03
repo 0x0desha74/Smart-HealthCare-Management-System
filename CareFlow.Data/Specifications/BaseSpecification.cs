@@ -7,7 +7,9 @@ namespace CareFlow.Core.Specifications
     {
         public Expression<Func<T, bool>> Criteria { get; set; }
         public List<Func<IQueryable<T>, IQueryable<T>>> Includes { get; } = new();
-
+        public int Take { get; set; }
+        public int Skip { get; set; }
+        public bool IsPaginationEnabled { get; set; }
 
         public BaseSpecification() { }
 
@@ -21,6 +23,14 @@ namespace CareFlow.Core.Specifications
         {
             Includes.Add(thenIncludeExpression);
         }
+        
+       public void ApplyPagination(int skip,int take)
+        {
+            Skip = skip;
+            Take = take;
+            IsPaginationEnabled = true;
+        }
+
     }
 
 }
