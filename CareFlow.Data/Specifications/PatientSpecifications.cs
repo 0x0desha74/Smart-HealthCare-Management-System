@@ -9,8 +9,8 @@ namespace CareFlow.Core.Specifications
             : base(b =>
                  (string.IsNullOrEmpty(specParams.Search) ||
             (b.FirstName != null && b.FirstName.ToLower().Contains(specParams.Search)) ||
-            (b.LastName != null && b.LastName.ToLower().Contains(specParams.Search)) ||
-            (b.LastName != null && b.LastName.ToLower().Contains(specParams.Search))
+            (b.LastName != null && b.LastName.ToLower().Contains(specParams.Search)) 
+           
             ))
         {
             AddIncludes(q => q.Include(p => p.Allergies));

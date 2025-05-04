@@ -41,7 +41,7 @@ namespace CareFlow.API.Controllers
 
 
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<ActionDoneSuccessfullyDto>> Delete(Guid id)
         {
@@ -60,13 +60,14 @@ namespace CareFlow.API.Controllers
         }
 
 
+        [Authorize(Roles = "Patient")]
         [HttpGet("appointments")]
-        public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetAppointmentsOfPatient()
+        public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointmentsOfPatient([FromQuery] SpecificationParameters specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var appointments = await _patientService.GetAppointmentsOfPatientAsync(userId);
+            var appointments = await _patientService.GetAppointmentsOfPatientAsync(specParams, userId);
 
-            return !appointments.Any() ? Ok(appointments) : BadRequest(new ApiResponse(404));
+            return appointments.Data.Any() ? Ok(appointments) : BadRequest(new ApiResponse(404));
         }
 
         [HttpGet("appointments/{id}")]

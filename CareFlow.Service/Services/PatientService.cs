@@ -86,14 +86,16 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(string userId)
+        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(SpecificationParameters specParams,string userId)
         {
-            var spec = new AppointmentsPatientSpecifications(userId);
+            var spec = new AppointmentsPatientSpecifications(specParams,userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
-            if (appointments is null)
-                return null;
+            if (appointments is null) return null;
 
-           return  _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(spec);
+           
+            var data =   _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+            return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
         public async Task<AppointmentDetailsDto> GetAppointmentOfPatient(Guid appointmentId, string userId)
