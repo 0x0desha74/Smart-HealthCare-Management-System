@@ -2,6 +2,8 @@
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
+using CareFlow.Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareFlow.API.Controllers
@@ -18,18 +20,19 @@ namespace CareFlow.API.Controllers
 
 
 
-        //[Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient,Doctor")]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetAppointments()
+        public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointments([FromQuery] SpecificationParameters specParams)
         {
-            var appointments = await _appointmentService.GetAppointmentsAsync();
-            if (!appointments.Any()) return NotFound(new ApiResponse(404));
+            var appointments = await _appointmentService.GetAppointmentsAsync(specParams);
+            if (appointments is null) return NotFound(new ApiResponse(404));
             return Ok(appointments);
 
         }
 
 
-
+        
+        [Authorize(Roles = "Patient,Doctor")]
         [HttpGet("{id}")]
         public async Task<ActionResult<AppointmentDetailsDto>> GetAppointment(Guid id)
         {
@@ -38,7 +41,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-        //[Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient,Doctor")]
         [HttpPost]
         public async Task<ActionResult<AppointmentToReturnDto>> Create(AppointmentCreateDto model)
         {
@@ -46,7 +49,7 @@ namespace CareFlow.API.Controllers
             return Ok(appointment);
         }
 
-        //[Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient,Doctor")]
         [HttpPut]
         public async Task<ActionResult<AppointmentToReturnDto>> Update(AppointmentUpdateDto model)
         {
@@ -54,6 +57,7 @@ namespace CareFlow.API.Controllers
             return Ok(appointment);
         }
 
+        [Authorize(Roles="Patient,Doctor")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

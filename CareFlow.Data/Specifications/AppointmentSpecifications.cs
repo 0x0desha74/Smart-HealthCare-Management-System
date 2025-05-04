@@ -5,7 +5,13 @@ namespace CareFlow.Core.Specifications
     public class AppointmentSpecifications : BaseSpecification<Appointment>
     {
 
-        public AppointmentSpecifications()
+        public AppointmentSpecifications(SpecificationParameters specParams)
+            : base(a =>
+            (string.IsNullOrEmpty(specParams.Search) ||
+            a.Clinic != null && a.Clinic.Name.ToLower().Contains(specParams.Search) ||
+            a.Doctor.FirstName != null && a.Doctor.FirstName.ToLower().Contains(specParams.Search) ||
+            a.Doctor.LastName != null && a.Doctor.LastName.ToLower().Contains(specParams.Search)
+            ))
         {
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));

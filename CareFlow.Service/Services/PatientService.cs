@@ -90,11 +90,10 @@ namespace CareFlow.Service.Services
         {
             var spec = new AppointmentsPatientSpecifications(userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
-
             if (appointments is null)
                 return null;
 
-            return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+           return  _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
         }
 
         public async Task<AppointmentDetailsDto> GetAppointmentOfPatient(Guid appointmentId, string userId)
