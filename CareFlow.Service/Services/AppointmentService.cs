@@ -41,7 +41,7 @@ namespace CareFlow.Service.Services
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
             if (!appointments.Any()) return null;
 
-            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(spec);
+            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(new AppointmentWithFilterationForCountSpecification(specParams,userId));
             var data =  _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
             return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
