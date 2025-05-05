@@ -1,17 +1,32 @@
-﻿using CareFlow.Data.Entities;
+﻿using CareFlow.Core.DTOs.FilterDTOs;
+using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 namespace CareFlow.Core.Specifications
 {
     public class AppointmentSpecifications : BaseSpecification<Appointment>
     {
 
-        public AppointmentSpecifications(SpecificationParameters specParams)
+        public AppointmentSpecifications(AppointmentFilterDto specParams,string userId)
             : base(a =>
-           ( string.IsNullOrEmpty(specParams.Search) ||
-           ( a.Clinic != null && a.Clinic.Name.ToLower().Contains(specParams.Search)) ||
-            (a.Doctor.FirstName != null && a.Doctor.FirstName.ToLower().Contains(specParams.Search)) ||
-            (a.Doctor.LastName != null && a.Doctor.LastName.ToLower().Contains(specParams.Search))
-            ))
+            (a.Doctor.AppUserId == userId || a.Patient.AppUserId == userId) &&
+
+            (
+            
+            string.IsNullOrEmpty(specParams.Search) ||
+            (a.Notes != null && a.Notes.ToLower().Contains(specParams.Search) ) ||
+            (a.Reason != null && a.Reason.ToLower().Contains(specParams.Search))
+            
+            ) &&
+            //(( a.Doctor.FirstName + " " + a.Doctor.LastName).ToLower().Contains(specParams.Doctor) && a.Doctor.AppUserId == userId) ||
+            //(( a.Patient.FirstName + " " + a.Patient.LastName).ToLower().Contains(specParams.Patient) && a.Patient.AppUserId == userId) ||
+            (
+            
+            ( 
+            string.IsNullOrEmpty(specParams.Clinic) ||( a.Clinic != null && a.Clinic.Name.ToLower().Contains(specParams.Clinic))) 
+            )
+                
+                 )
+         
         {
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));

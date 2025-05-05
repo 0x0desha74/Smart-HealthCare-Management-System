@@ -6,7 +6,7 @@ namespace CareFlow.Core.Specifications
     public class AppointmentsPatientSpecifications : BaseSpecification<Appointment>
     {
         public AppointmentsPatientSpecifications(SpecificationParameters specParams, string userId)
-            : base(a => a.Patient.AppUserId == userId &
+            : base(a => a.Patient.AppUserId == userId &&
            (string.IsNullOrEmpty(specParams.Search) ||
            (a.Clinic != null && a.Clinic.Name.ToLower().Contains(specParams.Search)) ||
             (a.Doctor.FirstName != null && a.Doctor.FirstName.ToLower().Contains(specParams.Search)) ||

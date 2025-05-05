@@ -1,6 +1,7 @@
 ﻿using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
+using CareFlow.Core.Specifications;
 
 namespace CareFlow.Core.Interfaces.Services
 {
@@ -11,7 +12,7 @@ namespace CareFlow.Core.Interfaces.Services
         Task CreateDoctorAsync(DoctorRegisterDto doctorDto, string userId);
         Task<DoctorToReturnDto> UpdateDoctorAsync(DoctorDto doctorDto);
         Task<bool> DeleteDoctorAsync(Guid id);
-        Task<IReadOnlyList<AppointmentToReturnDto>> GetAppointmentsOfDoctor(string userId);
+        Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfDoctor(SpecificationParameters specParams, string userId);
         Task<AppointmentToReturnDto> GetAppointmentOfDoctor(Guid appointmentId, string userId);
         Task<IReadOnlyList<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor(string userId);
     }

@@ -1,10 +1,12 @@
 ﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using CareFlow.Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CareFlow.API.Controllers
 {
@@ -22,9 +24,9 @@ namespace CareFlow.API.Controllers
 
         [Authorize(Roles = "Patient,Doctor")]
         [HttpGet]
-        public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointments([FromQuery] SpecificationParameters specParams)
+        public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointments([FromQuery] AppointmentFilterDto specParams)
         {
-            var appointments = await _appointmentService.GetAppointmentsAsync(specParams);
+            var appointments = await _appointmentService.GetAppointmentsAsync(specParams,User.FindFirstValue("uid"));
             if (appointments is null) return NotFound(new ApiResponse(404));
             return Ok(appointments);
 

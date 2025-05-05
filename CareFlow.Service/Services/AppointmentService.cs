@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
@@ -34,9 +35,9 @@ namespace CareFlow.Service.Services
         }
 
 
-        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsAsync(SpecificationParameters specParams)
+        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsAsync(AppointmentFilterDto specParams,string userId)
         {
-            var spec = new AppointmentSpecifications(specParams);
+            var spec = new AppointmentSpecifications(specParams,userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
             if (!appointments.Any()) return null;
 
