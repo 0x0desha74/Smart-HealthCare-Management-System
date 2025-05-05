@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Identity;
+﻿using CareFlow.Core.DTOs.FilterDTOs;
+using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Specifications;
@@ -14,6 +15,6 @@ namespace CareFlow.Core.Interfaces.Services
         Task<bool> DeleteDoctorAsync(Guid id);
         Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfDoctor(SpecificationParameters specParams, string userId);
         Task<AppointmentToReturnDto> GetAppointmentOfDoctor(Guid appointmentId, string userId);
-        Task<IReadOnlyList<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor(string userId);
+        Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor( PaginationDto dto,string userId);
     }
 }

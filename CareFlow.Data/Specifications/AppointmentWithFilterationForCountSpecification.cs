@@ -1,5 +1,7 @@
 ﻿using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Data.Entities;
+using CareFlow.Data.Entities.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,5 +34,10 @@ namespace CareFlow.Core.Specifications
         {
 
         }
+        public AppointmentWithFilterationForCountSpecification( string userId) : base(a => a.Doctor.AppUserId == userId && a.Status == AppointmentStatus.Pending)
+        {
+         
+        }
+
     }
 }

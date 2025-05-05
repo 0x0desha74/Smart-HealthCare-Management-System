@@ -1,4 +1,5 @@
 ﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
@@ -80,12 +81,12 @@ namespace CareFlow.API.Controllers
         }
 
         [HttpGet("appointments/upcoming")]
-        public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetUpcomingAppointments()
+        public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetUpcomingAppointments([FromQuery] PaginationDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var appointments = await _doctorService.GetUpcomingAppointmentOfDoctor(userId);
+            var appointments = await _doctorService.GetUpcomingAppointmentOfDoctor(specParams,userId);
 
-            if (!appointments.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));
+            if (!appointments.Data.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));
             return Ok(appointments);
 
         }

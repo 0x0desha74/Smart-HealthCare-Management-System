@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
@@ -127,13 +128,16 @@ namespace CareFlow.Service.Services
             return _mapper.Map<AppointmentToReturnDto>(appointment);
         }
 
-        public async Task<IReadOnlyList<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor(string userId)
+        public async Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor( PaginationDto specParams,string userId)
         {
-            var spec = new UpcomingPatientAppointmentsSpecifications(userId);
+            var spec = new UpcomingDoctorAppointmentsSpecifications(specParams,userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
             if (appointments is null)
                 return null;
-            return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
-        }
+
+            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(new AppointmentWithFilterationForCountSpecification(userId));
+            var data =  _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+            return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
+        } 
     }
 }
