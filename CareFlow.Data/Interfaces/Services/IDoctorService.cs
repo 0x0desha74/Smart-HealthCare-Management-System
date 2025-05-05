@@ -15,6 +15,6 @@ namespace CareFlow.Core.Interfaces.Services
         Task<bool> DeleteDoctorAsync(Guid id);
         Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfDoctor(SpecificationParameters specParams, string userId);
         Task<AppointmentToReturnDto> GetAppointmentOfDoctor(Guid appointmentId, string userId);
-        Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor(PaginationDto dto, string userId);
+        Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentsOfDoctor(PaginationDto dto, string userId);
     }
 }

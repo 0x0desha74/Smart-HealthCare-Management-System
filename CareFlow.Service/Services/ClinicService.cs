@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces;
@@ -19,12 +20,14 @@ namespace CareFlow.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<IReadOnlyList<ClinicToReturnDto>> GetClinics()
+        public async Task<Pagination<ClinicToReturnDto>> GetClinics(ClinicFilterDto specParams)
         {
-            var spec = new ClinicSpecifications();
+            var spec = new ClinicSpecifications(specParams);
             var clinics = await _unitOfWork.Repository<Clinic>().GetAllWithSpecAsync(spec);
             if (clinics is null) return null;
-            return _mapper.Map<IReadOnlyList<ClinicToReturnDto>>(clinics);
+            var count = await _unitOfWork.Repository<Clinic>().GetCountAsync(new ClinicFilterationForCountSpecification(specParams));
+            var data = _mapper.Map<IReadOnlyList<ClinicToReturnDto>>(clinics);
+            return new Pagination<ClinicToReturnDto>(specParams.PageSize, specParams.PageIndex,count, data);
         }
 
         public async Task<ClinicToReturnDto> GetClinic(Guid id)

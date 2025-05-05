@@ -84,7 +84,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetUpcomingAppointments([FromQuery] PaginationDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var appointments = await _doctorService.GetUpcomingAppointmentOfDoctor(specParams, userId);
+            var appointments = await _doctorService.GetUpcomingAppointmentsOfDoctor(specParams, userId);
 
             if (!appointments.Data.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));
             return Ok(appointments);

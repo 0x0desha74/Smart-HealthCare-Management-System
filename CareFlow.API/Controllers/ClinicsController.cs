@@ -1,4 +1,5 @@
 ﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
@@ -36,10 +37,10 @@ namespace CareFlow.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ClinicToReturnDto>>> GetClinics()
+        public async Task<ActionResult<IReadOnlyList<Pagination<ClinicToReturnDto>>>> GetClinics([FromQuery] ClinicFilterDto specParams)
         {
-            var clinics = await _clinicService.GetClinics();
-            if (!clinics.Any()) return NotFound(new ApiResponse(404));
+            var clinics = await _clinicService.GetClinics(specParams);
+            if (!clinics.Data.Any()) return NotFound(new ApiResponse(404));
             return Ok(clinics);
         }
 

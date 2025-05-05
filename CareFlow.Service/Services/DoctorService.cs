@@ -128,7 +128,7 @@ namespace CareFlow.Service.Services
             return _mapper.Map<AppointmentToReturnDto>(appointment);
         }
 
-        public async Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentOfDoctor(PaginationDto specParams, string userId)
+        public async Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentsOfDoctor(PaginationDto specParams, string userId)
         {
             var spec = new UpcomingDoctorAppointmentsSpecifications(specParams, userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
