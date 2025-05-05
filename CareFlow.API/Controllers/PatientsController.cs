@@ -1,4 +1,5 @@
 ﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
@@ -23,7 +24,7 @@ namespace CareFlow.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Pagination<PatientToReturnDto>>>> GetPatients([FromQuery] SpecificationParameters specParams)
         {
-            var patients = await _patientService.GetPatients(specParams);
+            var patients = await _patientService.GetPatientsAsync(specParams);
             if (!patients.Data.Any()) return NotFound(new ApiResponse(404));
             return Ok(patients);
         }
@@ -33,7 +34,7 @@ namespace CareFlow.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PatientToReturnDto>> GetPatient(Guid id)
         {
-            var patient = await _patientService.GetPatient(id);
+            var patient = await _patientService.GetPatientAsync(id);
             if (patient is null) return NotFound(new ApiResponse(404));
             return Ok(patient);
         }
@@ -54,7 +55,7 @@ namespace CareFlow.API.Controllers
         [HttpPut]
         public async Task<ActionResult<PatientToReturnDto>> Update(PatientDto model)
         {
-            var updatedPatient = await _patientService.UpdatePatient(model);
+            var updatedPatient = await _patientService.UpdatePatientAsync(model);
 
             return Ok(updatedPatient);
         }
@@ -74,17 +75,16 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<AppointmentDetailsDto>> GetAppointmentOfPatient(Guid id)
         {
             var userId = User.FindFirstValue("uid");
-            var appointment = await _patientService.GetAppointmentOfPatient(id, userId);
+            var appointment = await _patientService.GetAppointmentOfPatientAsync(id, userId);
 
             return appointment is not null ? Ok(appointment) : BadRequest(new ApiResponse(404));
         }
 
         [HttpGet("appointments/upcoming")]
-        public async Task<ActionResult<AppointmentToReturnDto>> GetUpcomingPatientAppointments()
+        public async Task<ActionResult<AppointmentToReturnDto>> GetUpcomingPatientAppointments([FromQuery] PaginationDto specParams)
         {
-            var userId = User.FindFirstValue("uid");
-            var appointments = await _patientService.GetUpcomingAppointmentsOfPatientAsync(userId);
-            if (!appointments.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));
+            var appointments = await _patientService.GetUpcomingAppointmentsOfPatientAsync(specParams, User.FindFirstValue("uid"));
+            if (!appointments.Data.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));
             return Ok(appointments);
         }
 

@@ -34,7 +34,10 @@ namespace CareFlow.Core.Specifications
         {
 
         }
-        public AppointmentWithFilterationForCountSpecification( string userId) : base(a => a.Doctor.AppUserId == userId && a.Status == AppointmentStatus.Pending)
+        public AppointmentWithFilterationForCountSpecification( string userId) 
+            : base( a =>
+            (string.IsNullOrEmpty(userId) || a.Doctor.AppUserId == userId || a.Patient.AppUserId == userId) &&
+            a.Status == AppointmentStatus.Pending)
         {
          
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
@@ -32,7 +33,7 @@ namespace CareFlow.Service.Services
                 throw new InvalidOperationException("An error occurred while creating patient entity");
         }
 
-        public async Task<Pagination<PatientToReturnDto>> GetPatients(SpecificationParameters specParams)
+        public async Task<Pagination<PatientToReturnDto>> GetPatientsAsync(SpecificationParameters specParams)
         {
             var spec = new PatientSpecifications(specParams);
             var patients = await _unitOfWork.Repository<Patient>().GetAllWithSpecAsync(spec);
@@ -43,7 +44,7 @@ namespace CareFlow.Service.Services
         }
 
 
-        public async Task<PatientToReturnDto> GetPatient(Guid id)
+        public async Task<PatientToReturnDto> GetPatientAsync(Guid id)
         {
             var spec = new PatientSpecifications(id);
             var patient = await _unitOfWork.Repository<Patient>().GetEntityWithAsync(spec);
@@ -65,7 +66,7 @@ namespace CareFlow.Service.Services
         }
 
 
-        public async Task<PatientToReturnDto> UpdatePatient(PatientDto patientDto)
+        public async Task<PatientToReturnDto> UpdatePatientAsync(PatientDto patientDto)
         {
             if (patientDto is null || patientDto.id == Guid.Empty)
                 throw new KeyNotFoundException("Invalid patient data");
@@ -98,7 +99,7 @@ namespace CareFlow.Service.Services
             return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
-        public async Task<AppointmentDetailsDto> GetAppointmentOfPatient(Guid appointmentId, string userId)
+        public async Task<AppointmentDetailsDto> GetAppointmentOfPatientAsync(Guid appointmentId, string userId)
         {
             var spec = new AppointmentsPatientSpecifications(appointmentId, userId);
             var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
@@ -109,14 +110,18 @@ namespace CareFlow.Service.Services
             return _mapper.Map<AppointmentDetailsDto>(appointment);
         }
 
-        public async Task<IReadOnlyList<AppointmentToReturnDto>> GetUpcomingAppointmentsOfPatientAsync(string userId)
+        public async Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentsOfPatientAsync(PaginationDto specParams,string userId)
         {
-            var spec = new UpcomingPatientAppointmentSpecifications(userId);
+            var spec = new UpcomingPatientAppointmentSpecifications(specParams,userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
 
             if (appointments is null)
                 return null;
-            return _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+
+            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(new AppointmentWithFilterationForCountSpecification(userId));
+
+            var data = _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+            return new Pagination<AppointmentToReturnDto>(specParams.PageSize,specParams.PageIndex,count,data);
         }
     }
 }
