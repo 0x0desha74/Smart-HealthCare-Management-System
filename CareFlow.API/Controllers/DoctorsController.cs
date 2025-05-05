@@ -38,7 +38,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult<DoctorToReturnDto>> Update(DoctorDto model)
         {
@@ -48,7 +48,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -62,9 +62,9 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointmentsOfDoctor([FromQuery] SpecificationParameters specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var appointments = await _doctorService.GetAppointmentsOfDoctor(specParams,userId);
+            var appointments = await _doctorService.GetAppointmentsOfDoctor(specParams, userId);
 
-            if (!appointments.Data.Any())  return NotFound(new ApiResponse(404));
+            if (!appointments.Data.Any()) return NotFound(new ApiResponse(404));
             return Ok(appointments);
         }
 
@@ -84,7 +84,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetUpcomingAppointments([FromQuery] PaginationDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var appointments = await _doctorService.GetUpcomingAppointmentOfDoctor(specParams,userId);
+            var appointments = await _doctorService.GetUpcomingAppointmentOfDoctor(specParams, userId);
 
             if (!appointments.Data.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));
             return Ok(appointments);

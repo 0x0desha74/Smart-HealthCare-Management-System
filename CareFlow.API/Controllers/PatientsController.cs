@@ -80,8 +80,9 @@ namespace CareFlow.API.Controllers
             return appointment is not null ? Ok(appointment) : BadRequest(new ApiResponse(404));
         }
 
+        [Authorize(Roles = "Patient")]
         [HttpGet("appointments/upcoming")]
-        public async Task<ActionResult<AppointmentToReturnDto>> GetUpcomingPatientAppointments([FromQuery] PaginationDto specParams)
+        public async Task<ActionResult<IReadOnlyList<Pagination<AppointmentToReturnDto>>>> GetUpcomingPatientAppointments([FromQuery] PaginationDto specParams)
         {
             var appointments = await _patientService.GetUpcomingAppointmentsOfPatientAsync(specParams, User.FindFirstValue("uid"));
             if (!appointments.Data.Any()) return NotFound(new ApiResponse(404, "No upcoming appointments"));

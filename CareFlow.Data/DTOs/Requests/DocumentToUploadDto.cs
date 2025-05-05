@@ -8,7 +8,7 @@ namespace CareFlow.Core.DTOs.Requests
     {
         [Required]
         [MaxFileSize(10 * (1024 * 1024))] // 10 MB
-        [AllowedFileExtensions( new[] {".pdf",".jpg",".png"})]
+        [AllowedFileExtensions(new[] { ".pdf", ".jpg", ".png" })]
         public IFormFile File { get; set; }
         [Required]
         public Guid PatientId { get; set; }

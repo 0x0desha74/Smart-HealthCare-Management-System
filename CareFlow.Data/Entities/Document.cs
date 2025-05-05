@@ -17,7 +17,7 @@ namespace CareFlow.Data.Entities
         public DateTime? DeletedAt { get; set; }
         public Patient Patient { get; set; }
         public Guid MedicalHistoryId { get; set; }
-        public MedicalHistory MedicalHistory{ get; set; }
+        public MedicalHistory MedicalHistory { get; set; }
         public bool IsDeleted { get; set; } = false;
     }
 }

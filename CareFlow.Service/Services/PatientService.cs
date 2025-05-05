@@ -39,7 +39,7 @@ namespace CareFlow.Service.Services
             var patients = await _unitOfWork.Repository<Patient>().GetAllWithSpecAsync(spec);
             var count = await _unitOfWork.Repository<Patient>().GetCountAsync(spec);
             if (patients is null) return null;
-            var data =  _mapper.Map<IReadOnlyList<PatientToReturnDto>>(patients);
+            var data = _mapper.Map<IReadOnlyList<PatientToReturnDto>>(patients);
             return new Pagination<PatientToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
@@ -87,15 +87,15 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(SpecificationParameters specParams,string userId)
+        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(SpecificationParameters specParams, string userId)
         {
-            var spec = new AppointmentsPatientSpecifications(specParams,userId);
+            var spec = new AppointmentsPatientSpecifications(specParams, userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
             if (appointments is null) return null;
 
             var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(spec);
-           
-            var data =   _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+
+            var data = _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
             return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
@@ -110,9 +110,9 @@ namespace CareFlow.Service.Services
             return _mapper.Map<AppointmentDetailsDto>(appointment);
         }
 
-        public async Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentsOfPatientAsync(PaginationDto specParams,string userId)
+        public async Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentsOfPatientAsync(PaginationDto specParams, string userId)
         {
-            var spec = new UpcomingPatientAppointmentSpecifications(specParams,userId);
+            var spec = new UpcomingPatientAppointmentSpecifications(specParams, userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
 
             if (appointments is null)
@@ -121,7 +121,7 @@ namespace CareFlow.Service.Services
             var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(new AppointmentWithFilterationForCountSpecification(userId));
 
             var data = _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
-            return new Pagination<AppointmentToReturnDto>(specParams.PageSize,specParams.PageIndex,count,data);
+            return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
     }
 }

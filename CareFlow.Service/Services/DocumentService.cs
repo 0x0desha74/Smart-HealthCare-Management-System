@@ -1,10 +1,9 @@
-﻿ using AutoMapper;
+﻿using AutoMapper;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;
 using CareFlow.Core.Interfaces;
 using CareFlow.Core.Interfaces.Services;
-using CareFlow.Core.Settings;
 using CareFlow.Core.Specifications;
 using CareFlow.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +32,7 @@ namespace CareFlow.Service.Services
 
             if (document is null)
                 return false;
-                
+
 
             if (document.UploadedByUserId != userId)
                 throw new UnauthorizedAccessException("Authorized!, You are not.");
@@ -53,7 +52,7 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<(byte[] fileDate, string contentType, string fileName)>  DownloadDocumentAsync(Guid id, string userId)
+        public async Task<(byte[] fileDate, string contentType, string fileName)> DownloadDocumentAsync(Guid id, string userId)
         {
             var document = await GetDocumentAsync(id, userId);
 
@@ -73,12 +72,12 @@ namespace CareFlow.Service.Services
         {
             var document = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id))
                 ?? throw new KeyNotFoundException("Document not found.");
-            
+
 
             if (document.Patient.AppUserId != userId && document.MedicalHistory.Doctor.AppUserId != userId)
                 throw new UnauthorizedAccessException("Authorize!, You are not.");
 
-            return  _mapper.Map<DocumentToReturnDto>(document);
+            return _mapper.Map<DocumentToReturnDto>(document);
         }
 
         public async Task<IReadOnlyList<DocumentToReturnDto>> GetDocumentsForPatientAsync(string userId)
@@ -101,7 +100,7 @@ namespace CareFlow.Service.Services
             var result = await _unitOfWork.Complete();
             if (result <= 0)
                 throw new InvalidOperationException("Failed to update document entity.");
-                
+
 
         }
 
@@ -116,16 +115,16 @@ namespace CareFlow.Service.Services
                 throw new UnauthorizedAccessException("Authorized!, You are not");
 
 
-                string folderPath = Path.Combine( _env.WebRootPath, "documents"); // folderPath =>/wwwroot/documents/
+            string folderPath = Path.Combine(_env.WebRootPath, "documents"); // folderPath =>/wwwroot/documents/
 
             string fileExtension = Path.GetExtension(dto.File.FileName);
-           string fileName = $"{Guid.NewGuid()}{fileExtension}";
+            string fileName = $"{Guid.NewGuid()}{fileExtension}";
 
-           
+
             //filePath => /wwwroot/documents/{fileName}
             string filePath = Path.Combine(folderPath, fileName);
 
-           
+
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
@@ -162,13 +161,13 @@ namespace CareFlow.Service.Services
             var extension = Path.GetExtension(fileName);
             return extension switch
             {
-                ".jpg" or ".jpeg"=> "image/jpeg",
+                ".jpg" or ".jpeg" => "image/jpeg",
                 "png" => "image/png",
                 "pdf" => "application/pdf",
                 _ => "application/octet-stream"
             };
         }
-        
+
 
     }
 }

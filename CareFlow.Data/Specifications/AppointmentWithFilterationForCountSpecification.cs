@@ -1,18 +1,12 @@
 ﻿using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Data.Entities;
 using CareFlow.Data.Entities.Enums;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CareFlow.Core.Specifications
 {
-   public class AppointmentWithFilterationForCountSpecification : BaseSpecification<Appointment>
+    public class AppointmentWithFilterationForCountSpecification : BaseSpecification<Appointment>
     {
-        public AppointmentWithFilterationForCountSpecification(AppointmentFilterDto specParams,string userId)
+        public AppointmentWithFilterationForCountSpecification(AppointmentFilterDto specParams, string userId)
              : base(a =>
 
             (a.Doctor.AppUserId == userId || a.Patient.AppUserId == userId) &&
@@ -34,12 +28,12 @@ namespace CareFlow.Core.Specifications
         {
 
         }
-        public AppointmentWithFilterationForCountSpecification( string userId) 
-            : base( a =>
+        public AppointmentWithFilterationForCountSpecification(string userId)
+            : base(a =>
             (string.IsNullOrEmpty(userId) || a.Doctor.AppUserId == userId || a.Patient.AppUserId == userId) &&
             a.Status == AppointmentStatus.Pending)
         {
-         
+
         }
 
     }

@@ -59,7 +59,7 @@ namespace CareFlow.Repository.Repositories
 
         public async Task<int> GetCountAsync(ISpecification<T> spec)
         {
-            return  await ApplySpecifications(spec).CountAsync();
+            return await ApplySpecifications(spec).CountAsync();
         }
 
 
@@ -68,6 +68,6 @@ namespace CareFlow.Repository.Repositories
             return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec);
         }
 
-       
+
     }
 }

@@ -3,7 +3,6 @@ using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -18,9 +17,9 @@ namespace CareFlow.API.Controllers
         {
             _documentService = documentService;
         }
-      
 
-        [Authorize(Roles ="Doctor,Patient")]
+
+        [Authorize(Roles = "Doctor,Patient")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<DocumentToReturnDto>>> GetDocuments()
         {
@@ -51,9 +50,9 @@ namespace CareFlow.API.Controllers
 
         [Authorize(Roles = "Doctor,Patient")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<string>> Update(Guid id,[FromBody]DocumentToUpdateDto model)
+        public async Task<ActionResult<string>> Update(Guid id, [FromBody] DocumentToUpdateDto model)
         {
-           await _documentService.UpdateDocumentAsync(id,model,User.FindFirstValue("uid"));
+            await _documentService.UpdateDocumentAsync(id, model, User.FindFirstValue("uid"));
             return Ok("Document Updated Successfully.");
         }
 

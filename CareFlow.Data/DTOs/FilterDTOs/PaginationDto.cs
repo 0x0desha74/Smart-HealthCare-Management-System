@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CareFlow.Core.DTOs.FilterDTOs
+﻿namespace CareFlow.Core.DTOs.FilterDTOs
 {
-   public class PaginationDto
+    public class PaginationDto
     {
         private const int maxPageSize = 10;
         private int pageSize = 5;

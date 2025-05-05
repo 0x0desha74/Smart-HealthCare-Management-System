@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CareFlow.Core.DTOs.Response
+﻿namespace CareFlow.Core.DTOs.Response
 {
-   public class Pagination<T>
+    public class Pagination<T>
     {
         public int PageSize { get; set; }
         public int PageIndex { get; set; }

@@ -23,8 +23,8 @@ namespace CareFlow.Core.Specifications
         {
             Includes.Add(thenIncludeExpression);
         }
-        
-       public void ApplyPagination(int skip,int take)
+
+        public void ApplyPagination(int skip, int take)
         {
             Skip = skip;
             Take = take;

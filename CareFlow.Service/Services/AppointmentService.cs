@@ -23,7 +23,7 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id,string userId)
+        public async Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id, string userId)
         {
             var spec = new AppointmentSpecifications(id);
             var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
@@ -33,8 +33,8 @@ namespace CareFlow.Service.Services
 
             if (appointment.Doctor.AppUserId != userId && appointment.Patient.AppUserId != userId)
                 throw new UnauthorizedAccessException("You are not authorized to view this appointment.");
-                
-                    return _mapper.Map<AppointmentDetailsDto>(appointment);
+
+            return _mapper.Map<AppointmentDetailsDto>(appointment);
         }
 
 
@@ -81,7 +81,7 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<AppointmentToReturnDto> UpdateAppointmentAsync(AppointmentUpdateDto appointmentDto,string userId)
+        public async Task<AppointmentToReturnDto> UpdateAppointmentAsync(AppointmentUpdateDto appointmentDto, string userId)
         {
             if (appointmentDto.Id == Guid.Empty)
                 throw new ArgumentException("Invalid appointment data provided, Id must no not be null");
@@ -115,7 +115,7 @@ namespace CareFlow.Service.Services
             return _mapper.Map<AppointmentToReturnDto>(existingAppointment);
         }
 
-        public async Task<bool> DeleteAppointmentAsync(Guid id,string userId)
+        public async Task<bool> DeleteAppointmentAsync(Guid id, string userId)
         {
             var spec = new AppointmentSpecifications(id);
             var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);

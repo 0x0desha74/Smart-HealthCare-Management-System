@@ -32,7 +32,7 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(a => a.Doctor).ThenInclude(p => p.Specializations));
             AddIncludes(q => q.Include(a => a.Clinic).ThenInclude(p => p.Location));
             ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
-             
+
         }
 
         public AppointmentSpecifications(Guid id)
