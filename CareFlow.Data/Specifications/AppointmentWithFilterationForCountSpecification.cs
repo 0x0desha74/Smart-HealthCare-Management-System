@@ -19,8 +19,8 @@ namespace CareFlow.Core.Specifications
             (a.Notes != null && a.Notes.ToLower().Contains(specParams.Search)) ||
             (a.Reason != null && a.Reason.ToLower().Contains(specParams.Search))) &&
 
-            //(( a.Doctor.FirstName + " " + a.Doctor.LastName).ToLower().Contains(specParams.Doctor) && a.Doctor.AppUserId == userId) ||
-            //(( a.Patient.FirstName + " " + a.Patient.LastName).ToLower().Contains(specParams.Patient) && a.Patient.AppUserId == userId) ||
+             (string.IsNullOrEmpty(specParams.Doctor) || (a.Doctor.FirstName + " " + a.Doctor.LastName).ToLower().Contains(specParams.Doctor)) &&
+            (string.IsNullOrEmpty(specParams.Patient) || (a.Patient.FirstName + " " + a.Patient.LastName).ToLower().Contains(specParams.Patient)) &&
 
             ((string.IsNullOrEmpty(specParams.Clinic) || (a.Clinic != null && a.Clinic.Name.ToLower().Contains(specParams.Clinic)))) &&
 

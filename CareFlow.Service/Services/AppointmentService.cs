@@ -23,7 +23,7 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id)
+        public async Task<AppointmentDetailsDto> GetAppointmentAsync(Guid id,string userId)
         {
             var spec = new AppointmentSpecifications(id);
             var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
@@ -31,18 +31,21 @@ namespace CareFlow.Service.Services
             if (appointment is null)
                 throw new KeyNotFoundException("Appointment not found, Invalid appointment ID");
 
-            return _mapper.Map<AppointmentDetailsDto>(appointment);
+            if (appointment.Doctor.AppUserId != userId && appointment.Patient.AppUserId != userId)
+                throw new UnauthorizedAccessException("You are not authorized to view this appointment.");
+                
+                    return _mapper.Map<AppointmentDetailsDto>(appointment);
         }
 
 
-        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsAsync(AppointmentFilterDto specParams,string userId)
+        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsAsync(AppointmentFilterDto specParams, string userId)
         {
-            var spec = new AppointmentSpecifications(specParams,userId);
+            var spec = new AppointmentSpecifications(specParams, userId);
             var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
             if (!appointments.Any()) return null;
 
-            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(new AppointmentWithFilterationForCountSpecification(specParams,userId));
-            var data =  _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(new AppointmentWithFilterationForCountSpecification(specParams, userId));
+            var data = _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
             return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
@@ -78,7 +81,7 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<AppointmentToReturnDto> UpdateAppointmentAsync(AppointmentUpdateDto appointmentDto)
+        public async Task<AppointmentToReturnDto> UpdateAppointmentAsync(AppointmentUpdateDto appointmentDto,string userId)
         {
             if (appointmentDto.Id == Guid.Empty)
                 throw new ArgumentException("Invalid appointment data provided, Id must no not be null");
@@ -89,6 +92,8 @@ namespace CareFlow.Service.Services
             if (existingAppointment is null)
                 throw new KeyNotFoundException("Appointment not found, Invalid appointment Id provided");
 
+            if (existingAppointment.Doctor.AppUserId != userId && existingAppointment.Patient.AppUserId != userId)
+                throw new UnauthorizedAccessException("You are not authorized to view this appointment.");
 
             var doctor = await _unitOfWork.Repository<Doctor>().GetByIdAsync(appointmentDto.DoctorId);
 
@@ -110,13 +115,16 @@ namespace CareFlow.Service.Services
             return _mapper.Map<AppointmentToReturnDto>(existingAppointment);
         }
 
-        public async Task<bool> DeleteAppointmentAsync(Guid id)
+        public async Task<bool> DeleteAppointmentAsync(Guid id,string userId)
         {
             var spec = new AppointmentSpecifications(id);
             var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(spec);
 
             if (appointment is null)
                 return false;
+
+            if (appointment.Doctor.AppUserId != userId && appointment.Patient.AppUserId != userId)
+                throw new UnauthorizedAccessException("You are not authorized to view this appointment.");
 
             _unitOfWork.Repository<Appointment>().Delete(appointment);
             var result = await _unitOfWork.Complete();
