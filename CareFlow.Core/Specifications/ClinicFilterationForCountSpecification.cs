@@ -3,7 +3,7 @@ using CareFlow.Data.Entities;
 
 namespace CareFlow.Core.Specifications
 {
-   public class ClinicFilterationForCountSpecification:BaseSpecification<Clinic>
+    public class ClinicFilterationForCountSpecification : BaseSpecification<Clinic>
     {
         public ClinicFilterationForCountSpecification(ClinicFilterDto specParams)
             : base(c =>

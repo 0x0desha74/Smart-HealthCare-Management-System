@@ -12,14 +12,14 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(c => c.Location));
         }
         public ClinicSpecifications(ClinicFilterDto specParams)
-            :base(c=>
-                ( string.IsNullOrEmpty(specParams.Search)|| 
+            : base(c =>
+                (string.IsNullOrEmpty(specParams.Search) ||
            (c.Location != null && c.Name.ToLower().Contains(specParams.Search)) ||
            (c.Location != null && c.Location.Country.ToLower().Contains(specParams.Search)) ||
-           (c.Location != null && c.Location.City.ToLower().Contains(specParams.Search) )||
+           (c.Location != null && c.Location.City.ToLower().Contains(specParams.Search)) ||
            (c.Location != null && c.Location.Street.ToLower().Contains(specParams.Search)) ||
-           (c.Location != null && c.Location.AddressLine1.ToLower().Contains(specParams.Search) ))
-                 
+           (c.Location != null && c.Location.AddressLine1.ToLower().Contains(specParams.Search)))
+
                  )
         {
             AddIncludes(q => q.Include(c => c.Location));

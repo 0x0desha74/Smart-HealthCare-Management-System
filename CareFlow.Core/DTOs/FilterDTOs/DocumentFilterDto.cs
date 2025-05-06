@@ -1,7 +1,7 @@
 ﻿
 namespace CareFlow.Core.DTOs.FilterDTOs
 {
-    public class DocumentFilterDto: PaginationDto
+    public class DocumentFilterDto : PaginationDto
     {
         private string? search;
 

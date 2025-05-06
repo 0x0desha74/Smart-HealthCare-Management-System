@@ -55,7 +55,7 @@ namespace CareFlow.Service.Services
 
         public async Task<(byte[] fileDate, string contentType, string fileName)> DownloadDocumentAsync(Guid id, string userId)
         {
-            var document = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id,userId))
+            var document = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id, userId))
                 ?? throw new KeyNotFoundException("Document not found or you are not authorized.");
 
             var filePath = Path.Combine(_env.WebRootPath, "documents", document.StoredFileName);
@@ -82,15 +82,15 @@ namespace CareFlow.Service.Services
             return _mapper.Map<DocumentToReturnDto>(document);
         }
 
-        public async Task<Pagination<DocumentToReturnDto>> GetDocumentsForPatientAsync(DocumentFilterDto specParams,string userId)
+        public async Task<Pagination<DocumentToReturnDto>> GetDocumentsForPatientAsync(DocumentFilterDto specParams, string userId)
         {
-            var documents = await _unitOfWork.Repository<Document>().GetAllWithSpecAsync(new DocumentSpecifications(specParams,userId));
+            var documents = await _unitOfWork.Repository<Document>().GetAllWithSpecAsync(new DocumentSpecifications(specParams, userId));
             if (!documents.Any())
                 throw new KeyNotFoundException("No Documents found for this patient");
             var count = await _unitOfWork.Repository<Document>().GetCountAsync(new DocumentFilterationForCountSpecifications(specParams, userId));
 
-            var data =  _mapper.Map<IReadOnlyList<DocumentToReturnDto>>(documents);
-            return new Pagination<DocumentToReturnDto>(specParams.PageSize, specParams.PageIndex,count, data);
+            var data = _mapper.Map<IReadOnlyList<DocumentToReturnDto>>(documents);
+            return new Pagination<DocumentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
         public async Task UpdateDocumentAsync(Guid id, DocumentToUpdateDto dto, string userId)

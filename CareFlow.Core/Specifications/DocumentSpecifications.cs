@@ -12,7 +12,7 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m => m.Doctor));
 
         }
-        public DocumentSpecifications(Guid id,string userId) : base(d => d.Id == id && d.Patient.AppUserId==userId)
+        public DocumentSpecifications(Guid id, string userId) : base(d => d.Id == id && d.Patient.AppUserId == userId)
         {
             AddIncludes(q => q.Include(d => d.Patient));
             AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m => m.Doctor));

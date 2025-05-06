@@ -1,4 +1,5 @@
 ﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
@@ -30,19 +31,19 @@ namespace CareFlow.API.Controllers
 
         [Authorize(Roles = "Doctor")]
         [HttpGet("doctor")]
-        public async Task<ActionResult<IReadOnlyList<PrescriptionToReturnDto>>> GetDoctorPrescriptions()
+        public async Task<ActionResult<IReadOnlyList<Pagination<PrescriptionToReturnDto>>>> GetDoctorPrescriptions([FromQuery] PrescriptionFilterDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var prescriptions = await _prescriptionService.GetDoctorPrescriptionsAsync(userId);
+            var prescriptions = await _prescriptionService.GetDoctorPrescriptionsAsync(specParams,userId);
             return Ok(prescriptions);
         }
 
         [Authorize(Roles = "Patient")]
         [HttpGet("patient")]
-        public async Task<ActionResult<IReadOnlyList<PrescriptionToReturnDto>>> GetPatientPrescriptions()
+        public async Task<ActionResult<IReadOnlyList<Pagination<PrescriptionToReturnDto>>>> GetPatientPrescriptions([FromQuery] PrescriptionFilterDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var prescriptions = await _prescriptionService.GetPatientPrescriptionsAsync(userId);
+            var prescriptions = await _prescriptionService.GetPatientPrescriptionsAsync(specParams,userId);
             return Ok(prescriptions);
         }
 

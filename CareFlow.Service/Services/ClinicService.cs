@@ -27,7 +27,7 @@ namespace CareFlow.Service.Services
             if (clinics is null) return null;
             var count = await _unitOfWork.Repository<Clinic>().GetCountAsync(new ClinicFilterationForCountSpecification(specParams));
             var data = _mapper.Map<IReadOnlyList<ClinicToReturnDto>>(clinics);
-            return new Pagination<ClinicToReturnDto>(specParams.PageSize, specParams.PageIndex,count, data);
+            return new Pagination<ClinicToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
         public async Task<ClinicToReturnDto> GetClinic(Guid id)

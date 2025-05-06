@@ -25,7 +25,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<DocumentToReturnDto>>> GetDocuments([FromQuery] DocumentFilterDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var documents = await _documentService.GetDocumentsForPatientAsync(specParams ,userId);
+            var documents = await _documentService.GetDocumentsForPatientAsync(specParams, userId);
             return Ok(documents);
 
         }
