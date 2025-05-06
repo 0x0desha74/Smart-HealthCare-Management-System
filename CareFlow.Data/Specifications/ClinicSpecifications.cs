@@ -13,12 +13,12 @@ namespace CareFlow.Core.Specifications
         }
         public ClinicSpecifications(ClinicFilterDto specParams)
             :base(c=>
-                ( string.IsNullOrEmpty(specParams.Search) || 
-            c.Name.ToLower().Contains(specParams.Search) ||
-            c.Location.Country.ToLower().Contains(specParams.Search) ||
-            c.Location.City.ToLower().Contains(specParams.Search) ||
-            c.Location.Street.ToLower().Contains(specParams.Search) ||
-            c.Location.AddressLine1.ToLower().Contains(specParams.Search)  )
+                ( string.IsNullOrEmpty(specParams.Search)|| 
+           (c.Location != null && c.Name.ToLower().Contains(specParams.Search)) ||
+           (c.Location != null && c.Location.Country.ToLower().Contains(specParams.Search)) ||
+           (c.Location != null && c.Location.City.ToLower().Contains(specParams.Search) )||
+           (c.Location != null && c.Location.Street.ToLower().Contains(specParams.Search)) ||
+           (c.Location != null && c.Location.AddressLine1.ToLower().Contains(specParams.Search) ))
                  
                  )
         {

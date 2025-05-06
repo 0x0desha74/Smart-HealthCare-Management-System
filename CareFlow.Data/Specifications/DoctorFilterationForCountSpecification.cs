@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CareFlow.Core.Specifications
 {
-   public class DoctorFilterationForCountSpecification:BaseSpecification<Doctor>
+    public class DoctorFilterationForCountSpecification : BaseSpecification<Doctor>
     {
         public DoctorFilterationForCountSpecification(DoctorFilterDto specParams)
                  : base(d =>
