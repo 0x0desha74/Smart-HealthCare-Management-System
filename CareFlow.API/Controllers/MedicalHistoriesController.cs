@@ -18,7 +18,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Doctor,Patient")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<MedicalHistoryToReturnDto>>> GetMedicalHistories()
         {
@@ -28,7 +28,7 @@ namespace CareFlow.API.Controllers
         }
 
 
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<MedicalHistoryToReturnDto>> GetMedicalHistory(Guid id)
         {

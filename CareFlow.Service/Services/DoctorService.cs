@@ -22,13 +22,14 @@ namespace CareFlow.Service.Services
         }
 
 
-        public async Task<IReadOnlyList<DoctorToReturnDto>> GetDoctorsAsync()
+        public async Task<Pagination<DoctorToReturnDto>> GetDoctorsAsync(DoctorFilterDto specParams)
         {
-            var spec = new DoctorSpecifications();
+            var spec = new DoctorSpecifications(specParams);
             var doctors = await _unitOfWork.Repository<Doctor>().GetAllWithSpecAsync(spec);
             if (doctors is null) return null;
-            return _mapper.Map<IReadOnlyList<DoctorToReturnDto>>(doctors);
-
+            var count = await _unitOfWork.Repository<Doctor>().GetCountAsync(new DoctorFilterationForCountSpecification(specParams));
+            var data = _mapper.Map<IReadOnlyList<DoctorToReturnDto>>(doctors);
+            return new Pagination<DoctorToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 
 
