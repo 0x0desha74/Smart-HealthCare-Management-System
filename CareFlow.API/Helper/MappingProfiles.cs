@@ -71,11 +71,12 @@ namespace CareFlow.API.Helper
             CreateMap<InstructionToCreateDto, Instruction>();
             CreateMap<InstructionToUpdateDto, Instruction>();
             CreateMap<Instruction, InstructionToReturnDto>();
-
             CreateMap<DocumentToUpdateDto, Document>();
+
             CreateMap<Document, DocumentToReturnDto>()
                 .ForMember(d => d.DownloadLink, O => O.MapFrom<DocumentDownloadUrlResolver>())
-                .ForMember(d => d.FileUrl, O => O.MapFrom<DocumentUrlResolver>());
+                .ForMember(d => d.FileUrl, O => O.MapFrom<DocumentUrlResolver>())
+                .ForMember(d => d.FileName, O => O.MapFrom(s => Path.GetFileNameWithoutExtension(s.OriginalFileName)));
 
 
         }

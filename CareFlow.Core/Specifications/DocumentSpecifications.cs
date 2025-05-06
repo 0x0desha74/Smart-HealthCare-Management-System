@@ -1,4 +1,5 @@
-﻿using CareFlow.Data.Entities;
+﻿using CareFlow.Core.DTOs.FilterDTOs;
+using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareFlow.Core.Specifications
@@ -11,11 +12,22 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m => m.Doctor));
 
         }
-        public DocumentSpecifications(string patientUserId) : base(d => d.Patient.AppUserId == patientUserId)
+        public DocumentSpecifications(Guid id,string userId) : base(d => d.Id == id && d.Patient.AppUserId==userId)
         {
             AddIncludes(q => q.Include(d => d.Patient));
             AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m => m.Doctor));
 
+        }
+        public DocumentSpecifications(DocumentFilterDto specParams, string patientUserId)
+            : base(d =>
+                  (d.Patient.AppUserId == patientUserId) &&
+                  (string.IsNullOrEmpty(specParams.Search) ||
+                    d.OriginalFileName.ToLower().Contains(specParams.Search))
+                  )
+        {
+            AddIncludes(q => q.Include(d => d.Patient));
+            AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m => m.Doctor));
+            ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
         }
     }
 }

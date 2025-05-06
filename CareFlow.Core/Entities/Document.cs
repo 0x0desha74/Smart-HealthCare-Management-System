@@ -5,7 +5,8 @@ namespace CareFlow.Data.Entities
 {
     public class Document : BaseEntity, ISoftDeletable
     {
-        public string FileName { get; set; }
+        public string StoredFileName { get; set; }
+        public string OriginalFileName { get; set; }
         public string FileUrl { get; set; }
         public string FileType { get; set; }
         public long FileSize { get; set; }

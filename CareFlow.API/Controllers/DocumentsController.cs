@@ -1,4 +1,5 @@
 ﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
@@ -21,10 +22,10 @@ namespace CareFlow.API.Controllers
 
         [Authorize(Roles = "Doctor,Patient")]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<DocumentToReturnDto>>> GetDocuments()
+        public async Task<ActionResult<IReadOnlyList<DocumentToReturnDto>>> GetDocuments([FromQuery] DocumentFilterDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var documents = await _documentService.GetDocumentsForPatientAsync(userId);
+            var documents = await _documentService.GetDocumentsForPatientAsync(specParams ,userId);
             return Ok(documents);
 
         }

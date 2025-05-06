@@ -246,10 +246,6 @@ namespace CareFlow.Repository.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
@@ -270,8 +266,16 @@ namespace CareFlow.Repository.Migrations
                     b.Property<Guid>("MedicalHistoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UploadedAt")
                         .HasColumnType("datetime2");

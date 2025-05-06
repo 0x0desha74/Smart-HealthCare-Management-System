@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CareFlow.Core\CareFlow.Core.csproj" />
     <ProjectReference Include="..\CareFlow.Service\CareFlow.Service.csproj" />
   </ItemGroup>
 

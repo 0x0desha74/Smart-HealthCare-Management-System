@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;
@@ -54,18 +55,19 @@ namespace CareFlow.Service.Services
 
         public async Task<(byte[] fileDate, string contentType, string fileName)> DownloadDocumentAsync(Guid id, string userId)
         {
-            var document = await GetDocumentAsync(id, userId);
+            var document = await _unitOfWork.Repository<Document>().GetEntityWithAsync(new DocumentSpecifications(id,userId))
+                ?? throw new KeyNotFoundException("Document not found or you are not authorized.");
 
-            var filePath = Path.Combine(_env.WebRootPath, "documents", document.FileName);
+            var filePath = Path.Combine(_env.WebRootPath, "documents", document.StoredFileName);
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("file not exist on the disk.");
 
             var fileData = File.ReadAllBytes(filePath);
 
-            var contentType = GetFileContextType(document.FileName);
+            var contentType = GetFileContextType(document.StoredFileName);
 
-            return (fileData, contentType, document.FileName);
+            return (fileData, contentType, document.StoredFileName);
         }
 
         public async Task<DocumentToReturnDto> GetDocumentAsync(Guid id, string userId)
@@ -80,12 +82,15 @@ namespace CareFlow.Service.Services
             return _mapper.Map<DocumentToReturnDto>(document);
         }
 
-        public async Task<IReadOnlyList<DocumentToReturnDto>> GetDocumentsForPatientAsync(string userId)
+        public async Task<Pagination<DocumentToReturnDto>> GetDocumentsForPatientAsync(DocumentFilterDto specParams,string userId)
         {
-            var documents = await _unitOfWork.Repository<Document>().GetAllWithSpecAsync(new DocumentSpecifications(userId));
+            var documents = await _unitOfWork.Repository<Document>().GetAllWithSpecAsync(new DocumentSpecifications(specParams,userId));
             if (!documents.Any())
                 throw new KeyNotFoundException("No Documents found for this patient");
-            return _mapper.Map<IReadOnlyList<DocumentToReturnDto>>(documents);
+            var count = await _unitOfWork.Repository<Document>().GetCountAsync(new DocumentFilterationForCountSpecifications(specParams, userId));
+
+            var data =  _mapper.Map<IReadOnlyList<DocumentToReturnDto>>(documents);
+            return new Pagination<DocumentToReturnDto>(specParams.PageSize, specParams.PageIndex,count, data);
         }
 
         public async Task UpdateDocumentAsync(Guid id, DocumentToUpdateDto dto, string userId)
@@ -135,7 +140,8 @@ namespace CareFlow.Service.Services
 
             var document = new Document()
             {
-                FileName = fileName,
+                StoredFileName = fileName,
+                OriginalFileName = dto.File.FileName,
                 FileUrl = $"/documents/{fileName}",
                 FileType = dto.File.ContentType,
                 FileSize = dto.File.Length,
