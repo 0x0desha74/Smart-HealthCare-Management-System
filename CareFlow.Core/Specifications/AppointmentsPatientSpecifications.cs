@@ -1,16 +1,18 @@
-﻿using CareFlow.Data.Entities;
+﻿using CareFlow.Core.DTOs.FilterDTOs;
+using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareFlow.Core.Specifications
 {
     public class AppointmentsPatientSpecifications : BaseSpecification<Appointment>
     {
-        public AppointmentsPatientSpecifications(SpecificationParameters specParams, string userId)
-            : base(a => a.Patient.AppUserId == userId &&
+        public AppointmentsPatientSpecifications(PatientFilterDto specParams, string userId)
+            : base(a => 
+            a.Patient.AppUserId == userId &&
            (string.IsNullOrEmpty(specParams.Search) ||
            (a.Clinic != null && a.Clinic.Name.ToLower().Contains(specParams.Search)) ||
-            (a.Doctor.FirstName != null && a.Doctor.FirstName.ToLower().Contains(specParams.Search)) ||
-            (a.Doctor.LastName != null && a.Doctor.LastName.ToLower().Contains(specParams.Search))
+            (a.Doctor.FirstName != null && a.Doctor.LastName != null && (a.Doctor.FirstName +" "+a.Doctor.LastName).ToLower().Contains(specParams.Search)) 
+           
             ))
         {
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));

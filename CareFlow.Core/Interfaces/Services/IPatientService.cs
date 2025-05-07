@@ -13,7 +13,7 @@ namespace CareFlow.Core.Interfaces.Services
         Task CreatePatientAsync(PatientRegisterDto patientDto, string userId);
         Task<PatientToReturnDto> UpdatePatientAsync(PatientDto patientDto);
         Task<bool> DeletePatientAsync(Guid id);
-        Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(SpecificationParameters specParams, string userId);
+        //Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(PatientFilterDto specParams, string userId);
         Task<AppointmentDetailsDto> GetAppointmentOfPatientAsync(Guid appointmentId, string userId);
         Task<Pagination<AppointmentToReturnDto>> GetUpcomingAppointmentsOfPatientAsync(PaginationDto dto, string userId);
     }

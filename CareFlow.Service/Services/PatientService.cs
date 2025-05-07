@@ -87,17 +87,17 @@ namespace CareFlow.Service.Services
 
         }
 
-        public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(SpecificationParameters specParams, string userId)
-        {
-            var spec = new AppointmentsPatientSpecifications(specParams, userId);
-            var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
-            if (appointments is null) return null;
+        //public async Task<Pagination<AppointmentToReturnDto>> GetAppointmentsOfPatientAsync(PatientFilterDto specParams, string userId)
+        //{
+        //    var spec = new AppointmentsPatientSpecifications(specParams, userId);
+        //    var appointments = await _unitOfWork.Repository<Appointment>().GetAllWithSpecAsync(spec);
+        //    if (appointments is null) return null;
 
-            var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(spec);
+        //    var count = await _unitOfWork.Repository<Appointment>().GetCountAsync(spec);
 
-            var data = _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
-            return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
-        }
+        //    var data = _mapper.Map<IReadOnlyList<AppointmentToReturnDto>>(appointments);
+        //    return new Pagination<AppointmentToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
+        //}
 
         public async Task<AppointmentDetailsDto> GetAppointmentOfPatientAsync(Guid appointmentId, string userId)
         {

@@ -3,7 +3,6 @@ using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
-using CareFlow.Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -20,6 +19,7 @@ namespace CareFlow.API.Controllers
             _doctorService = doctorService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<DoctorToReturnDto>>> GetDoctors([FromQuery] DoctorFilterDto specParams)
         {
@@ -28,7 +28,7 @@ namespace CareFlow.API.Controllers
             return Ok(doctors);
         }
 
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<DoctorToReturnDto>> GetDoctor(Guid id)
         {
@@ -58,17 +58,17 @@ namespace CareFlow.API.Controllers
         }
 
 
-        [HttpGet("appointments")]
-        public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointmentsOfDoctor([FromQuery] SpecificationParameters specParams)
-        {
-            var userId = User.FindFirstValue("uid");
-            var appointments = await _doctorService.GetAppointmentsOfDoctor(specParams, userId);
+        //[HttpGet("appointments")]
+        //public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointmentsOfDoctor([FromQuery] SpecificationParameters specParams)
+        //{
+        //    var userId = User.FindFirstValue("uid");
+        //    var appointments = await _doctorService.GetAppointmentsOfDoctor(specParams, userId);
 
-            if (!appointments.Data.Any()) return NotFound(new ApiResponse(404));
-            return Ok(appointments);
-        }
+        //    if (!appointments.Data.Any()) return NotFound(new ApiResponse(404));
+        //    return Ok(appointments);
+        //}
 
-
+        [Authorize(Roles = "Doctor")]
         [HttpGet("appointments/{id}")]
         public async Task<ActionResult<AppointmentToReturnDto>> GetAppointmentOfDoctor(Guid id)
         {
@@ -80,6 +80,7 @@ namespace CareFlow.API.Controllers
             return Ok(appointment);
         }
 
+        [Authorize(Roles = "Doctor")]
         [HttpGet("appointments/upcoming")]
         public async Task<ActionResult<IReadOnlyList<AppointmentToReturnDto>>> GetUpcomingAppointments([FromQuery] PaginationDto specParams)
         {

@@ -61,15 +61,15 @@ namespace CareFlow.API.Controllers
         }
 
 
-        [Authorize(Roles = "Patient")]
-        [HttpGet("appointments")]
-        public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointmentsOfPatient([FromQuery] SpecificationParameters specParams)
-        {
-            var userId = User.FindFirstValue("uid");
-            var appointments = await _patientService.GetAppointmentsOfPatientAsync(specParams, userId);
+        //[Authorize(Roles = "Patient")]
+        //[HttpGet("appointments")]
+        //public async Task<ActionResult<Pagination<AppointmentToReturnDto>>> GetAppointmentsOfPatient([FromQuery] SpecificationParameters specParams)
+        //{
+        //    var userId = User.FindFirstValue("uid");
+        //    var appointments = await _patientService.GetAppointmentsOfPatientAsync(specParams, userId);
 
-            return appointments.Data.Any() ? Ok(appointments) : BadRequest(new ApiResponse(404));
-        }
+        //    return appointments.Data.Any() ? Ok(appointments) : BadRequest(new ApiResponse(404));
+        //}
 
         [HttpGet("appointments/{id}")]
         public async Task<ActionResult<AppointmentDetailsDto>> GetAppointmentOfPatient(Guid id)
