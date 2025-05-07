@@ -1,15 +1,11 @@
 ﻿using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CareFlow.Core.Specifications
 {
-    public class PrescriptionWithPatientFilterationFOrCountSpecification:BaseSpecification<Prescription>
+    public class PrescriptionWithPatientFilterationFOrCountSpecification : BaseSpecification<Prescription>
     {
         public PrescriptionWithPatientFilterationFOrCountSpecification(PrescriptionFilterDto specParams, string userId)
             : base(a =>

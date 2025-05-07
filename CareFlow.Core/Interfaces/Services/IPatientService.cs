@@ -8,7 +8,7 @@ namespace CareFlow.Core.Interfaces.Services
 {
     public interface IPatientService
     {
-        Task<Pagination<PatientToReturnDto>> GetPatientsAsync(SpecificationParameters specParams);
+        Task<Pagination<PatientToReturnDto>> GetPatientsAsync(PatientFilterDto specParams);
         Task<PatientToReturnDto> GetPatientAsync(Guid id);
         Task CreatePatientAsync(PatientRegisterDto patientDto, string userId);
         Task<PatientToReturnDto> UpdatePatientAsync(PatientDto patientDto);

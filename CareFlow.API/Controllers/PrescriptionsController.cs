@@ -34,7 +34,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<Pagination<PrescriptionToReturnDto>>>> GetDoctorPrescriptions([FromQuery] PrescriptionFilterDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var prescriptions = await _prescriptionService.GetDoctorPrescriptionsAsync(specParams,userId);
+            var prescriptions = await _prescriptionService.GetDoctorPrescriptionsAsync(specParams, userId);
             return Ok(prescriptions);
         }
 
@@ -43,7 +43,7 @@ namespace CareFlow.API.Controllers
         public async Task<ActionResult<IReadOnlyList<Pagination<PrescriptionToReturnDto>>>> GetPatientPrescriptions([FromQuery] PrescriptionFilterDto specParams)
         {
             var userId = User.FindFirstValue("uid");
-            var prescriptions = await _prescriptionService.GetPatientPrescriptionsAsync(specParams,userId);
+            var prescriptions = await _prescriptionService.GetPatientPrescriptionsAsync(specParams, userId);
             return Ok(prescriptions);
         }
 

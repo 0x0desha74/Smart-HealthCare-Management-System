@@ -12,7 +12,7 @@ namespace CareFlow.Core.Specifications
             (a.Doctor.AppUserId == userId) &&
 
             (string.IsNullOrEmpty(specParams.Search) ||
-            (a.Patient != null && (a.Patient.FirstName + " "+ a.Patient.LastName).ToLower().Contains(specParams.Search))) &&
+            (a.Patient != null && (a.Patient.FirstName + " " + a.Patient.LastName).ToLower().Contains(specParams.Search))) &&
 
             (specParams.Status == null || a.Status == specParams.Status) &&
             (!specParams.StartDate.HasValue || a.IssueDate >= specParams.StartDate) &&

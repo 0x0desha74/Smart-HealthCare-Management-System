@@ -85,18 +85,18 @@ namespace CareFlow.Service.Services
 
         public async Task<Pagination<PrescriptionToReturnDto>> GetDoctorPrescriptionsAsync(PrescriptionFilterDto specParams, string userId)
         {
-            var spec = new PrescriptionDoctorSpecifications(specParams,userId);
-            var countSpec = new PrescriptionWithDoctorFilterationForCountSpecification(specParams, userId); 
-            return await GetPrescriptionsAsync(new ISpecification<Prescription>[] {spec,countSpec}, specParams);
+            var spec = new PrescriptionDoctorSpecifications(specParams, userId);
+            var countSpec = new PrescriptionWithDoctorFilterationForCountSpecification(specParams, userId);
+            return await GetPrescriptionsAsync(new ISpecification<Prescription>[] { spec, countSpec }, specParams);
         }
 
 
 
-        public async Task<Pagination<PrescriptionToReturnDto>> GetPatientPrescriptionsAsync(PrescriptionFilterDto specParams,string userId)
+        public async Task<Pagination<PrescriptionToReturnDto>> GetPatientPrescriptionsAsync(PrescriptionFilterDto specParams, string userId)
         {
-            var dataSpec = new PrescriptionPatientSpecifications(specParams,userId);
+            var dataSpec = new PrescriptionPatientSpecifications(specParams, userId);
             var countSpec = new PrescriptionWithPatientFilterationFOrCountSpecification(specParams, userId);
-            return await GetPrescriptionsAsync(new ISpecification<Prescription>[] { dataSpec,countSpec},specParams);
+            return await GetPrescriptionsAsync(new ISpecification<Prescription>[] { dataSpec, countSpec }, specParams);
 
         }
 
@@ -170,14 +170,14 @@ namespace CareFlow.Service.Services
                 : throw new InvalidOperationException("Failed to update the prescription status");
         }
 
-        private async Task<Pagination<PrescriptionToReturnDto>> GetPrescriptionsAsync(ISpecification<Prescription>[] spec,PrescriptionFilterDto specParams)
+        private async Task<Pagination<PrescriptionToReturnDto>> GetPrescriptionsAsync(ISpecification<Prescription>[] spec, PrescriptionFilterDto specParams)
         {
             var prescriptions = await _unitOfWork.Repository<Prescription>().GetAllWithSpecAsync(spec[0]);
             var count = await _unitOfWork.Repository<Prescription>().GetCountAsync(spec[1]);
             if (!prescriptions.Any())
                 throw new KeyNotFoundException("Prescriptions not found.");
 
-            var data =  _mapper.Map<IReadOnlyList<PrescriptionToReturnDto>>(prescriptions);
+            var data = _mapper.Map<IReadOnlyList<PrescriptionToReturnDto>>(prescriptions);
             return new Pagination<PrescriptionToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
         }
 

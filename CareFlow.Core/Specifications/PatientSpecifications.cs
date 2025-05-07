@@ -1,17 +1,17 @@
-﻿using CareFlow.Data.Entities;
+﻿using CareFlow.Core.DTOs.FilterDTOs;
+using CareFlow.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CareFlow.Core.Specifications
 {
     public class PatientSpecifications : BaseSpecification<Patient>
     {
-        public PatientSpecifications(SpecificationParameters specParams)
+        public PatientSpecifications(PatientFilterDto specParams)
             : base(b =>
-                 (string.IsNullOrEmpty(specParams.Search) ||
-            (b.FirstName != null && b.FirstName.ToLower().Contains(specParams.Search)) ||
-            (b.LastName != null && b.LastName.ToLower().Contains(specParams.Search))
+               string.IsNullOrEmpty(specParams.Search) ||
+          (b.FirstName != null && b.LastName != null && (b.FirstName + " " + b.LastName).ToLower().Contains(specParams.Search))
 
-            ))
+          )
         {
             AddIncludes(q => q.Include(p => p.Allergies));
             AddIncludes(q => q.Include(p => p.PhoneNumbers));

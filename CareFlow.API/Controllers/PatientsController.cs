@@ -20,9 +20,9 @@ namespace CareFlow.API.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Doctor")]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Pagination<PatientToReturnDto>>>> GetPatients([FromQuery] SpecificationParameters specParams)
+        public async Task<ActionResult<IReadOnlyList<Pagination<PatientToReturnDto>>>> GetPatients([FromQuery] PatientFilterDto specParams)
         {
             var patients = await _patientService.GetPatientsAsync(specParams);
             if (!patients.Data.Any()) return NotFound(new ApiResponse(404));

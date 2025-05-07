@@ -33,11 +33,11 @@ namespace CareFlow.Service.Services
                 throw new InvalidOperationException("An error occurred while creating patient entity");
         }
 
-        public async Task<Pagination<PatientToReturnDto>> GetPatientsAsync(SpecificationParameters specParams)
+        public async Task<Pagination<PatientToReturnDto>> GetPatientsAsync(PatientFilterDto specParams)
         {
             var spec = new PatientSpecifications(specParams);
             var patients = await _unitOfWork.Repository<Patient>().GetAllWithSpecAsync(spec);
-            var count = await _unitOfWork.Repository<Patient>().GetCountAsync(spec);
+            var count = await _unitOfWork.Repository<Patient>().GetCountAsync(new PatientWithFilterationForCountSpecifications(specParams));
             if (patients is null) return null;
             var data = _mapper.Map<IReadOnlyList<PatientToReturnDto>>(patients);
             return new Pagination<PatientToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
