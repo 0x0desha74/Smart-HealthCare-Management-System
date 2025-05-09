@@ -26,7 +26,7 @@ namespace CareFlow.API.Controllers
             var doctors = await _doctorService.GetDoctorsAsync(specParams);
             if (!doctors.Data.Any()) return NotFound(new ApiResponse(404));
             return Ok(doctors);
-        }
+        }  
 
         [Authorize]
         [HttpGet("{id}")]
