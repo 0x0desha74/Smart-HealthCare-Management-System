@@ -15,5 +15,6 @@
             get => search;
             set => search = value?.ToLower();
         }
+        public string? Sort { get; set; }
     }
 }

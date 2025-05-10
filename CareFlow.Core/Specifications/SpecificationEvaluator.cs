@@ -12,9 +12,17 @@ namespace CareFlow.Core.Specifications
             if (spec.Criteria is not null)
                 query = query.Where(spec.Criteria);
 
+            if (spec.OrderBy is not null)
+                query = query.OrderBy(spec.OrderBy);
+
+            if (spec.OrderByDescending is not null)
+                query = query.OrderBy(spec.OrderByDescending);
+
+
             if (spec.IsPaginationEnabled)
                 query = query.Skip(spec.Skip).Take(spec.Take);
 
+     
             query = spec.Includes.Aggregate(query, (current, include) => include(current));
             return query;
 

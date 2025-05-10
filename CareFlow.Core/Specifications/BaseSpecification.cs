@@ -10,6 +10,8 @@ namespace CareFlow.Core.Specifications
         public int Take { get; set; }
         public int Skip { get; set; }
         public bool IsPaginationEnabled { get; set; }
+        public Expression<Func<T, object>> OrderBy { get; set; }
+        public Expression<Func<T, object>> OrderByDescending { get; set; }
 
         public BaseSpecification() { }
 
@@ -31,6 +33,15 @@ namespace CareFlow.Core.Specifications
             IsPaginationEnabled = true;
         }
 
+        public void AddOrderByAsc(Expression<Func<T,object>> orderByExpression)
+        {
+            OrderBy = orderByExpression;
+        }
+
+        public void AddOrderByDesc(Expression<Func<T, object>> orderByDescExpression)
+        {
+            OrderBy = orderByDescExpression;
+        }
     }
 
 }
