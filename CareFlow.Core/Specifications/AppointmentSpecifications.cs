@@ -31,6 +31,23 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));
             AddIncludes(q => q.Include(a => a.Doctor).ThenInclude(p => p.Specializations));
             AddIncludes(q => q.Include(a => a.Clinic).ThenInclude(p => p.Location));
+            AddOrderBy(a => a.AppointmentDate);
+
+            if (!string.IsNullOrEmpty(specParams.Sort))
+            {
+                switch (specParams.Sort)
+                {
+                    case "dateAsc":
+                        AddOrderBy(a => a.AppointmentDate);
+                        break;
+                    case "dateDesc":
+                        AddOrderByDesc(a => a.AppointmentDate);
+                        break;
+                    default:
+                        AddOrderBy(a => a.AppointmentDate);
+                        break;
+                }
+            }
             ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
 
         }

@@ -12,6 +12,7 @@ namespace CareFlow.Core.DTOs.FilterDTOs
         public string? Doctor { get; set; }
         public string? Patient { get; set; }
         public string? Clinic { get; set; }
+        public string? Sort { get; set; }
         private string? search;
 
         public string? Search
