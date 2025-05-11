@@ -16,7 +16,7 @@ namespace CareFlow.Core.Specifications
                 query = query.OrderBy(spec.OrderBy);
 
             if (spec.OrderByDescending is not null)
-                query = query.OrderBy(spec.OrderByDescending);
+                query = query.OrderByDescending(spec.OrderByDescending);
 
 
             if (spec.IsPaginationEnabled)

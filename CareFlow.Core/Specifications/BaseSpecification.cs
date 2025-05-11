@@ -33,15 +33,19 @@ namespace CareFlow.Core.Specifications
             IsPaginationEnabled = true;
         }
 
-        public void AddOrderByAsc(Expression<Func<T,object>> orderByExpression)
+
+        public void AddOrderBy(Expression<Func<T, object>> orderByExpression)
         {
             OrderBy = orderByExpression;
+
         }
+
 
         public void AddOrderByDesc(Expression<Func<T, object>> orderByDescExpression)
         {
-            OrderBy = orderByDescExpression;
+            OrderByDescending = orderByDescExpression;
         }
+
     }
 
 }

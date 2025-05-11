@@ -23,31 +23,31 @@ namespace CareFlow.Core.Specifications
                  )
         {
             AddIncludes(q => q.Include(c => c.Location));
-            AddOrderByDesc(c => c.Name);
+            AddOrderBy(c => c.Name);
 
-            if (!string.IsNullOrEmpty(specParams.Sort.ToLower()))
+            if (!string.IsNullOrEmpty(specParams.Sort))
             {
                 switch (specParams.Sort)
                 {
-                    case "closingtineasc":
-                        AddOrderByAsc(c => c.ClosingTime);
+                    case "closingTimeAsc":
+                        AddOrderBy(c => c.ClosingTime);
                         break;
-                    case "oprningtimeasc":
-                        AddOrderByAsc(c => c.OpeningTime);
+                    case "openingTimeAsc":
+                        AddOrderByDesc(c => c.OpeningTime);
                         break;
                     case "nameAsc":
-                        AddOrderByAsc(c => c.Name);
+                        AddOrderBy(c => c.Name);
                         break;
-                    case "namedesc":
+                    case "nameDesc":
                         AddOrderByDesc(c => c.Name);
                         break;
                     default:
-                        AddOrderByDesc(c => c.Name);
-                            break;
+                        AddOrderBy(c => c.Name);
+                        break;
                 }
 
             }
-                ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
+            ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
         }
     }
 }
