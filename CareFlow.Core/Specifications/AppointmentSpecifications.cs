@@ -31,7 +31,7 @@ namespace CareFlow.Core.Specifications
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.Allergies));
             AddIncludes(q => q.Include(a => a.Doctor).ThenInclude(p => p.Specializations));
             AddIncludes(q => q.Include(a => a.Clinic).ThenInclude(p => p.Location));
-            AddOrderBy(a => a.AppointmentDate);
+            AddOrderByDesc(a => a.AppointmentDate);
 
             if (!string.IsNullOrEmpty(specParams.Sort))
             {
@@ -44,7 +44,7 @@ namespace CareFlow.Core.Specifications
                         AddOrderByDesc(a => a.AppointmentDate);
                         break;
                     default:
-                        AddOrderBy(a => a.AppointmentDate);
+                        AddOrderByDesc(a => a.AppointmentDate);
                         break;
                 }
             }

@@ -27,7 +27,26 @@ namespace CareFlow.Core.Specifications
         {
             AddIncludes(q => q.Include(d => d.Patient));
             AddIncludes(q => q.Include(d => d.MedicalHistory).ThenInclude(m => m.Doctor));
-            ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
+            if (!string.IsNullOrEmpty(specParams.Sort))
+            {
+                switch (specParams.Sort)
+                {
+                    case "dateAsc":
+                        AddOrderBy(d => d.UploadedAt);
+                        break;
+                    case "dateDesc":
+                        AddOrderByDesc(d => d.UploadedAt);
+                        break;
+                    default:
+                        AddOrderByDesc(d => d.UploadedAt);
+                        break;
+                }
+            }
+            else
+            {
+                AddOrderByDesc(d => d.UploadedAt);
+            }
+                ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
         }
     }
 }
