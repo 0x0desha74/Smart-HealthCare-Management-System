@@ -82,6 +82,7 @@ namespace CareFlow.API.Helper
             CreateMap<Review, ReviewToReturnDto>()
                 .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}"))
                 .ForMember(d => d.Doctor, O => O.MapFrom(s => $"{s.Doctor.FirstName} {s.Doctor.LastName}"));
+            CreateMap<ReviewToUpdateDto, Review>();
 
         }
     }

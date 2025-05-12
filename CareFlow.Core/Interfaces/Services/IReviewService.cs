@@ -11,5 +11,6 @@ namespace CareFlow.Core.Interfaces.Services
    public interface IReviewService
     {
         Task<ReviewToReturnDto> CreateAsync(ReviewToCreateDto dto ,string userId);
+        Task<ReviewToReturnDto> UpdateAsync(Guid id,ReviewToUpdateDto dto, string userId);
     }
 }

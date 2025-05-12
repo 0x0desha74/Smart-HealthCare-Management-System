@@ -25,5 +25,13 @@ namespace CareFlow.API.Controllers
             var review = await _reviewService.CreateAsync(model, User.FindFirstValue("uid"));
             return Ok(review);
         }
+
+        [Authorize(Roles = "Patient")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ReviewToReturnDto>> Update(Guid id, ReviewToUpdateDto model)
+        {
+            var review = await _reviewService.UpdateAsync(id, model, User.FindFirstValue("uid"));
+            return Ok(review);
+        }
     }
 }

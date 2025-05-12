@@ -43,5 +43,19 @@ namespace CareFlow.Service.Services
             return _mapper.Map<ReviewToReturnDto>(review);
        
         }
+
+        public async Task<ReviewToReturnDto> UpdateAsync(Guid id,ReviewToUpdateDto dto, string userId)
+        {
+            var review = await _unitOfWork.Repository<Review>().GetEntityWithAsync(new ReviewSpecifications(id,userId))
+                ?? throw new KeyNotFoundException("Review not found.");
+
+            review.Comment = dto.Comment;
+            review.Rating = dto.Rating;
+            _unitOfWork.Repository<Review>().Update(review);
+            var result = await _unitOfWork.Complete();
+            if (result <= 0)
+                throw new InvalidOperationException("Failed to update review entity");
+            return _mapper.Map<ReviewToReturnDto>(review);
+        }
     }
 }
