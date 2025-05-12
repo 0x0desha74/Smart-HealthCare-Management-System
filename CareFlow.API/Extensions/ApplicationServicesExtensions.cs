@@ -26,6 +26,7 @@ namespace CareFlow.API.Extensions
             services.AddScoped(typeof(IMedicineService), typeof(MedicineService));
             services.AddScoped(typeof(IInstructionService), typeof(InstructionService));
             services.AddScoped(typeof(IDocumentService), typeof(DocumentService));
+            services.AddScoped(typeof(IReviewService), typeof(ReviewService));
             services.AddScoped<DocumentDownloadUrlResolver>();
             services.AddScoped<DocumentUrlResolver>();
             services.AddScoped(typeof(IAuthService), typeof(AuthService));

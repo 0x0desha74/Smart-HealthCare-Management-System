@@ -78,6 +78,10 @@ namespace CareFlow.API.Helper
                 .ForMember(d => d.FileUrl, O => O.MapFrom<DocumentUrlResolver>())
                 .ForMember(d => d.FileName, O => O.MapFrom(s => Path.GetFileNameWithoutExtension(s.OriginalFileName)));
 
+            CreateMap<ReviewToCreateDto, Review>();
+            CreateMap<Review, ReviewToReturnDto>()
+                .ForMember(d => d.Patient, O => O.MapFrom(s => $"{s.Patient.FirstName} {s.Patient.LastName}"))
+                .ForMember(d => d.Doctor, O => O.MapFrom(s => $"{s.Doctor.FirstName} {s.Doctor.LastName}"));
 
         }
     }
