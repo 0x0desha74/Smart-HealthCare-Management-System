@@ -17,13 +17,13 @@ namespace CareFlow.Data.Entities
         public double Weight { get; set; }
         public string AppUserId { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
-        public Doctor Doctor { get; set; }
+        //public Doctor Doctor { get; set; }
         public ICollection<Phone> PhoneNumbers { get; set; } = new HashSet<Phone>();
         public ICollection<Allergy> Allergies { get; set; } = new HashSet<Allergy>();
         public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();
         public ICollection<Document> Documents { get; set; } = new HashSet<Document>();
         public ICollection<MedicalHistory> MedicalHistories { get; set; } = new HashSet<MedicalHistory>();
         public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
-        public Guid? DoctorId { get; set; }
+        //public Guid? DoctorId { get; set; }
     }
 }

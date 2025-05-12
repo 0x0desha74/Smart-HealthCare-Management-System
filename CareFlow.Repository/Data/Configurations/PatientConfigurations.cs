@@ -13,11 +13,11 @@ namespace CareFlow.Repository.Data.Configurations
             builder.Property(p => p.Gender)
                  .HasConversion<string>();
 
-            builder.HasOne(p => p.Doctor)
-                .WithMany(d => d.Patients)
-                .HasForeignKey(p => p.DoctorId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(p => p.Doctor)
+            //    .WithMany(d => d.Patients)
+            //    .HasForeignKey(p => p.DoctorId)
+            //    .IsRequired(false)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(p => p.Appointments)
                 .WithOne(d => d.Patient)
