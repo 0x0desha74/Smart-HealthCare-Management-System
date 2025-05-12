@@ -4,6 +4,7 @@ using CareFlow.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareFlow.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250511184913_addFeesColumnToDoctorsTable")]
+    partial class addFeesColumnToDoctorsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,38 +72,6 @@ namespace CareFlow.Repository.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("MedicalHistories");
-                });
-
-            modelBuilder.Entity("CareFlow.Core.Entities.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("CareFlow.Data.Entities.Allergy", b =>
@@ -615,25 +586,6 @@ namespace CareFlow.Repository.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("CareFlow.Core.Entities.Review", b =>
-                {
-                    b.HasOne("CareFlow.Data.Entities.Doctor", "Doctor")
-                        .WithMany("Reviews")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CareFlow.Data.Entities.Patient", "Patient")
-                        .WithMany("Reviews")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("CareFlow.Data.Entities.Allergy", b =>
                 {
                     b.HasOne("CareFlow.Data.Entities.Patient", null)
@@ -741,7 +693,7 @@ namespace CareFlow.Repository.Migrations
                     b.HasOne("CareFlow.Data.Entities.Doctor", "Doctor")
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Doctor");
                 });
@@ -844,8 +796,6 @@ namespace CareFlow.Repository.Migrations
                     b.Navigation("MedicalHistories");
 
                     b.Navigation("Patients");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("CareFlow.Data.Entities.Patient", b =>
@@ -861,8 +811,6 @@ namespace CareFlow.Repository.Migrations
                     b.Navigation("PhoneNumbers");
 
                     b.Navigation("Prescriptions");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("CareFlow.Data.Entities.Prescription", b =>

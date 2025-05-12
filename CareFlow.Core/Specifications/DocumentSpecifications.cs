@@ -46,7 +46,7 @@ namespace CareFlow.Core.Specifications
             {
                 AddOrderByDesc(d => d.UploadedAt);
             }
-                ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
+            ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
         }
     }
 }

@@ -7,12 +7,12 @@ namespace CareFlow.Core.Specifications
     public class AppointmentsPatientSpecifications : BaseSpecification<Appointment>
     {
         public AppointmentsPatientSpecifications(PatientFilterDto specParams, string userId)
-            : base(a => 
+            : base(a =>
             a.Patient.AppUserId == userId &&
            (string.IsNullOrEmpty(specParams.Search) ||
            (a.Clinic != null && a.Clinic.Name.ToLower().Contains(specParams.Search)) ||
-            (a.Doctor.FirstName != null && a.Doctor.LastName != null && (a.Doctor.FirstName +" "+a.Doctor.LastName).ToLower().Contains(specParams.Search)) 
-           
+            (a.Doctor.FirstName != null && a.Doctor.LastName != null && (a.Doctor.FirstName + " " + a.Doctor.LastName).ToLower().Contains(specParams.Search))
+
             ))
         {
             AddIncludes(q => q.Include(a => a.Patient).ThenInclude(p => p.PhoneNumbers));

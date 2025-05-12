@@ -9,7 +9,7 @@ namespace CareFlow.Core.Specifications
         int Take { get; set; }
         int Skip { get; set; }
         bool IsPaginationEnabled { get; set; }
-        Expression<Func<T,object>> OrderBy { get; set; }
-       Expression<Func<T,object>> OrderByDescending { get; set; }
+        Expression<Func<T, object>> OrderBy { get; set; }
+        Expression<Func<T, object>> OrderByDescending { get; set; }
     }
 }

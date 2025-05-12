@@ -2,7 +2,6 @@
 using CareFlow.Core.DTOs.Identity;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
-using CareFlow.Core.Specifications;
 
 namespace CareFlow.Core.Interfaces.Services
 {

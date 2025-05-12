@@ -13,6 +13,15 @@ namespace CareFlow.Repository.Data.Configurations
 
             builder.Property(d => d.Gender)
                 .HasConversion<string>();
+
+            builder.Property(d => d.Fees)
+                .HasColumnType("decimal(18,2)");
+
+            builder.HasMany(p => p.Reviews)
+                .WithOne(r => r.Doctor)
+                .HasForeignKey(r => r.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

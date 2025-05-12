@@ -17,12 +17,13 @@ namespace CareFlow.Data.Entities
         public DateOnly BirthData { get; set; }
         public int YearOfExperience { get; set; }
         public string AppUserId { get; set; }
+        public decimal Fees { get; set; }
         public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<Specialization> Specializations { get; set; } = new HashSet<Specialization>();
         public ICollection<MedicalHistory> MedicalHistories { get; set; } = new HashSet<MedicalHistory>();
         public Clinic Clinic { get; set; }
-
         public Guid? ClinicId { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
     }
 }

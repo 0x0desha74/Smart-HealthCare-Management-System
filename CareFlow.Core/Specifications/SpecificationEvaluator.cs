@@ -22,7 +22,7 @@ namespace CareFlow.Core.Specifications
             if (spec.IsPaginationEnabled)
                 query = query.Skip(spec.Skip).Take(spec.Take);
 
-     
+
             query = spec.Includes.Aggregate(query, (current, include) => include(current));
             return query;
 

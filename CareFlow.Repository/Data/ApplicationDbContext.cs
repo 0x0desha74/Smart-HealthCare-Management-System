@@ -50,5 +50,6 @@ namespace CareFlow.Repository.Data
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

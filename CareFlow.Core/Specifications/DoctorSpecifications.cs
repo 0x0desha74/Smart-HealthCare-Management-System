@@ -24,6 +24,33 @@ namespace CareFlow.Core.Specifications
         {
             AddIncludes(q => q.Include(d => d.Specializations));
             AddIncludes(q => q.Include(d => d.Clinic));
+            if (!string.IsNullOrEmpty(specParams.Sort))
+            {
+                switch (specParams.Sort)
+                {
+                    case "feesAsc":
+                        AddOrderBy(d => d.Fees);
+                        break;
+                    case "feesDesc":
+                        AddOrderByDesc(d => d.Fees);
+                        break;
+                    case "yoeAsc":
+                        AddOrderBy(d => d.YearOfExperience);
+                        break;
+                    case "yoeDesc":
+                        AddOrderByDesc(d => d.YearOfExperience);
+                        break;
+                    default:
+                        //sorting based on doctor rating and reviews
+                        break;
+                }
+
+            }
+            else
+            {
+                //sorting based on doctor rating and reviews
+
+            }
             ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
 
         }

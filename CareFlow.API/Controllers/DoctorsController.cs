@@ -19,6 +19,7 @@ namespace CareFlow.API.Controllers
             _doctorService = doctorService;
         }
 
+
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<DoctorToReturnDto>>> GetDoctors([FromQuery] DoctorFilterDto specParams)
@@ -26,7 +27,7 @@ namespace CareFlow.API.Controllers
             var doctors = await _doctorService.GetDoctorsAsync(specParams);
             if (!doctors.Data.Any()) return NotFound(new ApiResponse(404));
             return Ok(doctors);
-        }  
+        }
 
         [Authorize]
         [HttpGet("{id}")]

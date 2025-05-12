@@ -23,6 +23,7 @@ namespace CareFlow.Data.Entities
         public ICollection<Prescription> Prescriptions { get; set; } = new HashSet<Prescription>();
         public ICollection<Document> Documents { get; set; } = new HashSet<Document>();
         public ICollection<MedicalHistory> MedicalHistories { get; set; } = new HashSet<MedicalHistory>();
+        public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
         public Guid? DoctorId { get; set; }
     }
 }
