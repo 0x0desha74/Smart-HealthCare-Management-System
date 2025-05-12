@@ -1,4 +1,5 @@
-﻿using CareFlow.Core.DTOs.Requests;
+﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,16 @@ namespace CareFlow.API.Controllers
         {
             var review = await _reviewService.UpdateAsync(id, model, User.FindFirstValue("uid"));
             return Ok(review);
+        }
+
+        [Authorize(Roles="Patient")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var isDeleted = await _reviewService.DeleteAsync(id, User.FindFirstValue("uid"));
+            if (!isDeleted)
+                return NotFound(new ApiResponse(404, "Review not found."));
+            return NoContent();
         }
     }
 }

@@ -12,5 +12,7 @@ namespace CareFlow.Core.Interfaces.Services
     {
         Task<ReviewToReturnDto> CreateAsync(ReviewToCreateDto dto ,string userId);
         Task<ReviewToReturnDto> UpdateAsync(Guid id,ReviewToUpdateDto dto, string userId);
+        Task<bool> DeleteAsync(Guid id, string userId);
     }
 }
+

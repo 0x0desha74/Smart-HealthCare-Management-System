@@ -29,13 +29,15 @@ namespace CareFlow.Service.Services
         {
             var appointment = await _unitOfWork.Repository<Appointment>().GetEntityWithAsync(new AppointmentSpecifications(dto.AppointmentId))
                 ?? throw new KeyNotFoundException("Appointment not found.");
-            
-            if (appointment.DoctorId != dto.DoctorId && appointment.Patient.AppUserId != userId)
-                throw new UnauthorizedAccessException("You are not authorized.");
+         
+
+            if ( appointment.Patient.AppUserId != userId)
+                throw new UnauthorizedAccessException("You are not authorized to review this appointment.");
 
 
             var review = _mapper.Map<Review>(dto);
             review.PatientId = appointment.PatientId;
+            review.DoctorId= appointment.DoctorId;
             await _unitOfWork.Repository<Review>().AddAsync(review);
             var result = await _unitOfWork.Complete();
             if (result <= 0)
@@ -57,5 +59,24 @@ namespace CareFlow.Service.Services
                 throw new InvalidOperationException("Failed to update review entity");
             return _mapper.Map<ReviewToReturnDto>(review);
         }
+
+
+
+
+        public async Task<bool> DeleteAsync(Guid id, string userId)
+        {
+            var review = await _unitOfWork.Repository<Review>().GetEntityWithAsync(new ReviewSpecifications(id, userId));
+
+            if (review is null) return false;
+
+            _unitOfWork.Repository<Review>().Delete(review);
+            var result = await _unitOfWork.Complete();
+
+            if (result > 0)
+                return true;
+
+            throw new InvalidOperationException("Failed to delete the review entity");
+        }
+
     }
 }
