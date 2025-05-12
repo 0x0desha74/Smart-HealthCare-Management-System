@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Entities;
@@ -63,7 +64,7 @@ namespace CareFlow.Service.Services
 
 
 
-        public async Task<bool> DeleteAsync(Guid id, string userId)
+        public async Task<bool> DeleteAsync(Guid id, string userId) 
         {
             var review = await _unitOfWork.Repository<Review>().GetEntityWithAsync(new ReviewSpecifications(id, userId));
 
@@ -78,5 +79,15 @@ namespace CareFlow.Service.Services
             throw new InvalidOperationException("Failed to delete the review entity");
         }
 
+        public async Task<Pagination<ReviewToReturnDto>> GetReviewsAsync(ReviewFilterDto specParams,Guid doctorId)
+        {
+            var reviews = await _unitOfWork.Repository<Review>().GetAllWithSpecAsync(new ReviewSpecifications(specParams,doctorId));
+
+            if (!reviews.Any())
+                throw new KeyNotFoundException("Reviews not found.");
+            var count = await _unitOfWork.Repository<Review>().GetCountAsync(new ReviewWithFilterationForCountSpecifications(specParams, doctorId));
+            var data = _mapper.Map<IReadOnlyList<ReviewToReturnDto>>(reviews);
+            return new Pagination<ReviewToReturnDto>(specParams.PageSize, specParams.PageIndex, count, data);
+        }
     }
 }

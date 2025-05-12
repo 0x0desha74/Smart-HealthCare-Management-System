@@ -1,4 +1,5 @@
 ﻿using CareFlow.API.Errors;
+using CareFlow.Core.DTOs.FilterDTOs;
 using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
@@ -43,6 +44,15 @@ namespace CareFlow.API.Controllers
             if (!isDeleted)
                 return NotFound(new ApiResponse(404, "Review not found."));
             return NoContent();
+        }
+
+
+        [Authorize]
+        [HttpGet("{doctorId}")]
+        public async Task<ActionResult<IReadOnlyList<Pagination<ReviewToReturnDto>>>> GetReviews([FromQuery] ReviewFilterDto specParams,Guid doctorId)
+        {
+            var reviews = await _reviewService.GetReviewsAsync(specParams, doctorId);
+            return Ok(reviews);
         }
     }
 }
