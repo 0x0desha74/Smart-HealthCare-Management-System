@@ -4,7 +4,6 @@ using CareFlow.Core.DTOs.Requests;
 using CareFlow.Core.DTOs.Response;
 using CareFlow.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -36,7 +35,7 @@ namespace CareFlow.API.Controllers
             return Ok(review);
         }
 
-        [Authorize(Roles="Patient")]
+        [Authorize(Roles = "Patient")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -49,7 +48,7 @@ namespace CareFlow.API.Controllers
 
         [Authorize]
         [HttpGet("{doctorId}")]
-        public async Task<ActionResult<IReadOnlyList<Pagination<ReviewToReturnDto>>>> GetReviews([FromQuery] ReviewFilterDto specParams,Guid doctorId)
+        public async Task<ActionResult<IReadOnlyList<Pagination<ReviewToReturnDto>>>> GetReviews([FromQuery] ReviewFilterDto specParams, Guid doctorId)
         {
             var reviews = await _reviewService.GetReviewsAsync(specParams, doctorId);
             return Ok(reviews);

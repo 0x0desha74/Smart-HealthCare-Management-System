@@ -15,6 +15,8 @@ namespace CareFlow.Core.DTOs.Requests
         [MaxLength(100)]
         [Required]
         public string LicenceNumber { get; set; }
+        [MaxLength(2000)]
+        public string About { get; set; }
         [Required]
         public string? PictureUrl { get; set; }
         [Required]

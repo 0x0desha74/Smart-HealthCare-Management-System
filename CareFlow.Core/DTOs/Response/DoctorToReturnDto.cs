@@ -12,7 +12,7 @@ namespace CareFlow.Core.DTOs.Response
         public string LastName { get; set; }
         [MaxLength(100)]
         public string LicenceNumber { get; set; }
-
+        public string About { get; set; }
         public decimal Fees { get; set; }
         public string PictureUrl { get; set; }
         public int YearOfExperience { get; set; }
