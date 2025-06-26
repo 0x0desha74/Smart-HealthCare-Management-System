@@ -185,6 +185,61 @@ Most list endpoints support filtering and pagination:
 
 
 
+## 📂 Project Structure
+
+The solution is organized into several projects, each with a specific responsibility:
+
+-   **CareFlow.API**: The main ASP.NET Core Web API project. It contains controllers, DTOs, and handles HTTP requests and responses.
+-   **CareFlow.Core**: Contains core business logic, entities, interfaces, and specifications. This project is framework-agnostic.
+-   **CareFlow.Repository**: Handles data access logic, including Entity Framework Core contexts and repositories for interacting with the database.
+-   **CareFlow.Service**: Implements the business services and orchestrates operations using repositories and core logic.
+
+## ⚙️ Setup and Installation
+
+Follow these steps to get the CareFlow API up and running on your local machine.
+
+### Prerequisites
+
+-   .NET SDK (version compatible with the project, e.g., .NET 6.0 or later)
+-   SQL Server (or another compatible database, update connection string accordingly)
+-   Visual Studio or Visual Studio Code (recommended IDE)
+
+### Database Setup
+
+1.  **Update Connection String**: Open `CareFlow.API/appsettings.json` and `CareFlow.API/appsettings.Development.json`. Update the `DefaultConnection` string to point to your SQL Server instance.
+
+    ```json
+    "ConnectionStrings": {
+      "DefaultConnection": "Server=your_server_name;Database=CareFlowDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"
+    }
+    ```
+
+    Replace `your_server_name` with your SQL Server instance name.
+
+2.  **Apply Migrations**: Navigate to the `CareFlow.Repository` project directory in your terminal and run the following commands to create the database and apply migrations:
+
+    ```bash
+    dotnet ef database update
+    ```
+
+### Running the Application
+
+1.  **Build the Solution**: Open the solution (`CareFlow.sln`) in Visual Studio or navigate to the root directory in your terminal and run:
+
+    ```bash
+    dotnet build
+    ```
+
+2.  **Run the API**: Navigate to the `CareFlow.API` project directory and run:
+
+    ```bash
+    dotnet run
+    ```
+
+    Alternatively, you can run the project directly from Visual Studio/VS Code.
+
+The API will typically be available at `https://localhost:5001` (or a similar port). You can find the exact URL in the console output or in the `launchSettings.json` file within the `CareFlow.API/Properties` directory.
+
 ## 🚦 Getting Started
 
 1. **Authentication**: Register a user account or login to get a JWT token
